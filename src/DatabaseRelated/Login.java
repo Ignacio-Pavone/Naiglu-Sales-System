@@ -34,19 +34,7 @@ public class Login extends JDialog {
         enterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String email = Login.this.email.getText();
-                String password = String.valueOf(passwordField2.getPassword());
-                user = authenticate(email, password);
-                if (user != null) {
-                    dispose();
-                    JOptionPane.showMessageDialog(null,"Welcome " + user.name);
-                    Product nuevo = new Product(null);
-                    nuevo.setVisible(true);
-                } else {
-                    JOptionPane.showMessageDialog(Login.this,
-                            "Incorrect email or password.", "Try again",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+            loginUser();
             }
         });
 
@@ -60,18 +48,35 @@ public class Login extends JDialog {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Register registro = new Register(null);
-                registro.setVisible(true);
+              showRegister();
             }
         });
-
         setVisible(true);
+    }
+
+    private void loginUser (){
+        String email = Login.this.email.getText();
+        String password = String.valueOf(passwordField2.getPassword());
+        user = authenticate(email, password);
+        if (user != null) {
+            dispose();
+            JOptionPane.showMessageDialog(null,"Welcome " + user.name);
+            Product nuevo = new Product(null);
+            nuevo.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(Login.this,
+                    "Incorrect email or password.", "Try again",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void showRegister (){
+        Register nuevo = new Register(null);
+        nuevo.setVisible(true);
     }
 
     private Usuario authenticate(String email, String password) {
         Usuario user = null;
-
-
         try {
             String sql = "SELECT * FROM usuarios WHERE correo=? AND password=?";
             con = cn.getConnection();

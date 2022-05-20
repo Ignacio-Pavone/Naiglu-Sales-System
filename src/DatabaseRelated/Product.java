@@ -5,6 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 public class Product extends JDialog {
 
@@ -13,6 +14,8 @@ public class Product extends JDialog {
     private JButton exitButton;
     private JButton button2;
     private JTable tablaProductos;
+    private Product productData;
+    private HashMap<Integer,Product> productList = new HashMap<>();
 
     public Product(JFrame parent) {
         super(parent);
@@ -37,4 +40,6 @@ public class Product extends JDialog {
 
         ));
     };
+
+
 }

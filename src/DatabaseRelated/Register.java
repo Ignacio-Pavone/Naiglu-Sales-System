@@ -1,8 +1,8 @@
 package DatabaseRelated;
 
-
 import DatabaseRelated.Connect;
 import UserRelated.Usuario;
+import com.sun.java.accessibility.util.GUIInitializedListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,8 +13,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Register extends JDialog {
-
-
     private JTextField nameTextField;
     private JPasswordField passwordTextField;
     private JButton cancelButton;
@@ -24,8 +22,9 @@ public class Register extends JDialog {
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
-    Connect cn = new Connect();
 
+
+    Connect connection = new Connect();
 
     public boolean isEmail(String correo) {
         Pattern pat = null;
@@ -48,6 +47,7 @@ public class Register extends JDialog {
         setLocationRelativeTo(null);
         setUndecorated(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -73,7 +73,7 @@ public class Register extends JDialog {
     public boolean Registrarse(Usuario user) {
         String sql = "INSERT INTO usuarios (nombre, correo, password) VALUES (?,?,?)";
         try {
-            con = cn.getConnection();
+            con = connection.getConnection();
             ps = con.prepareStatement(sql);
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
@@ -88,9 +88,5 @@ public class Register extends JDialog {
             JOptionPane.showMessageDialog(null, e.getMessage());
             return false;
         }
-    }
-
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
     }
 }
