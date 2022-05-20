@@ -7,17 +7,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 
-public class Product extends JDialog {
+public class Inventory extends JDialog {
 
     private JPanel products1;
     private JTabbedPane tabbedPane1;
     private JButton exitButton;
     private JButton button2;
     private JTable tablaProductos;
-    private Product productData;
-    private HashMap<Integer,Product> productList = new HashMap<>();
+    private Inventory productData;
 
-    public Product(JFrame parent) {
+    private HashMap<Integer, Product> productList = new HashMap<>();
+
+    public Inventory(JFrame parent) {
         super(parent);
         crearTabla();
         setMinimumSize(new Dimension(400, 450));

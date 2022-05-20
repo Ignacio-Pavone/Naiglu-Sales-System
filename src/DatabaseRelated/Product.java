@@ -1,12 +1,12 @@
 package DatabaseRelated;
 
-public class ProductClass {
+public class Product {
     private int id;
     private String name;
     private int stock;
     private Double price;
 
-    public ProductClass(int id, String name, int stock, Double price) {
+    public Product(int id, String name, int stock, Double price) {
         this.id = id;
         this.name = name;
         this.stock = stock;

@@ -61,7 +61,7 @@ public class Login extends JDialog {
         if (user != null) {
             dispose();
             JOptionPane.showMessageDialog(null,"Welcome " + user.name);
-            Product nuevo = new Product(null);
+            Inventory nuevo = new Inventory(null);
             nuevo.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(Login.this,
