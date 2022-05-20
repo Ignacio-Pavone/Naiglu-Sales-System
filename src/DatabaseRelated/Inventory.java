@@ -27,7 +27,7 @@ public class Inventory extends JDialog {
     private JButton ADDButton;
     private JButton SALIRButton;
     private Inventory productData;
-    DefaultTableModel modelo = new DefaultTableModel();
+
 
     private HashMap<String, Product> productList = new HashMap<>();
 
@@ -57,12 +57,7 @@ public class Inventory extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 cargarProducto();
                 tablaProductos = new JTable(toTableModel());
-                JPanel p = new JPanel();
-                p.add(tablaProductos);
-                JFrame f = new JFrame();
-                f.add(p);
-                f.setSize(500, 500);
-                f.setVisible(true);
+
             }
         });
         tabbedPane1.addComponentListener(new ComponentAdapter() {
@@ -98,6 +93,7 @@ public class Inventory extends JDialog {
                 new Object[]{"ID", "Name", "Stock", "Precio"}, 0);
         for (Map.Entry<String, Product> entry : productList.entrySet()) {
             model.addRow(new Object[]{entry.getKey(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice()});
+            tablaProductos.setModel(model);
         }
         return model;
     }
