@@ -66,6 +66,7 @@ public class Inventory extends JDialog {
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
                 listarProductos();
+
             }
         });
     }
@@ -84,17 +85,14 @@ public class Inventory extends JDialog {
     }
 
     private void listarProductos() {
-        Object[] ob = new Object[4];
-        modelo = (DefaultTableModel) tablaProductos.getModel();
-        productList.forEach((k, v) -> {
-            ob[0] = productList.get(k);
-            ob[1] = productList.get(v.getName());
-            ob[2] = productList.get(v.getStock());
-            ob[3] = productList.get(v.getPrice());
-            modelo.addRow(ob);
-            TableColumnModel columnas = tablaProductos.getColumnModel();
-            columnas.getColumn(0).setMinWidth(50);
-        });
+
+        Object[][]ob  = {
+                {"1","Nacho", 15, 500},
+        };
+        tablaProductos.setModel(new DefaultTableModel(
+                ob,
+                new String[]{"ID", "NOMBRE", "STOCK", "PRECIO"}));
+
     }
 }
 
