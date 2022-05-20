@@ -34,7 +34,7 @@ public class Login extends JDialog {
         enterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            loginUser();
+                loginUser();
             }
         });
 
@@ -48,19 +48,19 @@ public class Login extends JDialog {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              showRegister();
+                showRegister();
             }
         });
         setVisible(true);
     }
 
-    private void loginUser (){
+    private void loginUser() {
         String email = Login.this.email.getText();
         String password = String.valueOf(passwordField2.getPassword());
         user = authenticate(email, password);
         if (user != null) {
             dispose();
-            JOptionPane.showMessageDialog(null,"Welcome " + user.name);
+            JOptionPane.showMessageDialog(null, "Welcome " + user.name);
             Inventory nuevo = new Inventory(null);
             nuevo.setVisible(true);
         } else {
@@ -70,7 +70,7 @@ public class Login extends JDialog {
         }
     }
 
-    private void showRegister (){
+    private void showRegister() {
         Register nuevo = new Register(null);
         nuevo.setVisible(true);
     }

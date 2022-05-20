@@ -57,18 +57,23 @@ public class Register extends JDialog {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Usuario user = new Usuario();
-                if (!nameTextField.getText().isEmpty() && isEmail(emailTextField.getText()) && passwordTextField.getPassword().length > 0) {
-                    user.setName(nameTextField.getText());
-                    user.setEmail(emailTextField.getText());
-                    user.setPassword(passwordTextField.getText());
-                    Registrarse(user);
-                } else {
-                    JOptionPane.showMessageDialog(null, "ERROR");
-                }
+                registerButtonLogic();
             }
-        });
-    }
+            });
+        }
+
+        public void registerButtonLogic () {
+            Usuario user = new Usuario();
+            if (!nameTextField.getText().isEmpty() && isEmail(emailTextField.getText()) && passwordTextField.getPassword().length > 0) {
+                user.setName(nameTextField.getText());
+                user.setEmail(emailTextField.getText());
+                user.setPassword(passwordTextField.getText());
+                Registrarse(user);
+            } else {
+                JOptionPane.showMessageDialog(null, "ERROR");
+            }
+        }
+
 
     public boolean Registrarse(Usuario user) {
         String sql = "INSERT INTO usuarios (nombre, correo, password) VALUES (?,?,?)";
