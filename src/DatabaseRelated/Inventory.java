@@ -56,8 +56,7 @@ public class Inventory extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cargarProducto();
-                tablaProductos = new JTable(toTableModel());
-
+                listarProductos();
             }
         });
         tabbedPane1.addComponentListener(new ComponentAdapter() {
@@ -88,27 +87,14 @@ public class Inventory extends JDialog {
         }
     }
 
-    private TableModel toTableModel() {
+    private void listarProductos() {
         DefaultTableModel model = new DefaultTableModel(
                 new Object[]{"ID", "Name", "Stock", "Precio"}, 0);
         for (Map.Entry<String, Product> entry : productList.entrySet()) {
             model.addRow(new Object[]{entry.getKey(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice()});
-            tablaProductos.setModel(model);
         }
-        return model;
+        tablaProductos.setModel(model);
     }
-
-    /*
-    private void listarProductos() {
-        Object[][] ob = {
-                {"2", "Juan", 20, 500},
-        };
-        tablaProductos.setModel(new DefaultTableModel(
-                ob,
-                new String[]{"ID", "NOMBRE", "STOCK", "PRECIO"}));
-    }
-
-     */
 }
 
 
