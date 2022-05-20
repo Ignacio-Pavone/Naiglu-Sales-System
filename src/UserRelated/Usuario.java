@@ -1,3 +1,5 @@
+package UserRelated;
+
 public class Usuario {
     public int ID;
     public String name;

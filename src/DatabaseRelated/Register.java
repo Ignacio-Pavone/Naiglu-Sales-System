@@ -1,25 +1,30 @@
+package DatabaseRelated;
+
+
+import DatabaseRelated.Connect;
+import UserRelated.Usuario;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Registro extends JDialog {
+public class Register extends JDialog {
 
 
-    private JTextField nombretxt;
-    private JPasswordField passtxt;
-    private JButton cancelarButton;
-    private JPanel registro;
-    private JTextField mailtxt;
-    private JButton registroButton;
+    private JTextField nameTextField;
+    private JPasswordField passwordTextField;
+    private JButton cancelButton;
+    private JPanel register;
+    private JTextField emailTextField;
+    private JButton registerButton;
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
-    Conexion cn = new Conexion();
+    Connect cn = new Connect();
 
 
     public boolean isEmail(String correo) {
@@ -34,29 +39,29 @@ public class Registro extends JDialog {
         }
     }
 
-    public Registro(JFrame parent) {
+    public Register(JFrame parent) {
         super(parent);
-        setTitle("Registro");
-        setContentPane(registro);
+        setTitle("DatabaseRelated.Register");
+        setContentPane(register);
         setMinimumSize(new Dimension(400, 450));
         setModal(true);
         setLocationRelativeTo(null);
         setUndecorated(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        cancelarButton.addActionListener(new ActionListener() {
+        cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
         });
-        registroButton.addActionListener(new ActionListener() {
+        registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Usuario user = new Usuario();
-                if (!nombretxt.getText().isEmpty() && isEmail(mailtxt.getText()) && passtxt.getPassword().length > 0) {
-                    user.setName(nombretxt.getText());
-                    user.setEmail(mailtxt.getText());
-                    user.setPassword(passtxt.getText());
+                if (!nameTextField.getText().isEmpty() && isEmail(emailTextField.getText()) && passwordTextField.getPassword().length > 0) {
+                    user.setName(nameTextField.getText());
+                    user.setEmail(emailTextField.getText());
+                    user.setPassword(passwordTextField.getText());
                     Registrarse(user);
                 } else {
                     JOptionPane.showMessageDialog(null, "ERROR");
@@ -74,7 +79,7 @@ public class Registro extends JDialog {
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getPassword());
             ps.execute();
-            JOptionPane.showMessageDialog(null, "REGISTRADO CON EXITO");
+            JOptionPane.showMessageDialog(null, "SUCCESSFUL REGISTRATION");
             return true;
         } catch (SQLIntegrityConstraintViolationException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -85,4 +90,7 @@ public class Registro extends JDialog {
         }
     }
 
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+    }
 }
