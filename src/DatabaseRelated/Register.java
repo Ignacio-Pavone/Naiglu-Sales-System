@@ -26,17 +26,7 @@ public class Register extends JDialog {
 
     Connect connection = new Connect();
 
-    public boolean isEmail(String correo) {
-        Pattern pat = null;
-        Matcher mat = null;
-        pat = Pattern.compile("^[\\w\\-\\_\\+]+(\\.[\\w\\-\\_]+)*@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$");
-        mat = pat.matcher(correo);
-        if (mat.find()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+
 
     public Register(JFrame parent) {
         super(parent);
@@ -91,6 +81,18 @@ public class Register extends JDialog {
             return false;
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean isEmail(String correo) {
+        Pattern pat = null;
+        Matcher mat = null;
+        pat = Pattern.compile("^[\\w\\-\\_\\+]+(\\.[\\w\\-\\_]+)*@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$");
+        mat = pat.matcher(correo);
+        if (mat.find()) {
+            return true;
+        } else {
             return false;
         }
     }
