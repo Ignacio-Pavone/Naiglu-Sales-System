@@ -3,12 +3,15 @@ package DatabaseRelated;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.jar.JarEntry;
 
 public class Inventory extends JDialog {
 
@@ -53,6 +56,13 @@ public class Inventory extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cargarProducto();
+                tablaProductos = new JTable(toTableModel());
+                JPanel p = new JPanel();
+                p.add(tablaProductos);
+                JFrame f = new JFrame();
+                f.add(p);
+                f.setSize(500, 500);
+                f.setVisible(true);
             }
         });
         tabbedPane1.addComponentListener(new ComponentAdapter() {
@@ -65,7 +75,6 @@ public class Inventory extends JDialog {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                listarProductos();
 
             }
         });
@@ -84,16 +93,26 @@ public class Inventory extends JDialog {
         }
     }
 
-    private void listarProductos() {
+    private TableModel toTableModel() {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"ID", "Name", "Stock", "Precio"}, 0);
+        for (Map.Entry<String, Product> entry : productList.entrySet()) {
+            model.addRow(new Object[]{entry.getKey(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice()});
+        }
+        return model;
+    }
 
-        Object[][]ob  = {
-                {"1","Nacho", 15, 500},
+    /*
+    private void listarProductos() {
+        Object[][] ob = {
+                {"2", "Juan", 20, 500},
         };
         tablaProductos.setModel(new DefaultTableModel(
                 ob,
                 new String[]{"ID", "NOMBRE", "STOCK", "PRECIO"}));
-
     }
+
+     */
 }
 
 
