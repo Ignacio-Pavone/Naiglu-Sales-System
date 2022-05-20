@@ -1,3 +1,6 @@
+package DatabaseRelated;
+
+import UserRelated.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
@@ -5,59 +8,59 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
-public class Loguin extends JDialog {
+public class Login extends JDialog {
     private JPasswordField passwordField2;
-    private JButton ingresarButton;
-    private JButton cancelarButton;
-    private JPanel loguinPanel;
-    private JTextField mail;
-    private JButton registrarseButton;
+    private JButton enterButton;
+    private JButton cancelButton;
+    private JPanel loginPanel;
+    private JTextField email;
+    private JButton registerButton;
     public static Usuario user;
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
-    Conexion cn = new Conexion();
+    Connect cn = new Connect();
 
-    public Loguin(JFrame parent) {
+    public Login(JFrame parent) {
         super(parent);
-        setTitle("Login");
-        setContentPane(loguinPanel);
+        setTitle("DatabaseRelated.Login");
+        setContentPane(loginPanel);
         setMinimumSize(new Dimension(400, 450));
         setModal(true);
         setUndecorated(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        ingresarButton.addActionListener(new ActionListener() {
+        enterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String email = mail.getText();
+                String email = Login.this.email.getText();
                 String password = String.valueOf(passwordField2.getPassword());
-                user = autenticar(email, password);
+                user = authenticate(email, password);
                 if (user != null) {
                     dispose();
-                    JOptionPane.showMessageDialog(null,"Bienvenido/a " + user.name);
-                    Productos nuevo = new Productos(null);
+                    JOptionPane.showMessageDialog(null,"Welcome " + user.name);
+                    Product nuevo = new Product(null);
                     nuevo.setVisible(true);
                 } else {
-                    JOptionPane.showMessageDialog(Loguin.this,
-                            "Usuario o Contraseña Incorrecto", "Intenta de nuevo",
+                    JOptionPane.showMessageDialog(Login.this,
+                            "Incorrect email or password.", "Try again",
                             JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
 
-        cancelarButton.addActionListener(new ActionListener() {
+        cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
         });
 
-        registrarseButton.addActionListener(new ActionListener() {
+        registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Registro registro = new Registro(null);
+                Register registro = new Register(null);
                 registro.setVisible(true);
             }
         });
@@ -65,11 +68,9 @@ public class Loguin extends JDialog {
         setVisible(true);
     }
 
-    private Usuario autenticar(String email, String password) {
+    private Usuario authenticate(String email, String password) {
         Usuario user = null;
-        final String DB_URL = "jdbc:mysql://localhost:3306/proyecto final";
-        final String USERNAME = "root";
-        final String PASSWORD = "";
+
 
         try {
             String sql = "SELECT * FROM usuarios WHERE correo=? AND password=?";

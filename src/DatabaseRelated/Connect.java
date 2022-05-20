@@ -1,10 +1,10 @@
-
+package DatabaseRelated;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class Conexion {
+public class Connect {
 
     Connection con;
 
