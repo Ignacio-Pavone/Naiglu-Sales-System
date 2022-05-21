@@ -42,6 +42,7 @@ public class Inventory extends JDialog {
         setUndecorated(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+        listarProductos();
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -119,8 +120,14 @@ public class Inventory extends JDialog {
         String name = updateName.getText();
         int stock = Integer.parseInt(updateStock.getText());
         Double price = Double.parseDouble(updatePrice.getText());
-        Product aux = new Product(id, name, stock, price);
-        productList.put(aux.getId(), aux);
+        if (!id.equals("")){
+            Product aux = new Product(id, name, stock, price);
+            productList.put(aux.getId(), aux);
+        }
+        updateID.setText("");
+        updateName.setText("");
+        updateStock.setText("");
+        updatePrice.setText("");
         listarProductos();
     }
 
