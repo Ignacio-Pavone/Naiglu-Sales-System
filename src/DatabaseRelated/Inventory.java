@@ -117,12 +117,14 @@ public class Inventory extends JDialog {
 
     private void actualizarProducto() {
         String id = updateID.getText();
-        String name = updateName.getText();
-        int stock = Integer.parseInt(updateStock.getText());
-        Double price = Double.parseDouble(updatePrice.getText());
-        if (!id.equals("")){
-            Product aux = new Product(id, name, stock, price);
-            productList.put(aux.getId(), aux);
+        if (!id.equals("")) {
+            String name = updateName.getText();
+            int stock = Integer.parseInt(updateStock.getText());
+            Double price = Double.parseDouble(updatePrice.getText());
+            if (!id.equals("")) {
+                Product aux = new Product(id, name, stock, price);
+                productList.put(aux.getId(), aux);
+            }
         }
         updateID.setText("");
         updateName.setText("");
