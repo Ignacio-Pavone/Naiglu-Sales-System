@@ -32,7 +32,7 @@ public class Register extends JDialog {
         super(parent);
         setTitle("DatabaseRelated.Register");
         setContentPane(register);
-        setMinimumSize(new Dimension(400, 450));
+        setMinimumSize(new Dimension(600, 550));
         setModal(true);
         setLocationRelativeTo(null);
         setUndecorated(true);
