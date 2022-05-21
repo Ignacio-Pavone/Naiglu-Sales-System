@@ -123,6 +123,8 @@ public class Inventory extends JDialog {
             Double price = Double.parseDouble(updatePrice.getText());
             Product aux = new Product(id, name, stock, price);
             productList.put(aux.getId(), aux);
+        }else{
+            JOptionPane.showMessageDialog(null, "Seleccione un producto a modificar");
         }
         updateID.setText("");
         updateName.setText("");
