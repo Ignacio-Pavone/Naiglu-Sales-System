@@ -139,7 +139,12 @@ public class Inventory extends JDialog {
 
     private void listarProductos() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"ID", "Name", "Stock", "Precio"}, 0);
+                new Object[]{"ID", "Name", "Stock", "Precio"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         for (Map.Entry<String, Product> entry : productList.entrySet()) {
             model.addRow(new Object[]{entry.getKey(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice()});
         }
