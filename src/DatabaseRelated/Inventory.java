@@ -169,23 +169,34 @@ public class Inventory extends JDialog {
         deleteCarritoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                seleccionFila = tablaCarrito.getSelectedRow();
-                int nuevoStock = 0;
-                String id = String.valueOf(tablaCarrito.getValueAt(seleccionFila, 0));
-                String nombre = String.valueOf(tablaCarrito.getValueAt(seleccionFila, 1));
-                int stock = Integer.parseInt(String.valueOf(tablaCarrito.getValueAt(seleccionFila, 2)));
-                double precio = Double.parseDouble(String.valueOf(tablaCarrito.getValueAt(seleccionFila, 3)));
-                nuevoStock = stockProducto(id) + stock;
-                System.out.println(nuevoStock);
-                Product aux = new Product(id,nombre,nuevoStock,precio);
-                productList.put(aux.getId(),aux);
-                listarCarrito();
-                listarProductos();
-                listarProductosCliente();
-                DefaultTableModel modelo = (DefaultTableModel)tablaCarrito.getModel();
-                modelo.removeRow(seleccionFila);
+                eliminarProductoCarrito();
             }
         });
+    }
+
+
+    private void eliminarProductoCarrito (){
+        seleccionFila = tablaCarrito.getSelectedRow();
+        int nuevoStock = 0;
+
+        if (seleccionFila != -1){
+            String id = String.valueOf(tablaCarrito.getValueAt(seleccionFila, 0));
+            String nombre = String.valueOf(tablaCarrito.getValueAt(seleccionFila, 1));
+            int stock = Integer.parseInt(String.valueOf(tablaCarrito.getValueAt(seleccionFila, 2)));
+            double precio = Double.parseDouble(String.valueOf(tablaCarrito.getValueAt(seleccionFila, 3)));
+            nuevoStock = stockProducto(id) + stock;
+            System.out.println(nuevoStock);
+            Product aux = new Product(id,nombre,nuevoStock,precio);
+            productList.put(aux.getId(),aux);
+            listarCarrito();
+            listarProductos();
+            listarProductosCliente();
+            DefaultTableModel modelo = (DefaultTableModel)tablaCarrito.getModel();
+            modelo.removeRow(seleccionFila);
+        }else{
+            JOptionPane.showMessageDialog(null, "Seleccione una fila");
+        }
+
     }
 
     private int stockProducto (String id){
