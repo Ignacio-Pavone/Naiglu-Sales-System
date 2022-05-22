@@ -113,10 +113,18 @@ public class Inventory extends JDialog {
         DELETEButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int dialogButton = JOptionPane.YES_NO_OPTION;
+                dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
                 String id = updateID.getText();
                 if (!id.equals("")) {
-                    deleteProduct(id);
-                    listarProductos();
+                    if (dialogButton == JOptionPane.YES_OPTION) {
+                        deleteProduct(id);
+                        listarProductos();
+                    }else{
+                        remove(dialogButton);
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Seleccione un Producto");
                 }
             }
         });
