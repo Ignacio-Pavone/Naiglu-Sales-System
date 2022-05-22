@@ -128,20 +128,7 @@ public class Inventory extends JDialog {
         DELETEButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int dialogButton = JOptionPane.YES_NO_OPTION;
-                String id = updateID.getText();
-                if (!id.equals("")) {
-                    dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
-                    if (dialogButton == JOptionPane.YES_OPTION) {
-                        deleteProduct(id);
-                        listarProductos();
-                        listarProductosCliente();
-                    } else {
-                        remove(dialogButton);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Seleccione un Producto");
-                }
+                borrarProductoLista();
             }
         });
 
@@ -154,16 +141,7 @@ public class Inventory extends JDialog {
         addCarroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                seleccionFila = listaProductosCliente.getSelectedRow();
-                if (seleccionFila != -1) {
-                    datosProductoCarro();
-                    listarCarrito();
-                    listarProductos();
-                    listarProductosCliente();
-                    cantUsuario.setText("");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Seleccione una fila");
-                }
+               añadiralCarro();
             }
         });
         deleteCarritoButton.addActionListener(new ActionListener() {
@@ -174,11 +152,39 @@ public class Inventory extends JDialog {
         });
     }
 
+    private void borrarProductoLista (){
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        String id = updateID.getText();
+        if (!id.equals("")) {
+            dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
+            if (dialogButton == JOptionPane.YES_OPTION) {
+                deleteProduct(id);
+                listarProductos();
+                listarProductosCliente();
+            } else {
+                remove(dialogButton);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione un Producto");
+        }
+    }
+
+    private void añadiralCarro (){
+        seleccionFila = listaProductosCliente.getSelectedRow();
+        if (seleccionFila != -1) {
+            datosProductoCarro();
+            listarCarrito();
+            listarProductos();
+            listarProductosCliente();
+            cantUsuario.setText("");
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione una fila");
+        }
+    }
 
     private void eliminarProductoCarrito (){
         seleccionFila = tablaCarrito.getSelectedRow();
         int nuevoStock = 0;
-
         if (seleccionFila != -1){
             String id = String.valueOf(tablaCarrito.getValueAt(seleccionFila, 0));
             String nombre = String.valueOf(tablaCarrito.getValueAt(seleccionFila, 1));
@@ -281,6 +287,7 @@ public class Inventory extends JDialog {
             JOptionPane.showMessageDialog(null, "Seleccione un producto a modificar");
         }
         limpiarLabels();
+        listarProductosCliente();
         listarProductos();
     }
 
