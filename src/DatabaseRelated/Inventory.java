@@ -89,6 +89,10 @@ public class Inventory extends JDialog {
                 cargarProducto();
                 listarProductos();
                 listarProductosCliente();
+                codeField.setText("");
+                nameField.setText("");
+                stockField.setText("");
+                priceField.setText("");
                 tablaProductos.setRowSelectionAllowed(true);
                 tablaProductos.setColumnSelectionAllowed(false);
 
@@ -158,6 +162,7 @@ public class Inventory extends JDialog {
                     listarCarrito();
                     listarProductos();
                     listarProductosCliente();
+                    cantUsuario.setText("");
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleccione una fila");
                 }
@@ -174,17 +179,24 @@ public class Inventory extends JDialog {
         }
     }
 
-
     private void datosProductoCarro (){
+        int nuevoStock = 0;
         String id = String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 0));
         String nombre = String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 1));
         int stock = Integer.parseInt(String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 2)));
         double precio = Double.parseDouble(String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 3)));
+<<<<<<< HEAD
         int newStock = Integer.parseInt(String.valueOf(listaProductosCliente.getValueAt(seleccionFila,2)))-Integer.parseInt(cantUsuario.getText());
         if (newStock>= 0 && newStock <= stock){
+=======
+        int newStock = Integer.parseInt(cantUsuario.getText());
+        if (newStock> 0 && newStock <= stock){
+            nuevoStock = stock-newStock;
+>>>>>>> 5f414b382fc1eee590221b27bc99ae7f439b47d3
             Product aux = new Product(id,nombre,newStock,precio);
+            Product aux2 = new Product(id,nombre,nuevoStock,precio);
             shopList.put(aux.getId(),aux);
-            productList.put(aux.getId(),aux);
+            productList.put(aux2.getId(),aux2);
         }else{
             JOptionPane.showMessageDialog(null, "Stock Insuficiente");
         }
