@@ -224,6 +224,16 @@ public class Inventory extends JDialog {
 
     }
 
+    private int productStockShopList(String id){
+        int stock = 0;
+        for (Map.Entry<String, Product> entry : shopList.entrySet()){
+            if (shopList.containsKey(id)){
+                stock = shopList.get(id).getStock();
+            }
+        }
+        return stock;
+    }
+
     private int productStock(String id){
         int stock = 0;
         for (Map.Entry<String, Product> entry : productList.entrySet()){
@@ -282,8 +292,17 @@ public class Inventory extends JDialog {
             auxStock = stock-newStock;
             Product aux = new Product(id,nombre,newStock,precio);
             Product aux2 = new Product(id,nombre,auxStock,precio);
-            shopList.put(aux.getId(),aux);
-            productList.put(aux2.getId(),aux2);
+            if (shopList.containsKey(id)){
+                int stockAux  = productStockShopList(id) + newStock;
+                System.out.println(stockAux);
+                Product aux3 = new Product(id,nombre,stockAux,precio);
+                shopList.put(aux3.getId(),aux3);
+                productList.put(aux2.getId(),aux2);
+            }else{
+                shopList.put(aux.getId(),aux);
+                productList.put(aux2.getId(),aux2);
+            }
+
         }else{
             JOptionPane.showMessageDialog(null, "Unavailable stock");
         }
