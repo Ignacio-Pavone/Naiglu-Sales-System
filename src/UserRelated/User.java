@@ -1,6 +1,6 @@
 package UserRelated;
 
-public class Usuario {
+public class User {
     public int ID;
     public String name;
     public String email;

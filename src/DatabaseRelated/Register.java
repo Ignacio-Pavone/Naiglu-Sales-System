@@ -1,8 +1,6 @@
 package DatabaseRelated;
 
-import DatabaseRelated.Connect;
-import UserRelated.Usuario;
-import com.sun.java.accessibility.util.GUIInitializedListener;
+import UserRelated.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,7 +51,7 @@ public class Register extends JDialog {
         }
 
         public void registerButtonLogic () {
-            Usuario user = new Usuario();
+            User user = new User();
             if (!nameTextField.getText().isEmpty() && isEmail(emailTextField.getText()) && passwordTextField.getPassword().length > 0) {
                 user.setName(nameTextField.getText());
                 user.setEmail(emailTextField.getText());
@@ -65,7 +63,7 @@ public class Register extends JDialog {
         }
 
 
-    public boolean Registrarse(Usuario user) {
+    public boolean Registrarse(User user) {
         String sql = "INSERT INTO usuarios (nombre, correo, password) VALUES (?,?,?)";
         try {
             con = connection.getConnection();

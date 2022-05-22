@@ -15,14 +15,14 @@ public class Inventory extends JDialog {
     private JPanel products1;
     private JTabbedPane tabbedPane1;
     private JButton exitButton;
-    private JButton modificarButton;
-    private JTable tablaProductos;
+    private JButton modifyButton;
+    private JTable productsTable;
     private JTextField codeField;
     private JTextField nameField;
     private JTextField stockField;
     private JTextField priceField;
-    private JButton ADDButton;
-    private JButton SALIRButton;
+    private JButton addButton;
+    private JButton exitingButton;
     private JTextField updateID;
     private JTextField updatePrice;
     private JTextField updateName;
@@ -33,25 +33,25 @@ public class Inventory extends JDialog {
     private JLabel pricetxt;
     private JLabel codetxt;
     private JLabel stockLabel;
-    private JButton DELETEButton;
-    private JTable tablaCarrito;
-    private JButton SALIRButton1;
-    private JTable listaProductosCliente;
-    private JButton salirListaUsuario;
-    private JButton addCarroButton;
-    private JTextField cantUsuario;
-    private JButton CONFIRMARButton;
-    private JButton CANCELARButton;
+    private JButton deleteButton;
+    private JTable cartTable;
+    private JButton exitbutton1;
+    private JTable clientProductList;
+    private JButton exitUserList;
+    private JButton addToCartButton;
+    private JTextField userAmmount;
+    private JButton CONFIRMPURCHASEButton;
+    private JButton CANCELButton;
     private JScrollPane tabl;
-    private JLabel cantValueLabel;
-    private JButton deleteCarritoButton;
+    private JLabel ammountValueLabel;
+    private JButton deleteCartElement;
     private JLabel textFinalPrice;
     private JLabel finalPrice;
-    private JButton SALIRButton2;
+    private JButton exitButton2;
     private JTextField cantField;
-    private JButton REFRESHButton;
+    private JButton refreshButton;
     private Inventory productData;
-    private int seleccionFila;
+    private int rowSelection;
 
 
     private HashMap<String, Product> productList = new HashMap<>();
@@ -69,31 +69,31 @@ public class Inventory extends JDialog {
         tableStyle();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        listarProductos();
-        listarProductosCliente();
-        listarCarrito();
+        listProducts();
+        listClientProducts();
+        listCart();
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
         });
-        SALIRButton.addActionListener(new ActionListener() {
+        exitingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
         });
 
-        ADDButton.addActionListener(new ActionListener() {
+        addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cargarProducto();
-                listarProductos();
-                listarProductosCliente();
-                emptyTextsAdd();
-                tablaProductos.setRowSelectionAllowed(true);
-                tablaProductos.setColumnSelectionAllowed(false);
+                addProduct();
+                listProducts();
+                listClientProducts();
+                clearTextFields();
+                productsTable.setRowSelectionAllowed(true);
+                productsTable.setColumnSelectionAllowed(false);
 
             }
         });
@@ -103,127 +103,128 @@ public class Inventory extends JDialog {
                 super.componentResized(e);
             }
         });
-        tablaProductos.addComponentListener(new ComponentAdapter() {
+        productsTable.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
 
             }
         });
-        modificarButton.addActionListener(new ActionListener() {
+        modifyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                seleccionFila = tablaProductos.getSelectedRow();
-                if (seleccionFila != -1) {
-                    datosFila();
+                rowSelection = productsTable.getSelectedRow();
+                if (rowSelection != -1) {
+                    rowData();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Seleccione una fila");
+                    JOptionPane.showMessageDialog(null, "Select a row");
                 }
             }
         });
         updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                actualizarProducto();
+                updateProduct();
             }
         });
-        DELETEButton.addActionListener(new ActionListener() {
+        deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                borrarProductoLista();
+                deleteProductFromList();
             }
         });
 
-        salirListaUsuario.addActionListener(new ActionListener() {
+        exitUserList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
         });
-        addCarroButton.addActionListener(new ActionListener() {
+        addToCartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               añadiralCarro();
+               addToCart();
 
             }
         });
-        deleteCarritoButton.addActionListener(new ActionListener() {
+        deleteCartElement.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                eliminarProductoCarrito();
-                //listarCarrito();
+                deleteProductFromCart();
             }
         });
     }
 
-    private void borrarProductoLista (){
+    private void deleteProductFromList(){
         int dialogButton = JOptionPane.YES_NO_OPTION;
         String id = updateID.getText();
         if (!id.equals("")) {
             dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
             if (dialogButton == JOptionPane.YES_OPTION) {
                 deleteProduct(id);
-                listarProductos();
-                listarProductosCliente();
+                listProducts();
+                listClientProducts();
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Seleccione un Producto");
+            JOptionPane.showMessageDialog(null, "Select a product");
         }
     }
 
-    private void añadiralCarro (){
-        seleccionFila = listaProductosCliente.getSelectedRow();
-        if (seleccionFila != -1) {
-            datosProductoCarro();
-            listarCarrito();
-            listarProductos();
-            listarProductosCliente();
-            cantUsuario.setText("");
+    private void addToCart(){
+        rowSelection = clientProductList.getSelectedRow();
+        if (rowSelection != -1) {
+            cartProductsData();
+            listCart();
+            listProducts();
+            listClientProducts();
+            userAmmount.setText("");
             setTotalPrice();
         } else {
-            JOptionPane.showMessageDialog(null, "Seleccione una fila");
+            JOptionPane.showMessageDialog(null, "Select a row");
         }
 
     }
 
     private void setTotalPrice(){
         double totalprice = 0;
-        for (int i = 0; i < tablaCarrito.getRowCount(); i++) {
-            totalprice = totalprice + Double.parseDouble(String.valueOf(tablaCarrito.getValueAt(i,4)));
+        for (int i = 0; i < cartTable.getRowCount(); i++) {
+            totalprice = totalprice + Double.parseDouble(String.valueOf(cartTable.getValueAt(i,4)));
         }
         textFinalPrice.setVisible(true);
-        textFinalPrice.setText("Total del carrito: "+ totalprice);
+        textFinalPrice.setText("Final price: "+ totalprice);
 
     }
 
-    private void eliminarProductoCarrito (){
+    private void deleteProductFromCart(){
 
-        int fila = 0 ;
-        fila = tablaCarrito.getSelectedRow();
+        int row = 0 ;
+        row = cartTable.getSelectedRow();
         int dialogButton = JOptionPane.YES_NO_OPTION;
-        int nuevoStock = 0;
-        if (fila != -1){
+        int newStock = 0;
+        if (row != -1){
             dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
             if (dialogButton == JOptionPane.YES_OPTION) {
-                String id = String.valueOf(tablaCarrito.getValueAt(fila, 0));
-                String nombre = String.valueOf(tablaCarrito.getValueAt(fila, 1));
-                int stock = Integer.parseInt(String.valueOf(tablaCarrito.getValueAt(fila, 2)));
-                double precio = Double.parseDouble(String.valueOf(tablaCarrito.getValueAt(fila, 3)));
-                nuevoStock = stockProducto(id) + stock;
-                Product aux = new Product(id, nombre, nuevoStock, precio);
+                String id = String.valueOf(cartTable.getValueAt(row, 0));
+                String name = String.valueOf(cartTable.getValueAt(row, 1));
+                int stock = Integer.parseInt(String.valueOf(cartTable.getValueAt(row, 2)));
+                double price = Double.parseDouble(String.valueOf(cartTable.getValueAt(row, 3)));
+                newStock = productStock(id) + stock;
+                Product aux = new Product(id, name, newStock, price);
                 deleteProductShop(id);
                 productList.put(aux.getId(), aux);
-                listarProductos();
-                listarProductosCliente();
-                listarCarrito();
+                listProducts();
+                listClientProducts();
+                listCart();
+                setTotalPrice();
             }
         }else{
-            JOptionPane.showMessageDialog(null, "Seleccione una fila");
+            JOptionPane.showMessageDialog(null, "Select a row");
         }
+
 
     }
 
-    private int stockProducto (String id){
+    private int productStock(String id){
         int stock = 0;
         for (Map.Entry<String, Product> entry : productList.entrySet()){
             if (productList.containsKey(id)){
@@ -233,7 +234,7 @@ public class Inventory extends JDialog {
         return stock;
     }
 
-    private void emptyTextsAdd (){
+    private void clearTextFields(){
         codeField.setText("");
         nameField.setText("");
         stockField.setText("");
@@ -246,13 +247,13 @@ public class Inventory extends JDialog {
         codetxt.setForeground(Color.WHITE);
         pricetxt.setForeground(Color.WHITE);
         stockLabel.setForeground(Color.WHITE);
-        cantValueLabel.setForeground(Color.WHITE);
+        ammountValueLabel.setForeground(Color.WHITE);
     }
 
     private void tableStyle (){
-        listaProductosCliente.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
-        tablaCarrito.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
-        tablaProductos.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
+        clientProductList.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
+        cartTable.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
+        productsTable.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
     }
 
     private void deleteProductShop(String id) {
@@ -264,43 +265,43 @@ public class Inventory extends JDialog {
     private void deleteProduct(String id) {
         if (productList.containsKey(id)) {
             productList.remove(id);
-            limpiarLabels();
+            cleanLabels();
         } else {
-            JOptionPane.showMessageDialog(null, "Seleccione un Producto");
+            JOptionPane.showMessageDialog(null, "Select a product");
         }
     }
 
-    private void datosProductoCarro (){
-        int nuevoStock = 0;
-        String id = String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 0));
-        String nombre = String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 1));
-        int stock = Integer.parseInt(String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 2)));
-        double precio = Double.parseDouble(String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 3)));
-        int newStock = Integer.parseInt(cantUsuario.getText());
+    private void cartProductsData(){
+        int auxStock = 0;
+        String id = String.valueOf(clientProductList.getValueAt(rowSelection, 0));
+        String nombre = String.valueOf(clientProductList.getValueAt(rowSelection, 1));
+        int stock = Integer.parseInt(String.valueOf(clientProductList.getValueAt(rowSelection, 2)));
+        double precio = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 3)));
+        int newStock = Integer.parseInt(userAmmount.getText());
         if (newStock> 0 && newStock <= stock){
-            nuevoStock = stock-newStock;
+            auxStock = stock-newStock;
             Product aux = new Product(id,nombre,newStock,precio);
-            Product aux2 = new Product(id,nombre,nuevoStock,precio);
+            Product aux2 = new Product(id,nombre,auxStock,precio);
             shopList.put(aux.getId(),aux);
             productList.put(aux2.getId(),aux2);
         }else{
-            JOptionPane.showMessageDialog(null, "Stock Insuficiente");
+            JOptionPane.showMessageDialog(null, "Unavailable stock");
         }
 
     }
 
-    private void datosFila() {
-        String id = String.valueOf(tablaProductos.getValueAt(seleccionFila, 0));
-        String nombre = String.valueOf(tablaProductos.getValueAt(seleccionFila, 1));
-        int stock = Integer.parseInt(String.valueOf(tablaProductos.getValueAt(seleccionFila, 2)));
-        double precio = Double.parseDouble(String.valueOf(tablaProductos.getValueAt(seleccionFila, 3)));
+    private void rowData() {
+        String id = String.valueOf(productsTable.getValueAt(rowSelection, 0));
+        String name = String.valueOf(productsTable.getValueAt(rowSelection, 1));
+        int stock = Integer.parseInt(String.valueOf(productsTable.getValueAt(rowSelection, 2)));
+        double price = Double.parseDouble(String.valueOf(productsTable.getValueAt(rowSelection, 3)));
         updateID.setText(id);
-        updateName.setText(nombre);
+        updateName.setText(name);
         updateStock.setText(String.valueOf(stock));
-        updatePrice.setText(String.valueOf(precio));
+        updatePrice.setText(String.valueOf(price));
     }
 
-    private void actualizarProducto() {
+    private void updateProduct() {
         String id = updateID.getText();
         if (!id.equals("")) {
             String name = updateName.getText();
@@ -309,21 +310,21 @@ public class Inventory extends JDialog {
             Product aux = new Product(id, name, stock, price);
             productList.put(aux.getId(), aux);
         } else {
-            JOptionPane.showMessageDialog(null, "Seleccione un producto a modificar");
+            JOptionPane.showMessageDialog(null, "Select a product you want to modify");
         }
-        limpiarLabels();
-        listarProductosCliente();
-        listarProductos();
+        cleanLabels();
+        listClientProducts();
+        listProducts();
     }
 
-    private void limpiarLabels() {
+    private void cleanLabels() {
         updateID.setText("");
         updateName.setText("");
         updateStock.setText("");
         updatePrice.setText("");
     }
 
-    private void cargarProducto() {
+    private void addProduct() {
         try {
             Product data = new Product();
             data.setId(codeField.getText());
@@ -336,9 +337,9 @@ public class Inventory extends JDialog {
         }
     }
 
-    private void listarProductos() {
+    private void listProducts() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Codigo", "Name", "Stock", "Precio"}, 0) {
+                new Object[]{"Item ID", "Name", "Stock", "Price"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -347,12 +348,12 @@ public class Inventory extends JDialog {
         for (Map.Entry<String, Product> entry : productList.entrySet()) {
             model.addRow(new Object[]{entry.getKey(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice()});
         }
-        tablaProductos.setModel(model);
+        productsTable.setModel(model);
     }
 
-    private void listarCarrito() {
+    private void listCart() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Codigo", "Name", "Cantidad", "Precio unitario", "Precio total"}, 0) {
+                new Object[]{"Item ID", "Name", "Ammount", "Unit price", "Total price"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -362,12 +363,12 @@ public class Inventory extends JDialog {
             model.addRow(new Object[]{entry.getKey(),entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getPrice()*entry.getValue().getStock()});
         }
 
-        tablaCarrito.setModel(model);
+        cartTable.setModel(model);
     }
 
-    private void listarProductosCliente() {
+    private void listClientProducts() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Codigo", "Name", "Stock", "Precio"}, 0) {
+                new Object[]{"Item ID", "Name", "Stock", "Price"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -376,7 +377,7 @@ public class Inventory extends JDialog {
         for (Map.Entry<String, Product> entry : productList.entrySet()) {
             model.addRow(new Object[]{entry.getKey(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice()});
         }
-        listaProductosCliente.setModel(model);
+        clientProductList.setModel(model);
     }
 }
 

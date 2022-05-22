@@ -19,7 +19,7 @@
         <properties>
           <font name="Consolas" size="12" style="0"/>
           <text value=""/>
-          <toolTipText value="UserRelated.Usuario"/>
+          <toolTipText value="UserRelated.User"/>
         </properties>
       </component>
       <component id="c3d14" class="javax.swing.JPasswordField" binding="passwordTextField">

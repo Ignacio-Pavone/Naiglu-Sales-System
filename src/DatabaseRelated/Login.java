@@ -1,6 +1,6 @@
 package DatabaseRelated;
 
-import UserRelated.Usuario;
+import UserRelated.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ public class Login extends JDialog {
     private JPanel loginPanel;
     private JTextField email;
     private JButton registerButton;
-    public static Usuario user;
+    public static User user;
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
@@ -76,8 +76,8 @@ public class Login extends JDialog {
         nuevo.setVisible(true);
     }
 
-    private Usuario authenticate(String email, String password) {
-        Usuario user = null;
+    private User authenticate(String email, String password) {
+        User user = null;
         try {
             String sql = "SELECT * FROM usuarios WHERE correo=? AND password=?";
             con = cn.getConnection();
@@ -87,7 +87,7 @@ public class Login extends JDialog {
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                user = new Usuario();
+                user = new User();
                 user.ID = rs.getInt("id");
                 user.name = rs.getString("nombre");
                 user.email = rs.getString("correo");
