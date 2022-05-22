@@ -148,6 +148,7 @@ public class Inventory extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 eliminarProductoCarrito();
+                //listarCarrito();
             }
         });
     }
@@ -181,25 +182,25 @@ public class Inventory extends JDialog {
     }
 
     private void eliminarProductoCarrito (){
-        seleccionFila = tablaCarrito.getSelectedRow();
+
+        int fila = 0 ;
+        fila = tablaCarrito.getSelectedRow();
         int dialogButton = JOptionPane.YES_NO_OPTION;
         int nuevoStock = 0;
-        if (seleccionFila != -1){
+        if (fila != -1){
             dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
             if (dialogButton == JOptionPane.YES_OPTION) {
-                String id = String.valueOf(tablaCarrito.getValueAt(seleccionFila, 0));
-                String nombre = String.valueOf(tablaCarrito.getValueAt(seleccionFila, 1));
-                int stock = Integer.parseInt(String.valueOf(tablaCarrito.getValueAt(seleccionFila, 2)));
-                double precio = Double.parseDouble(String.valueOf(tablaCarrito.getValueAt(seleccionFila, 3)));
+                String id = String.valueOf(tablaCarrito.getValueAt(fila, 0));
+                String nombre = String.valueOf(tablaCarrito.getValueAt(fila, 1));
+                int stock = Integer.parseInt(String.valueOf(tablaCarrito.getValueAt(fila, 2)));
+                double precio = Double.parseDouble(String.valueOf(tablaCarrito.getValueAt(fila, 3)));
                 nuevoStock = stockProducto(id) + stock;
-                System.out.println(nuevoStock);
                 Product aux = new Product(id, nombre, nuevoStock, precio);
+                deleteProductShop(id);
                 productList.put(aux.getId(), aux);
-                listarCarrito();
                 listarProductos();
                 listarProductosCliente();
-                DefaultTableModel modelo = (DefaultTableModel) tablaCarrito.getModel();
-                modelo.removeRow(seleccionFila);
+                listarCarrito();
             }
         }else{
             JOptionPane.showMessageDialog(null, "Seleccione una fila");
@@ -236,6 +237,12 @@ public class Inventory extends JDialog {
         listaProductosCliente.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
         tablaCarrito.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
         tablaProductos.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
+    }
+
+    private void deleteProductShop(String id) {
+        if (shopList.containsKey(id)) {
+            shopList.remove(id);
+        }
     }
 
     private void deleteProduct(String id) {
