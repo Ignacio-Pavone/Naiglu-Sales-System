@@ -336,14 +336,14 @@ public class Inventory extends JDialog {
 
     private void listarCarrito() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Codigo", "Name", "Cantidad", "Precio"}, 0) {
+                new Object[]{"Codigo", "Name", "Cantidad", "Precio unitario", "Precio total"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
         for (Map.Entry<String, Product> entry : shopList.entrySet()) {
-            model.addRow(new Object[]{entry.getKey(),entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice()});
+            model.addRow(new Object[]{entry.getKey(),entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getPrice()*entry.getValue().getStock()});
         }
         tablaCarrito.setModel(model);
     }
