@@ -156,6 +156,8 @@ public class Inventory extends JDialog {
                 if (seleccionFila != -1) {
                     datosProductoCarro();
                     listarCarrito();
+                    listarProductos();
+                    listarProductosCliente();
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleccione una fila");
                 }
@@ -172,14 +174,20 @@ public class Inventory extends JDialog {
         }
     }
 
+
     private void datosProductoCarro (){
         String id = String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 0));
         String nombre = String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 1));
         int stock = Integer.parseInt(String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 2)));
         double precio = Double.parseDouble(String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 3)));
         int newStock = Integer.parseInt(cantUsuario.getText());
-        Product aux = new Product(id,nombre,newStock,precio);
-        shopList.put(aux.getId(),aux);
+        if (newStock <= stock){
+            Product aux = new Product(id,nombre,newStock,precio);
+            shopList.put(aux.getId(),aux);
+            productList.put(aux.getId(),aux);
+        }else{
+            JOptionPane.showMessageDialog(null, "Stock Insuficiente");
+        }
 
     }
 
