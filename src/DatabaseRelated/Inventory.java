@@ -43,6 +43,7 @@ public class Inventory extends JDialog {
     private JButton CONFIRMARButton;
     private JButton CANCELARButton;
     private JScrollPane tabl;
+    private JLabel cantValueLabel;
     private JButton SALIRButton2;
     private JTextField cantField;
     private JButton REFRESHButton;
@@ -59,8 +60,10 @@ public class Inventory extends JDialog {
         codetxt.setForeground(Color.WHITE);
         pricetxt.setForeground(Color.WHITE);
         stockLabel.setForeground(Color.WHITE);
-
-
+        cantValueLabel.setForeground(Color.WHITE);
+        listaProductosCliente.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
+        tablaCarrito.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
+        tablaProductos.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
         setMinimumSize(new Dimension(600, 550));
         setContentPane(products1);
         setModal(true);
