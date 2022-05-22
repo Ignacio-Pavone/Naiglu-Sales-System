@@ -44,6 +44,7 @@ public class Inventory extends JDialog {
     private JButton CANCELARButton;
     private JScrollPane tabl;
     private JLabel cantValueLabel;
+    private JButton deleteCarritoButton;
     private JButton SALIRButton2;
     private JTextField cantField;
     private JButton REFRESHButton;
@@ -56,18 +57,14 @@ public class Inventory extends JDialog {
 
     public Inventory(JFrame parent) {
         super(parent);
-        nameText.setForeground(Color.WHITE);
-        codetxt.setForeground(Color.WHITE);
-        pricetxt.setForeground(Color.WHITE);
-        stockLabel.setForeground(Color.WHITE);
-        cantValueLabel.setForeground(Color.WHITE);
-        listaProductosCliente.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
-        tablaCarrito.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
-        tablaProductos.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
+
+        tableStyle();
         setMinimumSize(new Dimension(600, 550));
         setContentPane(products1);
         setModal(true);
         setUndecorated(false);
+        labelStyle();
+        tableStyle();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         listarProductos();
@@ -92,10 +89,7 @@ public class Inventory extends JDialog {
                 cargarProducto();
                 listarProductos();
                 listarProductosCliente();
-                codeField.setText("");
-                nameField.setText("");
-                stockField.setText("");
-                priceField.setText("");
+                emptyTextsAdd();
                 tablaProductos.setRowSelectionAllowed(true);
                 tablaProductos.setColumnSelectionAllowed(false);
 
@@ -141,6 +135,7 @@ public class Inventory extends JDialog {
                     if (dialogButton == JOptionPane.YES_OPTION) {
                         deleteProduct(id);
                         listarProductos();
+                        listarProductosCliente();
                     } else {
                         remove(dialogButton);
                     }
@@ -171,6 +166,57 @@ public class Inventory extends JDialog {
                 }
             }
         });
+        deleteCarritoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                seleccionFila = tablaCarrito.getSelectedRow();
+                int nuevoStock = 0;
+                String id = String.valueOf(tablaCarrito.getValueAt(seleccionFila, 0));
+                String nombre = String.valueOf(tablaCarrito.getValueAt(seleccionFila, 1));
+                int stock = Integer.parseInt(String.valueOf(tablaCarrito.getValueAt(seleccionFila, 2)));
+                double precio = Double.parseDouble(String.valueOf(tablaCarrito.getValueAt(seleccionFila, 3)));
+                nuevoStock = stockProducto(id) + stock;
+                System.out.println(nuevoStock);
+                Product aux = new Product(id,nombre,nuevoStock,precio);
+                productList.put(aux.getId(),aux);
+                listarCarrito();
+                listarProductos();
+                listarProductosCliente();
+                DefaultTableModel modelo = (DefaultTableModel)tablaCarrito.getModel();
+                modelo.removeRow(seleccionFila);
+            }
+        });
+    }
+
+    private int stockProducto (String id){
+        int stock = 0;
+        for (Map.Entry<String, Product> entry : productList.entrySet()){
+            if (productList.containsKey(id)){
+                stock = productList.get(id).getStock();
+            }
+        }
+        return stock;
+    }
+
+    private void emptyTextsAdd (){
+        codeField.setText("");
+        nameField.setText("");
+        stockField.setText("");
+        priceField.setText("");
+    }
+
+    private void labelStyle (){
+        nameText.setForeground(Color.WHITE);
+        codetxt.setForeground(Color.WHITE);
+        pricetxt.setForeground(Color.WHITE);
+        stockLabel.setForeground(Color.WHITE);
+        cantValueLabel.setForeground(Color.WHITE);
+    }
+
+    private void tableStyle (){
+        listaProductosCliente.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
+        tablaCarrito.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
+        tablaProductos.getTableHeader().setFont( new Font( "Consolas" , Font.BOLD, 12 ));
     }
 
     private void deleteProduct(String id) {
@@ -180,10 +226,6 @@ public class Inventory extends JDialog {
         } else {
             JOptionPane.showMessageDialog(null, "Seleccione un Producto");
         }
-    }
-
-    private void nuevaFuncion (){
-
     }
 
     private void datosProductoCarro (){
@@ -267,14 +309,14 @@ public class Inventory extends JDialog {
 
     private void listarCarrito() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Name", "Cantidad", "Precio"}, 0) {
+                new Object[]{"Codigo", "Name", "Cantidad", "Precio"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
         for (Map.Entry<String, Product> entry : shopList.entrySet()) {
-            model.addRow(new Object[]{entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice()});
+            model.addRow(new Object[]{entry.getKey(),entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice()});
         }
         tablaCarrito.setModel(model);
     }
