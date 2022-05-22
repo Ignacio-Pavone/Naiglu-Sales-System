@@ -182,6 +182,10 @@ public class Inventory extends JDialog {
         }
     }
 
+    private void nuevaFuncion (){
+
+    }
+
     private void datosProductoCarro (){
         int nuevoStock = 0;
         String id = String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 0));
