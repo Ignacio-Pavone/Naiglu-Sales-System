@@ -180,8 +180,8 @@ public class Inventory extends JDialog {
         String nombre = String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 1));
         int stock = Integer.parseInt(String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 2)));
         double precio = Double.parseDouble(String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 3)));
-        int newStock = Integer.parseInt(cantUsuario.getText());
-        if (newStock> 0 && newStock <= stock){
+        int newStock = Integer.parseInt(String.valueOf(listaProductosCliente.getValueAt(seleccionFila,2)))-Integer.parseInt(cantUsuario.getText());
+        if (newStock>= 0 && newStock <= stock){
             Product aux = new Product(id,nombre,newStock,precio);
             shopList.put(aux.getId(),aux);
             productList.put(aux.getId(),aux);
@@ -262,6 +262,7 @@ public class Inventory extends JDialog {
         for (Map.Entry<String, Product> entry : shopList.entrySet()) {
             model.addRow(new Object[]{entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice()});
         }
+
         tablaCarrito.setModel(model);
     }
 
