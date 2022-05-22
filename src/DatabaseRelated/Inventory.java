@@ -181,7 +181,7 @@ public class Inventory extends JDialog {
         int stock = Integer.parseInt(String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 2)));
         double precio = Double.parseDouble(String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 3)));
         int newStock = Integer.parseInt(cantUsuario.getText());
-        if (newStock <= stock){
+        if (newStock> 0 && newStock <= stock){
             Product aux = new Product(id,nombre,newStock,precio);
             shopList.put(aux.getId(),aux);
             productList.put(aux.getId(),aux);
