@@ -34,11 +34,24 @@ public class Inventory extends JDialog {
     private JLabel codetxt;
     private JLabel stockLabel;
     private JButton DELETEButton;
+    private JTable tablaCarrito;
+    private JButton SALIRButton1;
+    private JTable listaProductosCliente;
+    private JButton salirListaUsuario;
+    private JButton addCarroButton;
+    private JTextField cantUsuario;
+    private JButton CONFIRMARButton;
+    private JButton CANCELARButton;
+    private JScrollPane tabl;
+    private JButton SALIRButton2;
+    private JTextField cantField;
+    private JButton REFRESHButton;
     private Inventory productData;
     private int seleccionFila;
 
 
     private HashMap<String, Product> productList = new HashMap<>();
+    private HashMap<String, Product> shopList = new HashMap<>();
 
     public Inventory(JFrame parent) {
         super(parent);
@@ -47,6 +60,7 @@ public class Inventory extends JDialog {
         pricetxt.setForeground(Color.WHITE);
         stockLabel.setForeground(Color.WHITE);
 
+
         setMinimumSize(new Dimension(600, 550));
         setContentPane(products1);
         setModal(true);
@@ -54,6 +68,8 @@ public class Inventory extends JDialog {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         listarProductos();
+        listarProductosCliente();
+        listarCarrito();
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -72,9 +88,9 @@ public class Inventory extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 cargarProducto();
                 listarProductos();
+                listarProductosCliente();
                 tablaProductos.setRowSelectionAllowed(true);
                 tablaProductos.setColumnSelectionAllowed(false);
-
 
             }
         });
@@ -100,8 +116,6 @@ public class Inventory extends JDialog {
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleccione una fila");
                 }
-
-
             }
         });
         updateButton.addActionListener(new ActionListener() {
@@ -114,17 +128,36 @@ public class Inventory extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int dialogButton = JOptionPane.YES_NO_OPTION;
-                dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
                 String id = updateID.getText();
                 if (!id.equals("")) {
+                    dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
                     if (dialogButton == JOptionPane.YES_OPTION) {
                         deleteProduct(id);
                         listarProductos();
-                    }else{
+                    } else {
                         remove(dialogButton);
                     }
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "Seleccione un Producto");
+                }
+            }
+        });
+
+        salirListaUsuario.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+        addCarroButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                seleccionFila = listaProductosCliente.getSelectedRow();
+                if (seleccionFila != -1) {
+                    datosProductoCarro();
+                    listarCarrito();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Seleccione una fila");
                 }
             }
         });
@@ -133,16 +166,24 @@ public class Inventory extends JDialog {
     private void deleteProduct(String id) {
         if (productList.containsKey(id)) {
             productList.remove(id);
-            updateName.setText("");
-            updateStock.setText("");
-            updatePrice.setText("");
+            limpiarLabels();
         } else {
             JOptionPane.showMessageDialog(null, "Seleccione un Producto");
         }
     }
 
-    private void datosFila() {
+    private void datosProductoCarro (){
+        String id = String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 0));
+        String nombre = String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 1));
+        int stock = Integer.parseInt(String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 2)));
+        double precio = Double.parseDouble(String.valueOf(listaProductosCliente.getValueAt(seleccionFila, 3)));
+        int newStock = Integer.parseInt(cantUsuario.getText());
+        Product aux = new Product(id,nombre,newStock,precio);
+        shopList.put(aux.getId(),aux);
 
+    }
+
+    private void datosFila() {
         String id = String.valueOf(tablaProductos.getValueAt(seleccionFila, 0));
         String nombre = String.valueOf(tablaProductos.getValueAt(seleccionFila, 1));
         int stock = Integer.parseInt(String.valueOf(tablaProductos.getValueAt(seleccionFila, 2)));
@@ -164,11 +205,15 @@ public class Inventory extends JDialog {
         } else {
             JOptionPane.showMessageDialog(null, "Seleccione un producto a modificar");
         }
+        limpiarLabels();
+        listarProductos();
+    }
+
+    private void limpiarLabels() {
         updateID.setText("");
         updateName.setText("");
         updateStock.setText("");
         updatePrice.setText("");
-        listarProductos();
     }
 
     private void cargarProducto() {
@@ -196,6 +241,34 @@ public class Inventory extends JDialog {
             model.addRow(new Object[]{entry.getKey(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice()});
         }
         tablaProductos.setModel(model);
+    }
+
+    private void listarCarrito() {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"Name", "Cantidad", "Precio"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        for (Map.Entry<String, Product> entry : shopList.entrySet()) {
+            model.addRow(new Object[]{entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice()});
+        }
+        tablaCarrito.setModel(model);
+    }
+
+    private void listarProductosCliente() {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"Codigo", "Name", "Stock", "Precio"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        for (Map.Entry<String, Product> entry : productList.entrySet()) {
+            model.addRow(new Object[]{entry.getKey(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice()});
+        }
+        listaProductosCliente.setModel(model);
     }
 }
 
