@@ -28,6 +28,12 @@ public class Inventory extends JDialog {
     private JTextField updateName;
     private JTextField updateStock;
     private JButton updateButton;
+    private JLabel nameText;
+    private JPanel stocktxt;
+    private JLabel pricetxt;
+    private JLabel codetxt;
+    private JLabel stockLabel;
+    private JButton DELETEButton;
     private Inventory productData;
     private int seleccionFila;
 
@@ -36,10 +42,15 @@ public class Inventory extends JDialog {
 
     public Inventory(JFrame parent) {
         super(parent);
+        nameText.setForeground(Color.WHITE);
+        codetxt.setForeground(Color.WHITE);
+        pricetxt.setForeground(Color.WHITE);
+        stockLabel.setForeground(Color.WHITE);
+
         setMinimumSize(new Dimension(600, 550));
         setContentPane(products1);
         setModal(true);
-        setUndecorated(true);
+        setUndecorated(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         listarProductos();
@@ -86,11 +97,9 @@ public class Inventory extends JDialog {
                 seleccionFila = tablaProductos.getSelectedRow();
                 if (seleccionFila != -1) {
                     datosFila();
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "Seleccione una fila");
                 }
-
-
 
 
             }
@@ -101,6 +110,27 @@ public class Inventory extends JDialog {
                 actualizarProducto();
             }
         });
+        DELETEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String id = updateID.getText();
+                if (!id.equals("")) {
+                    deleteProduct(id);
+                    listarProductos();
+                }
+            }
+        });
+    }
+
+    private void deleteProduct(String id) {
+        if (productList.containsKey(id)) {
+            productList.remove(id);
+            updateName.setText("");
+            updateStock.setText("");
+            updatePrice.setText("");
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione un Producto");
+        }
     }
 
     private void datosFila() {
@@ -123,7 +153,7 @@ public class Inventory extends JDialog {
             Double price = Double.parseDouble(updatePrice.getText());
             Product aux = new Product(id, name, stock, price);
             productList.put(aux.getId(), aux);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Seleccione un producto a modificar");
         }
         updateID.setText("");
@@ -148,7 +178,7 @@ public class Inventory extends JDialog {
 
     private void listarProductos() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"ID", "Name", "Stock", "Precio"}, 0){
+                new Object[]{"Codigo", "Name", "Stock", "Precio"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;

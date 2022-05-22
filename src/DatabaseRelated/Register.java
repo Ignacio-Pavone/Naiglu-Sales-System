@@ -35,7 +35,7 @@ public class Register extends JDialog {
         setMinimumSize(new Dimension(600, 550));
         setModal(true);
         setLocationRelativeTo(null);
-        setUndecorated(true);
+        setUndecorated(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         cancelButton.addActionListener(new ActionListener() {
