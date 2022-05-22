@@ -45,6 +45,8 @@ public class Inventory extends JDialog {
     private JScrollPane tabl;
     private JLabel cantValueLabel;
     private JButton deleteCarritoButton;
+    private JLabel textFinalPrice;
+    private JLabel finalPrice;
     private JButton SALIRButton2;
     private JTextField cantField;
     private JButton REFRESHButton;
@@ -142,6 +144,7 @@ public class Inventory extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                añadiralCarro();
+
             }
         });
         deleteCarritoButton.addActionListener(new ActionListener() {
@@ -176,9 +179,21 @@ public class Inventory extends JDialog {
             listarProductos();
             listarProductosCliente();
             cantUsuario.setText("");
+            setTotalPrice();
         } else {
             JOptionPane.showMessageDialog(null, "Seleccione una fila");
         }
+
+    }
+
+    private void setTotalPrice(){
+        double totalprice = 0;
+        for (int i = 0; i < tablaCarrito.getRowCount(); i++) {
+            totalprice = totalprice + Double.parseDouble(String.valueOf(tablaCarrito.getValueAt(i,4)));
+        }
+        textFinalPrice.setVisible(true);
+        textFinalPrice.setText("Total del carrito: "+ totalprice);
+
     }
 
     private void eliminarProductoCarrito (){
@@ -226,6 +241,7 @@ public class Inventory extends JDialog {
     }
 
     private void labelStyle (){
+        textFinalPrice.setForeground(Color.WHITE);
         nameText.setForeground(Color.WHITE);
         codetxt.setForeground(Color.WHITE);
         pricetxt.setForeground(Color.WHITE);
@@ -345,6 +361,7 @@ public class Inventory extends JDialog {
         for (Map.Entry<String, Product> entry : shopList.entrySet()) {
             model.addRow(new Object[]{entry.getKey(),entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getPrice()*entry.getValue().getStock()});
         }
+
         tablaCarrito.setModel(model);
     }
 
