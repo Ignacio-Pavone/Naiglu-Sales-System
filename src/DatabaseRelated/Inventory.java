@@ -9,13 +9,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Inventory extends JDialog {
 
     private JPanel products1;
-    private JTabbedPane tabbedPane1;
+    private JTabbedPane jTabbed;
     private JButton exitButton;
     private JButton modifyButton;
     private JTable productsTable;
@@ -31,7 +32,7 @@ public class Inventory extends JDialog {
     private JTextField updateStock;
     private JButton updateButton;
     private JLabel nameText;
-    private JPanel stocktxt;
+    private JPanel addProducts;
     private JLabel pricetxt;
     private JLabel codetxt;
     private JLabel stockLabel;
@@ -48,20 +49,24 @@ public class Inventory extends JDialog {
     private JLabel ammountValueLabel;
     private JButton deleteCartElement;
     private JLabel textFinalPrice;
+    private JPanel adminPanel;
     private JLabel finalPrice;
     private JButton exitButton2;
     private JTextField cantField;
     private JButton refreshButton;
     private Inventory productData;
+    private JTable ventasTable;
     private int rowSelection;
+    private double ammountAcc;
     private User u = new User();
-
-    protected void setU(User u) {
-        this.u = u;
-    }
-
     private HashMap<String, Product> productList = new HashMap<>();
     private HashMap<String, Product> shopList = new HashMap<>();
+    private ArrayList<Venta> listaVentass = new ArrayList<>();
+
+
+
+
+
 
     public Inventory(JFrame parent) {
         super(parent);
@@ -78,9 +83,11 @@ public class Inventory extends JDialog {
         listProducts();
         listClientProducts();
         listCart();
+        listaVentas();
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println(u);
                 dispose();
             }
         });
@@ -103,10 +110,14 @@ public class Inventory extends JDialog {
 
             }
         });
-        tabbedPane1.addComponentListener(new ComponentAdapter() {
+        jTabbed.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
+                if (!u.name.equals("Admin") && !u.email.equals("admin@admin.com")){
+                    jTabbed.remove(adminPanel);
+                    jTabbed.remove(addProducts);
+                }
             }
         });
         productsTable.addComponentListener(new ComponentAdapter() {
@@ -162,9 +173,16 @@ public class Inventory extends JDialog {
         CONFIRMPURCHASEButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(u);
+                Double ammount = ammountAcc;
+                Venta nueva = new Venta(u.name,ammount);
+                listaVentass.add(nueva);
+                listaVentas();
             }
         });
+    }
+
+    protected void setU(User u) {
+        this.u = u;
     }
 
     private void deleteProductFromList(){
@@ -204,7 +222,7 @@ public class Inventory extends JDialog {
         }
         textFinalPrice.setVisible(true);
         textFinalPrice.setText("Final price: "+ totalprice);
-
+        ammountAcc = totalprice;
     }
 
     private void deleteProductFromCart(){
@@ -409,6 +427,20 @@ public class Inventory extends JDialog {
             model.addRow(new Object[]{entry.getKey(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice()});
         }
         clientProductList.setModel(model);
+    }
+
+    private void listaVentas() {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"Comprobante Nº", "Client Name", "Total Ammount"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        for (int i = 0; i<listaVentass.size();i++) {
+            model.addRow(new Object[]{listaVentass.get(i).getNumero(), listaVentass.get(i).getNombreCliente(),listaVentass.get(i).getTotalAmmount()});
+        }
+        ventasTable.setModel(model);
     }
 }
 
