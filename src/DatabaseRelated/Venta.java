@@ -5,6 +5,10 @@ public class Venta {
     private String nombreCliente;
     private double totalAmmount;
 
+    public Venta(){
+
+    }
+
     public Venta(String nombreCliente, double totalAmmount) {
 
         this.numero = Math.floor((Math.random() * 500 + 1));
