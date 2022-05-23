@@ -73,6 +73,7 @@ public class Inventory extends JDialog {
     private JLabel sellPriceLabel;
     private JTextField updateSupplier;
     private JTextField updateSellPrice;
+    private JButton DELETEELEMENTButton;
     private int rowSelection;
     private double ammountAcc;
 
@@ -199,6 +200,12 @@ public class Inventory extends JDialog {
                 addSupplier();
             }
         });
+        DELETEELEMENTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteSupplierFromList();
+            }
+        });
     }
 
     private boolean checkSupplierRequirements() {
@@ -223,10 +230,14 @@ public class Inventory extends JDialog {
     }
 
     private void setComboBoxConfig() {
-        Object[] arr = suppliersList.toArray();
-        System.out.println(Arrays.toString(arr));
-        comboBox1.setEditable(false);
-        comboBox1.addItem(arr[suppliersList.size() - 1]);
+        comboBox1.removeAllItems();
+        Object[] arr = new Object[suppliersList.size()];
+        arr = suppliersList.toArray();
+        for (Object o: arr) {
+            comboBox1.addItem(o);
+        }
+        //comboBox1.setEditable(false);
+        //comboBox1.addItem(arr[suppliersList.size() - 1]);
     }
 
 
@@ -349,7 +360,30 @@ public class Inventory extends JDialog {
                 setTotalPrice();
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Select a row");
+
+        }
+    }
+
+    private void deleteSupplierFromList(){
+        int row = 0;
+        row = supplierTable.getSelectedRow();
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        if (row != -1){
+            dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
+            if (dialogButton == JOptionPane.YES_OPTION) {
+                String name = String.valueOf(supplierTable.getValueAt(row, 0));
+                String taxpayerID = String.valueOf(supplierTable.getValueAt(row, 1));
+                String phoneNumber = String.valueOf(supplierTable.getValueAt(row, 2));
+                String workingArea = String.valueOf(supplierTable.getValueAt(row, 3));
+                Supplier aux = new Supplier(name,taxpayerID,phoneNumber,workingArea);
+                deleteSupplier(aux.getName());
+                listSuppliers();
+                setComboBoxConfig();
+
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Select a row");
+            }
         }
     }
 
@@ -430,6 +464,24 @@ public class Inventory extends JDialog {
         } else {
             JOptionPane.showMessageDialog(null, "Select a product");
         }
+    }
+
+    private void deleteSupplier(String name) {
+        Supplier aux = searchSupplier(name);
+        if (suppliersList.contains(aux)) {
+            suppliersList.remove(aux);
+        } else {
+            JOptionPane.showMessageDialog(null, "Select a product");
+        }
+    }
+
+    private Supplier searchSupplier(String name){
+        for (Supplier s:suppliersList) {
+            if (s.getName().equals(name)){
+                return s;
+            }
+        }
+        return null;
     }
 
     private void cartProductsData() {

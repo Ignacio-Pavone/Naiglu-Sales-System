@@ -8,6 +8,11 @@ public class Supplier extends Entity implements I_SaleAndPurchase{
     public Supplier() {
     }
 
+    public Supplier(String name, String taxpayerID, String phoneNumber, String workingArea) {
+        super(name, taxpayerID, phoneNumber);
+        this.workingArea = workingArea;
+    }
+
     public String getWorkingArea() {
         return workingArea;
     }

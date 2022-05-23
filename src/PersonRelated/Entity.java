@@ -10,6 +10,11 @@ public abstract class Entity {
     public Entity() {
     }
 
+    public Entity(String name, String taxpayerID, String phoneNumber) {
+        this.name = name;
+        this.taxpayerID = taxpayerID;
+        this.phoneNumber = phoneNumber;
+    }
 
     @Override
     public boolean equals(Object o) {
