@@ -217,6 +217,7 @@ public class Inventory extends JDialog {
             aux.setWorkingArea(supplierWorkingArea.getText());
             suppliersList.add(aux);
             setComboBoxConfig();
+            clearSupplierFields();
         }
         listSuppliers();
     }
@@ -228,12 +229,7 @@ public class Inventory extends JDialog {
         comboBox1.addItem(arr[suppliersList.size() - 1]);
     }
 
-    private void clearSupplierFields() {
-        supplierNameField.setText("");
-        supplierIDField.setText("");
-        supplierPhoneField.setText("");
-        supplierWorkingArea.setText("");
-    }
+
 
     private void listSuppliers() {
         DefaultTableModel model = new DefaultTableModel(
@@ -383,6 +379,14 @@ public class Inventory extends JDialog {
         stockField.setText("");
         priceField.setText("");
         sellPriceField.setText("");
+    }
+
+    private void clearSupplierFields(){
+        supplierNameField.setText("");
+        supplierIDField.setText("");
+        supplierPhoneField.setText("");
+        supplierWorkingArea.setText("");
+
     }
 
     private void labelStyle() {
