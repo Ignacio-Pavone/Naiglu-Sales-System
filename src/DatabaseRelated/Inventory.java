@@ -2,7 +2,6 @@ package DatabaseRelated;
 
 import PersonRelated.Supplier;
 import UserRelated.Employee;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -73,7 +72,11 @@ public class Inventory extends JDialog {
     private JLabel sellPriceLabel;
     private JTextField updateSupplier;
     private JTextField updateSellPrice;
+<<<<<<< HEAD
     private JButton DELETEELEMENTButton;
+=======
+    private JPanel supplierTab;
+>>>>>>> 609a5125d6c30ac227bf462fd4186771bc962d91
     private int rowSelection;
     private double ammountAcc;
 
@@ -135,6 +138,7 @@ public class Inventory extends JDialog {
                     sellTable.remove(adminPanel);
                     sellTable.remove(addProducts);
                     sellTable.remove(addSells);
+                    sellTable.remove(supplierTab);
                 }
             }
         });
@@ -200,13 +204,19 @@ public class Inventory extends JDialog {
                 addSupplier();
             }
         });
+<<<<<<< HEAD
         DELETEELEMENTButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 deleteSupplierFromList();
             }
         });
+=======
+
+>>>>>>> 609a5125d6c30ac227bf462fd4186771bc962d91
     }
+
+
 
     private boolean checkSupplierRequirements() {
         return !supplierIDField.getText().equals("") && !supplierNameField.getText().equals("") && !supplierPhoneField.getText().equals("") && !supplierWorkingArea.getText().equals("");
@@ -239,7 +249,6 @@ public class Inventory extends JDialog {
         //comboBox1.setEditable(false);
         //comboBox1.addItem(arr[suppliersList.size() - 1]);
     }
-
 
 
     private void listSuppliers() {
@@ -332,6 +341,7 @@ public class Inventory extends JDialog {
         }
         textFinalPrice.setVisible(true);
         textFinalPrice.setText("Final price: " + totalprice);
+        textFinalPrice.setForeground(Color.GREEN);
         ammountAcc = totalprice;
     }
 
@@ -351,7 +361,7 @@ public class Inventory extends JDialog {
                 double price = Double.parseDouble(String.valueOf(cartTable.getValueAt(row, 4)));
                 double sellPrice = Double.parseDouble(String.valueOf(cartTable.getValueAt(row, 4)));
                 newStock = productStock(id) + stock;
-                Product aux = new Product(id,supplier, name, newStock, price,sellPrice);
+                Product aux = new Product(id, supplier, name, newStock, price, sellPrice);
                 deleteProductShop(id);
                 productList.put(aux.getId(), aux);
                 listProducts();
@@ -415,12 +425,11 @@ public class Inventory extends JDialog {
         sellPriceField.setText("");
     }
 
-    private void clearSupplierFields(){
+    private void clearSupplierFields() {
         supplierNameField.setText("");
         supplierIDField.setText("");
         supplierPhoneField.setText("");
         supplierWorkingArea.setText("");
-
     }
 
     private void labelStyle() {
