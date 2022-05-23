@@ -13,8 +13,6 @@ public class Supplier extends Entity implements I_SaleAndPurchase{
     }
 
 
-
-
     @Override
     public int hashCode() {
         return 1;

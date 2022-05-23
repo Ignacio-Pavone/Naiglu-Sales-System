@@ -5,22 +5,31 @@ import java.util.Objects;
 public class Product {
     private String id;
     private String name;
+    private String supplierName;
     private int stock;
     private Double price;
+    private Double sellPrice;
 
 
     public Product(){
 
     }
+    public Product(String id,String supplierName, String name, int stock, Double price) {
+        this.id = id;
+        this.supplierName = supplierName;
+        this.name = name;
+        this.stock = stock;
+        this.price = price;
+
+
+    }
+
     public Product(String id, String name, int stock, Double price) {
         this.id = id;
         this.name = name;
         this.stock = stock;
         this.price = price;
     }
-
-
-
 
     public String getId() {
         return id;
@@ -30,14 +39,12 @@ public class Product {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", stock=" + stock +
-                ", price=" + price +
-                '}';
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 
     public String getName() {
@@ -62,5 +69,25 @@ public class Product {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Double getSellPrice() {
+        return sellPrice;
+    }
+
+    public void setSellPrice(Double sellPrice) {
+        this.sellPrice = sellPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", supplierName='" + supplierName + '\'' +
+                ", stock=" + stock +
+                ", price=" + price +
+                ", sellPrice=" + sellPrice +
+                '}';
     }
 }

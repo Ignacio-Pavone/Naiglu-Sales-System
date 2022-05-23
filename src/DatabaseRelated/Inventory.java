@@ -69,6 +69,8 @@ public class Inventory extends JDialog {
     private JLabel phoneLabel;
     private JLabel taxPayerLabel;
     private JLabel WorkigAreaLabel;
+    private JTextField sellPriceField;
+    private JLabel sellPriceLabel;
     private int rowSelection;
     private double ammountAcc;
 
@@ -207,7 +209,6 @@ public class Inventory extends JDialog {
             JOptionPane.showMessageDialog(null,"Ingresa todos los datos necesarios");
         }
         else{
-
             aux.setName(supplierNameField.getText());
             aux.setTaxpayerID(supplierIDField.getText());
             aux.setPhoneNumber(supplierPhoneField.getText());
@@ -231,10 +232,6 @@ public class Inventory extends JDialog {
         supplierPhoneField.setText("");
         supplierWorkingArea.setText("");
     }
-
-
-
-
 
     private void listSuppliers() {
         DefaultTableModel model = new DefaultTableModel(
@@ -354,8 +351,6 @@ public class Inventory extends JDialog {
         } else {
             JOptionPane.showMessageDialog(null, "Select a row");
         }
-
-
     }
 
     private int productStockShopList(String id) {
@@ -383,6 +378,8 @@ public class Inventory extends JDialog {
         nameField.setText("");
         stockField.setText("");
         priceField.setText("");
+        sellPriceLabel.setText("");
+
     }
 
     private void labelStyle() {
@@ -397,6 +394,7 @@ public class Inventory extends JDialog {
         taxPayerLabel.setForeground(Color.WHITE);
         phoneLabel.setForeground(Color.WHITE);
         WorkigAreaLabel.setForeground(Color.WHITE);
+        sellPriceLabel.setForeground(Color.WHITE);
     }
 
     private void tableStyle() {
@@ -429,19 +427,23 @@ public class Inventory extends JDialog {
 
     private void cartProductsData() {
         int auxStock = 0;
+
         String id = String.valueOf(clientProductList.getValueAt(rowSelection, 0));
-        String nombre = String.valueOf(clientProductList.getValueAt(rowSelection, 1));
-        int stock = Integer.parseInt(String.valueOf(clientProductList.getValueAt(rowSelection, 2)));
-        double precio = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 3)));
+        String supplier = String.valueOf(clientProductList.getValueAt(rowSelection, 1));
+        String nombre = String.valueOf(clientProductList.getValueAt(rowSelection, 2));
+        int stock = Integer.parseInt(String.valueOf(clientProductList.getValueAt(rowSelection, 3)));
+       // double precio = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 4)));
+        double sellPrice = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 4)));
+
         int newStock = Integer.parseInt(userAmmount.getText());
         if (newStock > 0 && newStock <= stock) {
             auxStock = stock - newStock;
-            Product aux = new Product(id, nombre, newStock, precio);
-            Product aux2 = new Product(id, nombre, auxStock, precio);
+            Product aux = new Product(id,supplier, nombre, newStock, sellPrice);
+            Product aux2 = new Product(id,supplier, nombre, auxStock, sellPrice);
             if (shopList.containsKey(id)) {
                 int stockAux = productStockShopList(id) + newStock;
                 System.out.println(stockAux);
-                Product aux3 = new Product(id, nombre, stockAux, precio);
+                Product aux3 = new Product(id, supplier,nombre, stockAux, sellPrice);
                 shopList.put(aux3.getId(), aux3);
                 productList.put(aux2.getId(), aux2);
             } else {
@@ -493,9 +495,12 @@ public class Inventory extends JDialog {
         try {
             Product data = new Product();
             data.setId(codeField.getText());
+            Supplier aux = (Supplier) comboBox1.getSelectedItem();
+            data.setSupplierName(aux.getName());
             data.setName(nameField.getText());
             data.setStock(Integer.parseInt(stockField.getText()));
             data.setPrice(Double.parseDouble(priceField.getText()));
+            data.setSellPrice(Double.parseDouble(sellPriceField.getText()));
             productList.put(data.getId(), data);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -511,21 +516,21 @@ public class Inventory extends JDialog {
             }
         };
         for (Map.Entry<String, Product> entry : productList.entrySet()) {
-            model.addRow(new Object[]{entry.getKey(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice()});
+            model.addRow(new Object[]{entry.getKey(),entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(),entry.getValue().getSellPrice()});
         }
         productsTable.setModel(model);
     }
 
     private void listCart() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Item ID", "Name", "Ammount", "Unit price", "Total price"}, 0) {
+                new Object[]{"Item ID","Supplier Name", "Name", "Ammount", "Unity price", "Total price"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
         for (Map.Entry<String, Product> entry : shopList.entrySet()) {
-            model.addRow(new Object[]{entry.getKey(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getPrice() * entry.getValue().getStock()});
+            model.addRow(new Object[]{entry.getKey(),entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getPrice() * entry.getValue().getStock()});
         }
 
         cartTable.setModel(model);
@@ -533,14 +538,14 @@ public class Inventory extends JDialog {
 
     private void listClientProducts() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Item ID", "Name", "Stock", "Price"}, 0) {
+                new Object[]{"Item ID","Supplier", "Name", "Stock", "Sell Price"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
         for (Map.Entry<String, Product> entry : productList.entrySet()) {
-            model.addRow(new Object[]{entry.getKey(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice()});
+            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getSellPrice()});
         }
         clientProductList.setModel(model);
     }
