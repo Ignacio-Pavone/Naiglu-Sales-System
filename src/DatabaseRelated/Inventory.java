@@ -468,14 +468,14 @@ public class Inventory extends JDialog {
 
     private void listaVentas() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Comprobante Nº", "Client Name", "Total Ammount"}, 0) {
+                new Object[]{"Comprobante Nº", "Client Name", "Total Ammount", "Date"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
         for (int i = 0; i < listaVentass.size(); i++) {
-            model.addRow(new Object[]{listaVentass.get(i).getNumero(), listaVentass.get(i).getNombreCliente(), listaVentass.get(i).getTotalAmmount()});
+            model.addRow(new Object[]{listaVentass.get(i).getNumero(), listaVentass.get(i).getNombreCliente(), listaVentass.get(i).getTotalAmmount(), listaVentass.get(i).getFecha()});
         }
         ventasTable.setModel(model);
     }
