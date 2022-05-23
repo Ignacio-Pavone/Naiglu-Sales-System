@@ -53,7 +53,7 @@
                       <background color="-9934485"/>
                       <fillsViewportHeight value="true"/>
                       <font name="Consolas" size="12" style="0"/>
-                      <gridColor color="-9934485"/>
+                      <gridColor color="-15985889"/>
                       <selectionForeground color="-4871738"/>
                     </properties>
                   </component>
@@ -133,7 +133,7 @@
                       <background color="-9934485"/>
                       <fillsViewportHeight value="true"/>
                       <font name="Consolas" size="12" style="0"/>
-                      <gridColor color="-9934485"/>
+                      <gridColor color="-15985889"/>
                       <selectionForeground color="-4871738"/>
                     </properties>
                   </component>
@@ -234,15 +234,20 @@
                       <background color="-9934485"/>
                       <fillsViewportHeight value="true"/>
                       <font name="Consolas" size="12" style="0"/>
+                      <gridColor color="-15985889"/>
                     </properties>
                   </component>
                 </children>
               </scrollpane>
-              <vspacer id="cd45d">
+              <component id="9c6d9" class="javax.swing.JButton" binding="generarFacturaButton" default-binding="true">
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
-              </vspacer>
+                <properties>
+                  <background color="-14192098"/>
+                  <text value="Generar Factura"/>
+                </properties>
+              </component>
             </children>
           </grid>
           <grid id="17eef" binding="addProducts" layout-manager="GridLayoutManager" row-count="8" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -439,7 +444,7 @@
                           <enabled value="true"/>
                           <fillsViewportHeight value="true"/>
                           <font name="Consolas" size="12" style="0"/>
-                          <gridColor color="-10791582"/>
+                          <gridColor color="-15985889"/>
                           <preferredSize width="200" height="200"/>
                           <selectionBackground color="-4871738"/>
                         </properties>

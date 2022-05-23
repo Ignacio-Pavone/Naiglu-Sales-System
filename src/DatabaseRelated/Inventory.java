@@ -58,6 +58,7 @@ public class Inventory extends JDialog {
     private Inventory productData;
     private JTable ventasTable;
     private JPanel addSells;
+    private JButton generarFacturaButton;
     private int rowSelection;
     private double ammountAcc;
     private Employee employee = new Employee();
@@ -68,7 +69,6 @@ public class Inventory extends JDialog {
 
     public Inventory(JFrame parent) {
         super(parent);
-
         tableStyle();
         setMinimumSize(new Dimension(600, 550));
         setContentPane(products1);
@@ -112,7 +112,7 @@ public class Inventory extends JDialog {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                System.out.println(employee.isAdmin());
+
                 if (!employee.isAdmin()) {
                     sellTable.remove(adminPanel);
                     sellTable.remove(addProducts);
@@ -173,18 +173,18 @@ public class Inventory extends JDialog {
         CONFIRMPURCHASEButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               confirmPruchase();
+                confirmPruchase();
             }
         });
     }
 
-    private void confirmPruchase (){
+    private void confirmPruchase() {
         Venta nueva = new Venta();
         if (tableHaveData()) {
             System.out.println("hola");
             Double ammount = ammountAcc;
             nueva = new Venta(employee.getName(), ammount);
-            if (!sellExist(nueva) ) {
+            if (!sellExist(nueva)) {
                 listaVentass.add(nueva);
                 textFinalPrice.setText("Total Price");
                 shopList.clear();
@@ -194,10 +194,10 @@ public class Inventory extends JDialog {
         listaVentas();
     }
 
-    private boolean tableHaveData (){
+    private boolean tableHaveData() {
         boolean flag = false;
-        if (shopList.size()>0 && !flag){
-        System.out.println(shopList.size());
+        if (shopList.size() > 0 && !flag) {
+            System.out.println(shopList.size());
             flag = true;
         }
         return flag;
@@ -327,6 +327,10 @@ public class Inventory extends JDialog {
         cartTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         productsTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         ventasTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
+        ventasTable.getTableHeader().setBackground(Color.GRAY);
+        productsTable.getTableHeader().setBackground(Color.GRAY);
+        cartTable.getTableHeader().setBackground(Color.GRAY);
+        clientProductList.getTableHeader().setBackground(Color.GRAY);
     }
 
     private void deleteProductShop(String id) {
