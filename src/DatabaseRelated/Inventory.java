@@ -64,6 +64,11 @@ public class Inventory extends JDialog {
     private JTextField supplierIDField;
     private JTextField supplierWorkingArea;
     private JComboBox comboBox1;
+    private JLabel supplierText;
+    private JLabel nameLabel;
+    private JLabel phoneLabel;
+    private JLabel taxPayerLabel;
+    private JLabel WorkigAreaLabel;
     private int rowSelection;
     private double ammountAcc;
 
@@ -77,7 +82,7 @@ public class Inventory extends JDialog {
     public Inventory(JFrame parent) {
         super(parent);
         tableStyle();
-        setMinimumSize(new Dimension(600, 550));
+        setMinimumSize(new Dimension(650, 600));
         setContentPane(products1);
         setModal(true);
         setUndecorated(false);
@@ -387,6 +392,11 @@ public class Inventory extends JDialog {
         pricetxt.setForeground(Color.WHITE);
         stockLabel.setForeground(Color.WHITE);
         ammountValueLabel.setForeground(Color.WHITE);
+        supplierText.setForeground(Color.WHITE);
+        nameLabel.setForeground(Color.WHITE);
+        taxPayerLabel.setForeground(Color.WHITE);
+        phoneLabel.setForeground(Color.WHITE);
+        WorkigAreaLabel.setForeground(Color.WHITE);
     }
 
     private void tableStyle() {
@@ -394,6 +404,8 @@ public class Inventory extends JDialog {
         cartTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         productsTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         ventasTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
+        supplierTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
+        supplierTable.getTableHeader().setBackground(Color.GRAY);
         ventasTable.getTableHeader().setBackground(Color.GRAY);
         productsTable.getTableHeader().setBackground(Color.GRAY);
         cartTable.getTableHeader().setBackground(Color.GRAY);
@@ -492,7 +504,7 @@ public class Inventory extends JDialog {
 
     private void listProducts() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Item ID", "Name", "Stock", "Price"}, 0) {
+                new Object[]{"Item ID","Supplier Name", "Name", "Stock", "Stock Price", "Sell Price"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
