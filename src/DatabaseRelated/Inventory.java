@@ -378,7 +378,7 @@ public class Inventory extends JDialog {
         nameField.setText("");
         stockField.setText("");
         priceField.setText("");
-        sellPriceLabel.setText("");
+
 
     }
 
@@ -442,7 +442,6 @@ public class Inventory extends JDialog {
             Product aux2 = new Product(id,supplier, nombre, auxStock, sellPrice);
             if (shopList.containsKey(id)) {
                 int stockAux = productStockShopList(id) + newStock;
-                System.out.println(stockAux);
                 Product aux3 = new Product(id, supplier,nombre, stockAux, sellPrice);
                 shopList.put(aux3.getId(), aux3);
                 productList.put(aux2.getId(), aux2);
@@ -530,7 +529,7 @@ public class Inventory extends JDialog {
             }
         };
         for (Map.Entry<String, Product> entry : shopList.entrySet()) {
-            model.addRow(new Object[]{entry.getKey(),entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getPrice() * entry.getValue().getStock()});
+            model.addRow(new Object[]{entry.getKey(),entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getSellPrice(), entry.getValue().getSellPrice() * entry.getValue().getStock()});
         }
 
         cartTable.setModel(model);

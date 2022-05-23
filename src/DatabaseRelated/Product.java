@@ -19,10 +19,10 @@ public class Product {
         this.supplierName = supplierName;
         this.name = name;
         this.stock = stock;
-        this.price = price;
-
-
+        this.sellPrice = price;
     }
+
+
 
     public Product(String id, String name, int stock, Double price) {
         this.id = id;
