@@ -1,10 +1,10 @@
 package UserRelated;
 
 public class User {
-    public int ID;
-    public String name;
-    public String email;
-    public String password;
+    private int ID;
+    private String name;
+    private String email;
+    private String password;
 
     public User() {
     }

@@ -5,11 +5,11 @@ public class Main {
 
     public static void main(String[] args) {
         Login login = new Login(null);
-        User user = Login.user;
+        User user = Login.employee;
         if (user != null) {
-            System.out.println("ID " + user.ID);
-            System.out.println("Successful authentication: " + user.name);
-            System.out.println("Email: " + user.email);
+            System.out.println("ID " + user.getID());
+            System.out.println("Successful authentication: " + user.getName());
+            System.out.println("Email: " + user.getEmail());
         }
         else {
             System.out.println("Cancelled");

@@ -1,5 +1,6 @@
 package DatabaseRelated;
 
+import UserRelated.Employee;
 import UserRelated.User;
 
 import javax.swing.*;
@@ -51,26 +52,27 @@ public class Register extends JDialog {
         }
 
         public void registerButtonLogic () {
-            User user = new User();
+            Employee employee = new Employee();
             if (!nameTextField.getText().isEmpty() && isEmail(emailTextField.getText()) && passwordTextField.getPassword().length > 0) {
-                user.setName(nameTextField.getText());
-                user.setEmail(emailTextField.getText());
-                user.setPassword(passwordTextField.getText());
-                Registrarse(user);
+                employee.setName(nameTextField.getText());
+                employee.setEmail(emailTextField.getText());
+                employee.setPassword(passwordTextField.getText());
+                Registrarse(employee);
             } else {
                 JOptionPane.showMessageDialog(null, "ERROR");
             }
         }
 
 
-    public boolean Registrarse(User user) {
-        String sql = "INSERT INTO usuarios (nombre, correo, password) VALUES (?,?,?)";
+    public boolean Registrarse(Employee employee) {
+        String sql = "INSERT INTO usuarios (nombre, correo, password, esAdmin) VALUES (?,?,?,?)";
         try {
             con = connection.getConnection();
             ps = con.prepareStatement(sql);
-            ps.setString(1, user.getName());
-            ps.setString(2, user.getEmail());
-            ps.setString(3, user.getPassword());
+            ps.setString(1, employee.getName());
+            ps.setString(2, employee.getEmail());
+            ps.setString(3, employee.getPassword());
+            ps.setBoolean(4,employee.isAdmin());
             ps.execute();
             JOptionPane.showMessageDialog(null, "SUCCESSFUL REGISTRATION");
             return true;

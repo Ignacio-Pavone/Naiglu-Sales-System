@@ -1,5 +1,6 @@
 package DatabaseRelated;
 
+import UserRelated.Employee;
 import UserRelated.User;
 
 import javax.swing.*;
@@ -59,7 +60,7 @@ public class Inventory extends JDialog {
     private JPanel addSells;
     private int rowSelection;
     private double ammountAcc;
-    private User u = new User();
+    private Employee employee = new Employee();
     private HashMap<String, Product> productList = new HashMap<>();
     private HashMap<String, Product> shopList = new HashMap<>();
     private ArrayList<Venta> listaVentass = new ArrayList<>();
@@ -84,7 +85,7 @@ public class Inventory extends JDialog {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(u);
+                System.out.println(employee);
                 dispose();
             }
         });
@@ -111,7 +112,8 @@ public class Inventory extends JDialog {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                if (!u.name.equals("Admin") && !u.email.equals("admin@admin.com")) {
+                System.out.println(employee.isAdmin());
+                if (!employee.isAdmin()) {
                     sellTable.remove(adminPanel);
                     sellTable.remove(addProducts);
                     sellTable.remove(addSells);
@@ -181,7 +183,7 @@ public class Inventory extends JDialog {
         if (tableHaveData()) {
             System.out.println("hola");
             Double ammount = ammountAcc;
-            nueva = new Venta(u.name, ammount);
+            nueva = new Venta(employee.getName(), ammount);
             if (!sellExist(nueva) ) {
                 listaVentass.add(nueva);
                 textFinalPrice.setText("Total Price");
@@ -211,8 +213,8 @@ public class Inventory extends JDialog {
         return flag;
     }
 
-    protected void setU(User u) {
-        this.u = u;
+    protected void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     private void deleteProductFromList() {

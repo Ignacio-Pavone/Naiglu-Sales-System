@@ -1,6 +1,6 @@
 package DatabaseRelated;
 
-import UserRelated.User;
+import UserRelated.Employee;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ public class Login extends JDialog {
     private JPanel loginPanel;
     private JTextField email;
     private JButton registerButton;
-    public static User user;
+    public static Employee employee;
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
@@ -58,12 +58,12 @@ public class Login extends JDialog {
     private void loginUser() {
         String email = Login.this.email.getText();
         String password = String.valueOf(passwordField2.getPassword());
-        user = authenticate(email, password);
-        if (user != null) {
+        employee = authenticate(email, password);
+        if (employee != null) {
             dispose();
-            JOptionPane.showMessageDialog(null, "Welcome " + user.name);
+            JOptionPane.showMessageDialog(null, "Welcome " + employee.getName());
             Inventory nuevo = new Inventory(null);
-            nuevo.setU(user);
+            nuevo.setEmployee(employee);
             nuevo.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(Login.this,
@@ -77,8 +77,8 @@ public class Login extends JDialog {
         nuevo.setVisible(true);
     }
 
-    private User authenticate(String email, String password) {
-        User user = null;
+    private Employee authenticate(String email, String password) {
+        Employee em = null;
         try {
             String sql = "SELECT * FROM usuarios WHERE correo=? AND password=?";
             con = cn.getConnection();
@@ -88,17 +88,18 @@ public class Login extends JDialog {
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                user = new User();
-                user.ID = rs.getInt("id");
-                user.name = rs.getString("nombre");
-                user.email = rs.getString("correo");
-                user.password = rs.getString("password");
+                em = new Employee();
+                em.setID(rs.getInt("id"));
+                em.setName(rs.getString("nombre"));
+                em.setEmail( rs.getString("correo"));
+                em.setPassword(rs.getString("password"));
+                em.setAdmin(rs.getBoolean("esAdmin"));
             }
             rs.close();
             con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return user;
+        return em;
     }
 }
