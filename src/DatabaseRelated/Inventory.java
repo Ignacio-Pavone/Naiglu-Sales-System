@@ -72,11 +72,8 @@ public class Inventory extends JDialog {
     private JLabel sellPriceLabel;
     private JTextField updateSupplier;
     private JTextField updateSellPrice;
-<<<<<<< HEAD
     private JButton DELETEELEMENTButton;
-=======
     private JPanel supplierTab;
->>>>>>> 609a5125d6c30ac227bf462fd4186771bc962d91
     private int rowSelection;
     private double ammountAcc;
 
@@ -204,16 +201,14 @@ public class Inventory extends JDialog {
                 addSupplier();
             }
         });
-<<<<<<< HEAD
         DELETEELEMENTButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 deleteSupplierFromList();
             }
         });
-=======
 
->>>>>>> 609a5125d6c30ac227bf462fd4186771bc962d91
+
     }
 
 
