@@ -6,6 +6,9 @@ public class User {
     public String email;
     public String password;
 
+    public User() {
+    }
+
     public int getID() {
         return ID;
     }
@@ -36,6 +39,16 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "ID=" + ID +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }
 

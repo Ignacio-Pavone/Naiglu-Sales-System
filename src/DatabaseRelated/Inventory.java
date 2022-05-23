@@ -1,5 +1,7 @@
 package DatabaseRelated;
 
+import UserRelated.User;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -52,7 +54,11 @@ public class Inventory extends JDialog {
     private JButton refreshButton;
     private Inventory productData;
     private int rowSelection;
+    private User u = new User();
 
+    protected void setU(User u) {
+        this.u = u;
+    }
 
     private HashMap<String, Product> productList = new HashMap<>();
     private HashMap<String, Product> shopList = new HashMap<>();
@@ -151,6 +157,12 @@ public class Inventory extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 deleteProductFromCart();
+            }
+        });
+        CONFIRMPURCHASEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(u);
             }
         });
     }
