@@ -1,7 +1,7 @@
 package DatabaseRelated;
 
+import PersonRelated.Supplier;
 import UserRelated.Employee;
-import UserRelated.User;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -10,9 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Inventory extends JDialog {
 
@@ -59,12 +57,21 @@ public class Inventory extends JDialog {
     private JTable ventasTable;
     private JPanel addSells;
     private JButton generarFacturaButton;
+    private JTable supplierTable;
+    private JButton addSupplierButton;
+    private JTextField supplierNameField;
+    private JTextField supplierPhoneField;
+    private JTextField supplierIDField;
+    private JTextField supplierWorkingArea;
+    private JComboBox comboBox1;
     private int rowSelection;
     private double ammountAcc;
+
     private Employee employee = new Employee();
     private HashMap<String, Product> productList = new HashMap<>();
     private HashMap<String, Product> shopList = new HashMap<>();
     private ArrayList<Venta> listaVentass = new ArrayList<>();
+    private HashSet<Supplier> suppliersList = new HashSet<>();
 
 
     public Inventory(JFrame parent) {
@@ -81,6 +88,7 @@ public class Inventory extends JDialog {
         listProducts();
         listClientProducts();
         listCart();
+        listSuppliers();
         listaVentas();
         exitButton.addActionListener(new ActionListener() {
             @Override
@@ -176,6 +184,65 @@ public class Inventory extends JDialog {
                 confirmPruchase();
             }
         });
+        addSupplierButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addSupplier();
+            }
+        });
+    }
+    private boolean checkSupplierRequirements(){
+        return !supplierIDField.getText().equals("") && !supplierNameField.getText().equals("") && !supplierPhoneField.getText().equals("") && !supplierWorkingArea.getText().equals("");
+    }
+
+
+    private void addSupplier(){
+        Supplier aux = new Supplier();
+        if (!checkSupplierRequirements()){
+            JOptionPane.showMessageDialog(null,"Ingresa todos los datos necesarios");
+        }
+        else{
+
+            aux.setName(supplierNameField.getText());
+            aux.setTaxpayerID(supplierIDField.getText());
+            aux.setPhoneNumber(supplierPhoneField.getText());
+            aux.setWorkingArea(supplierWorkingArea.getText());
+            suppliersList.add(aux);
+            setComboBoxConfig();
+        }
+        listSuppliers();
+    }
+
+    private void setComboBoxConfig(){
+        Object[] arr = suppliersList.toArray();
+        System.out.println(Arrays.toString(arr));
+        comboBox1.setEditable(false);
+        comboBox1.addItem(arr[suppliersList.size()-1]);
+    }
+
+    private void clearSupplierFields() {
+        supplierNameField.setText("");
+        supplierIDField.setText("");
+        supplierPhoneField.setText("");
+        supplierWorkingArea.setText("");
+    }
+
+
+
+
+
+    private void listSuppliers() {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"Name", "Taxpayer ID", "Phone", "Area"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        for (Supplier s: suppliersList) {
+            model.addRow(new Object[]{s.getName(),s.getTaxpayerID(),s.getPhoneNumber(),s.getWorkingArea()});
+        }
+        supplierTable.setModel(model);
     }
 
     private void confirmPruchase() {

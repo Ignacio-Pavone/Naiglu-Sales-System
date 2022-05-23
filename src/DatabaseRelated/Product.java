@@ -1,5 +1,7 @@
 package DatabaseRelated;
 
+import java.util.Objects;
+
 public class Product {
     private String id;
     private String name;
@@ -16,6 +18,9 @@ public class Product {
         this.stock = stock;
         this.price = price;
     }
+
+
+
 
     public String getId() {
         return id;
