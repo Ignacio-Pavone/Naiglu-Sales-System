@@ -378,6 +378,7 @@ public class Inventory extends JDialog {
         nameField.setText("");
         stockField.setText("");
         priceField.setText("");
+        sellPriceField.setText("");
 
 
     }
@@ -432,17 +433,17 @@ public class Inventory extends JDialog {
         String supplier = String.valueOf(clientProductList.getValueAt(rowSelection, 1));
         String nombre = String.valueOf(clientProductList.getValueAt(rowSelection, 2));
         int stock = Integer.parseInt(String.valueOf(clientProductList.getValueAt(rowSelection, 3)));
-       // double precio = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 4)));
-        double sellPrice = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 4)));
+        double precio = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 4)));
+        double sellPrice = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 5)));
 
         int newStock = Integer.parseInt(userAmmount.getText());
         if (newStock > 0 && newStock <= stock) {
             auxStock = stock - newStock;
-            Product aux = new Product(id,supplier, nombre, newStock, sellPrice);
-            Product aux2 = new Product(id,supplier, nombre, auxStock, sellPrice);
+            Product aux = new Product(id,supplier, nombre, newStock,precio,sellPrice);
+            Product aux2 = new Product(id,supplier, nombre, auxStock,precio, sellPrice);
             if (shopList.containsKey(id)) {
                 int stockAux = productStockShopList(id) + newStock;
-                Product aux3 = new Product(id, supplier,nombre, stockAux, sellPrice);
+                Product aux3 = new Product(id, supplier,nombre, stockAux,precio, sellPrice);
                 shopList.put(aux3.getId(), aux3);
                 productList.put(aux2.getId(), aux2);
             } else {
@@ -508,7 +509,7 @@ public class Inventory extends JDialog {
 
     private void listProducts() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Item ID","Supplier Name", "Name", "Stock", "Stock Price", "Sell Price"}, 0) {
+                new Object[]{"Item ID","Supplier Name", "Name", "Stock", "Price", "Sell Price"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -531,20 +532,19 @@ public class Inventory extends JDialog {
         for (Map.Entry<String, Product> entry : shopList.entrySet()) {
             model.addRow(new Object[]{entry.getKey(),entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getSellPrice(), entry.getValue().getSellPrice() * entry.getValue().getStock()});
         }
-
         cartTable.setModel(model);
     }
 
     private void listClientProducts() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Item ID","Supplier", "Name", "Stock", "Sell Price"}, 0) {
+                new Object[]{"Item ID","Supplier", "Name", "Stock","Price","Sell Price"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
         for (Map.Entry<String, Product> entry : productList.entrySet()) {
-            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getSellPrice()});
+            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(),entry.getValue().getPrice(), entry.getValue().getSellPrice()});
         }
         clientProductList.setModel(model);
     }

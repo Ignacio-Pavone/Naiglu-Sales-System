@@ -14,15 +14,14 @@ public class Product {
     public Product(){
 
     }
-    public Product(String id,String supplierName, String name, int stock, Double price) {
+    public Product(String id,String supplierName, String name, int stock,Double normalPrice, Double price) {
         this.id = id;
         this.supplierName = supplierName;
         this.name = name;
         this.stock = stock;
+        this.price = normalPrice;
         this.sellPrice = price;
     }
-
-
 
     public Product(String id, String name, int stock, Double price) {
         this.id = id;
