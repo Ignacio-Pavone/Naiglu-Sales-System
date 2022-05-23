@@ -171,23 +171,25 @@ public class Inventory extends JDialog {
         CONFIRMPURCHASEButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //rowSelection = cartTable.getSelectedRow();
-                Venta nueva = new Venta();
-                if (tableHaveData()) {
-                    System.out.println("hola");
-                    Double ammount = ammountAcc;
-                    nueva = new Venta(u.name, ammount);
-                    if (!sellExist(nueva) ) {
-                        listaVentass.add(nueva);
-                        textFinalPrice.setText("Total Price");
-                        shopList.clear();
-                    }
-                }
-
-                listCart();
-                listaVentas();
+               confirmPruchase();
             }
         });
+    }
+
+    private void confirmPruchase (){
+        Venta nueva = new Venta();
+        if (tableHaveData()) {
+            System.out.println("hola");
+            Double ammount = ammountAcc;
+            nueva = new Venta(u.name, ammount);
+            if (!sellExist(nueva) ) {
+                listaVentass.add(nueva);
+                textFinalPrice.setText("Total Price");
+                shopList.clear();
+            }
+        }
+        listCart();
+        listaVentas();
     }
 
     private boolean tableHaveData (){
