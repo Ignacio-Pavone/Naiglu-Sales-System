@@ -16,9 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
 
 
@@ -89,6 +87,7 @@ public class Inventory extends JDialog {
     private JLabel lineLabel1;
     private JLabel lineLabel2;
     private JButton CERRARCAJAButton;
+    private JTable stadisticsTable;
     private int rowSelection;
     private double ammountAcc;
 
@@ -240,6 +239,7 @@ public class Inventory extends JDialog {
             cantFacturas = listaVentass.size();
             //hacer algo
             listaVentass.clear();
+            listStadisticTable(total,cantFacturas);
         } else {
             JOptionPane.showMessageDialog(null, "Faltan facturar");
         }
@@ -666,6 +666,20 @@ public class Inventory extends JDialog {
         }
         productsTable.setModel(model);
     }
+
+    private void listStadisticTable(double total, int cantVentas) { //Borra las estadisticas si se genera una nueva factura.
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"Total/Day", "N° Sales"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+            model.addRow(new Object[]{total,cantVentas});
+            stadisticsTable.setModel(model);
+        }
+
+
 
     private void listCart() {
         DefaultTableModel model = new DefaultTableModel(
