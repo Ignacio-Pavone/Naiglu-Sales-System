@@ -13,10 +13,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -93,6 +90,7 @@ public class Inventory extends JDialog {
     private JLabel lineLabel2;
     private int rowSelection;
     private double ammountAcc;
+    final Point offset = new Point();
 
     private Employee employee = new Employee();
     private HashMap<String, Product> productList = new HashMap<>(); // lista Productos
@@ -105,18 +103,28 @@ public class Inventory extends JDialog {
         super(parent);
         tableStyle();
         setMinimumSize(new Dimension(650, 600));
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setContentPane(products1);
         setModal(true);
-        setUndecorated(false);
-        labelStyle();
-        tableStyle();
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setUndecorated(true);
         setLocationRelativeTo(null);
-        listProducts();
-        listClientProducts();
-        listCart();
-        listSuppliers();
-        listaVentas();
+        listingCollections();
+
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(final MouseEvent e) {
+                offset.setLocation(e.getPoint());
+            }
+        });
+
+        addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(final MouseEvent e) {
+                setLocation(e.getXOnScreen()-offset.x, e.getYOnScreen()-offset.y);
+            }
+        });
+
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -225,13 +233,11 @@ public class Inventory extends JDialog {
                 deleteSupplierFromList();
             }
         });
-
     }
 
     private boolean checkSupplierRequirements() {
         return !supplierIDField.getText().equals("") && !supplierNameField.getText().equals("") && !supplierPhoneField.getText().equals("") && !supplierWorkingArea.getText().equals("");
     }
-
 
     private void addSupplier() {
         Supplier aux = new Supplier();
@@ -675,9 +681,17 @@ public class Inventory extends JDialog {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
 
-
-
+    private void listingCollections(){
+        labelStyle();
+        tableStyle();
+        setLocationRelativeTo(null);
+        listProducts();
+        listClientProducts();
+        listCart();
+        listSuppliers();
+        listaVentas();
     }
 }
 

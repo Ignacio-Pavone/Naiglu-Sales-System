@@ -5,8 +5,7 @@ import UserRelated.User;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.sql.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,11 +20,7 @@ public class Register extends JDialog {
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
-
-
     Connect connection = new Connect();
-
-
 
     public Register(JFrame parent) {
         super(parent);
@@ -37,12 +32,8 @@ public class Register extends JDialog {
         setUndecorated(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+
+
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

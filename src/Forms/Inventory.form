@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="products1" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="19" width="521" height="589"/>
+      <xy x="20" y="19" width="559" height="589"/>
     </constraints>
     <properties>
       <background color="-13882315"/>
@@ -18,13 +18,20 @@
         </constraints>
         <properties>
           <background color="-14192098"/>
+          <doubleBuffered value="true"/>
           <enabled value="true"/>
           <font name="Consolas" size="12" style="0"/>
           <foreground color="-12609246"/>
+          <inheritsPopupMenu value="false"/>
+          <opaque value="false"/>
           <tabLayoutPolicy value="0"/>
           <tabPlacement value="1"/>
         </properties>
-        <border type="none"/>
+        <border type="line" title="By Babel Group" title-justification="2" title-position="2">
+          <font name="Consolas" size="12" style="0"/>
+          <title-color color="-6936527"/>
+          <color color="-16777216"/>
+        </border>
         <children>
           <grid id="17df4" layout-manager="GridLayoutManager" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>

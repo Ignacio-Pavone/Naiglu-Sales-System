@@ -4,8 +4,7 @@ import UserRelated.Employee;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.sql.*;
 
 public class Login extends JDialog {
@@ -16,6 +15,7 @@ public class Login extends JDialog {
     private JTextField email;
     private JButton registerButton;
     public static Employee employee;
+    final Point offset = new Point();
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
@@ -27,7 +27,6 @@ public class Login extends JDialog {
         setContentPane(loginPanel);
         setMinimumSize(new Dimension(600, 550));
         setModal(true);
-
         setUndecorated(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -43,6 +42,20 @@ public class Login extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
+            }
+        });
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(final MouseEvent e) {
+                offset.setLocation(e.getPoint());
+            }
+        });
+
+        addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(final MouseEvent e) {
+                setLocation(e.getXOnScreen()-offset.x, e.getYOnScreen()-offset.y);
             }
         });
 
