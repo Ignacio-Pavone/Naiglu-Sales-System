@@ -74,6 +74,9 @@ public class Inventory extends JDialog {
     private JTextField updateSellPrice;
     private JButton DELETEELEMENTButton;
     private JPanel supplierTab;
+    private JLabel setAmmountDay;
+    private JLabel lineLabel1;
+    private JLabel lineLabel2;
     private int rowSelection;
     private double ammountAcc;
 
@@ -193,6 +196,7 @@ public class Inventory extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 confirmPruchase();
+                setTotalDay();
             }
         });
         addSupplierButton.addActionListener(new ActionListener() {
@@ -208,10 +212,7 @@ public class Inventory extends JDialog {
             }
         });
 
-
     }
-
-
 
     private boolean checkSupplierRequirements() {
         return !supplierIDField.getText().equals("") && !supplierNameField.getText().equals("") && !supplierPhoneField.getText().equals("") && !supplierWorkingArea.getText().equals("");
@@ -263,7 +264,6 @@ public class Inventory extends JDialog {
     private void confirmPruchase() {
         Venta nueva = new Venta();
         if (tableHaveData()) {
-            System.out.println("hola");
             Double ammount = ammountAcc;
             nueva = new Venta(employee.getName(), ammount);
             if (!sellExist(nueva)) {
@@ -335,9 +335,19 @@ public class Inventory extends JDialog {
             totalprice = totalprice + Double.parseDouble(String.valueOf(cartTable.getValueAt(i, 5)));
         }
         textFinalPrice.setVisible(true);
-        textFinalPrice.setText("Final price: " + totalprice);
+        textFinalPrice.setText("Final price: $" + totalprice);
         textFinalPrice.setForeground(Color.GREEN);
         ammountAcc = totalprice;
+    }
+
+    private void setTotalDay() {
+        double totalprice = 0;
+        for (int i = 0; i < ventasTable.getRowCount(); i++) {
+            totalprice = totalprice + Double.parseDouble(String.valueOf(ventasTable.getValueAt(i, 2)));
+        }
+        setAmmountDay.setVisible(true);
+        setAmmountDay.setText("Today $" + totalprice);
+        setAmmountDay.setForeground(Color.GREEN);
     }
 
     private void deleteProductFromCart() {
@@ -386,9 +396,8 @@ public class Inventory extends JDialog {
                 setComboBoxConfig();
 
             }
-            else{
-                JOptionPane.showMessageDialog(null, "Select a row");
-            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Select a row");
         }
     }
 
@@ -440,6 +449,9 @@ public class Inventory extends JDialog {
         phoneLabel.setForeground(Color.WHITE);
         WorkigAreaLabel.setForeground(Color.WHITE);
         sellPriceLabel.setForeground(Color.WHITE);
+        lineLabel1.setForeground(Color.BLACK);
+        lineLabel2.setForeground(Color.BLACK);
+        setAmmountDay.setForeground(Color.GRAY);
     }
 
     private void tableStyle() {
@@ -584,7 +596,7 @@ public class Inventory extends JDialog {
             }
         };
         for (Map.Entry<String, Product> entry : productList.entrySet()) {
-            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getSellPrice()});
+            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), "$" +entry.getValue().getPrice(), "$" + entry.getValue().getSellPrice()});
         }
         productsTable.setModel(model);
     }
@@ -598,7 +610,7 @@ public class Inventory extends JDialog {
             }
         };
         for (Map.Entry<String, Product> entry : shopList.entrySet()) {
-            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getSellPrice(), entry.getValue().getSellPrice() * entry.getValue().getStock()});
+            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(),  entry.getValue().getSellPrice(),entry.getValue().getSellPrice() * entry.getValue().getStock()});
         }
         cartTable.setModel(model);
     }
