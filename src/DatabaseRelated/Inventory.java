@@ -102,8 +102,9 @@ public class Inventory extends JDialog {
 
     public Inventory(JFrame parent) {
         super(parent);
+        hardCode();
         tableStyle();
-        setMinimumSize(new Dimension(650, 600));
+        setMinimumSize(new Dimension(750, 700));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setContentPane(products1);
         setModal(true);
@@ -790,6 +791,28 @@ public class Inventory extends JDialog {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void hardCode (){
+        Supplier aux = new Supplier("Fravega", "3333333","155757575","IT");
+        Supplier aux1 = new Supplier("Compumundo", "6555555","22333333","IT");
+        Supplier aux2 = new Supplier("Ribeiro", "11111111","44444444","IT");
+        Supplier aux3 = new Supplier("Delta", "22222222","2222222","IT");
+        suppliersList.add(aux);
+        suppliersList.add(aux1);
+        suppliersList.add(aux2);
+        suppliersList.add(aux3);
+
+        Product new1 = new Product("1", aux.getName(), "PC", 200, 70000.00,100000.00);
+        Product new2 = new Product("2", aux1.getName(), "TECLADO", 150, 5000.00,5000.00);
+        Product new3 = new Product("3", aux2.getName(), "MOUSE", 500, 3000.00,4000.00);
+        Product new4 = new Product("4", aux3.getName(), "AURICULAR", 100, 6000.00,8000.00);
+        productList.put(new1.getId(),new1);
+        productList.put(new2.getId(),new2);
+        productList.put(new3.getId(),new3);
+        productList.put(new4.getId(),new4);
+        setComboBoxConfig();
+
     }
 }
 
