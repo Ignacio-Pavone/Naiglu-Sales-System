@@ -223,10 +223,6 @@ public class Inventory extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 rowSelection = ventasTable.getSelectedRow();
                 if (rowSelection != -1) {
-                    //0 comprobante
-                    //1 cliente
-                    //2 precio
-                    //3 fecha
                     createInvoice((Double) ventasTable.getValueAt(rowSelection, 0), (String) ventasTable.getValueAt(rowSelection, 1), (Double) ventasTable.getValueAt(rowSelection, 2), (String) ventasTable.getValueAt(rowSelection, 3));
                 }
             }
@@ -297,7 +293,6 @@ public class Inventory extends JDialog {
     private boolean tableHaveData() {
         boolean flag = false;
         if (shopList.size() > 0 && !flag) {
-            System.out.println(shopList.size());
             flag = true;
         }
         return flag;
