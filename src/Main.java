@@ -6,6 +6,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Login login = new Login(null);
+        Login login2 = new Login(null);
     }
 }
