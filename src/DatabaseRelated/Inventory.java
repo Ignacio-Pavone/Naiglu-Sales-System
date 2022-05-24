@@ -2,6 +2,14 @@ package DatabaseRelated;
 
 import PersonRelated.Supplier;
 import UserRelated.Employee;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -9,7 +17,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.*;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
 
 public class Inventory extends JDialog {
 
@@ -230,6 +244,8 @@ public class Inventory extends JDialog {
             suppliersList.add(aux);
             setComboBoxConfig();
             clearSupplierFields();
+            //createDocument();
+
         }
         listSuppliers();
     }
@@ -629,6 +645,28 @@ public class Inventory extends JDialog {
             model.addRow(new Object[]{listaVentass.get(i).getNumero(), listaVentass.get(i).getNombreCliente(), listaVentass.get(i).getTotalAmmount(), listaVentass.get(i).getFecha()});
         }
         ventasTable.setModel(model);
+    }
+
+    public void createDocument()  {
+        String filename = "name.pdf";
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage(PDRectangle.A4);
+        document.addPage(page);
+        try{
+            PDPageContentStream contentStream = new PDPageContentStream(document,page);
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.TIMES_BOLD,12);
+            contentStream.newLineAtOffset(20,page.getMediaBox().getHeight()-52);
+            contentStream.showText("test");
+            contentStream.endText();
+            contentStream.close();
+            document.save(filename);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
     }
 }
 
