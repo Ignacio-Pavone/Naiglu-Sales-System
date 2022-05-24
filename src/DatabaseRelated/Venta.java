@@ -54,4 +54,15 @@ public class Venta {
     public void setTotalAmmount(double totalAmmount) {
         this.totalAmmount = totalAmmount;
     }
+
+    @Override
+    public String toString() {
+        return "Venta{" +
+                "numero=" + numero +
+                ", nombreCliente='" + nombreCliente + '\'' +
+                ", totalAmmount=" + totalAmmount +
+                ", date=" + date +
+                ", fecha='" + fecha + '\'' +
+                '}';
+    }
 }

@@ -245,7 +245,7 @@ public class Inventory extends JDialog {
             suppliersList.add(aux);
             setComboBoxConfig();
             clearSupplierFields();
-            //createDocument();
+            createDocument();
 
         }
         listSuppliers();
@@ -258,8 +258,7 @@ public class Inventory extends JDialog {
         for (Object o: arr) {
             comboBox1.addItem(o);
         }
-        //comboBox1.setEditable(false);
-        //comboBox1.addItem(arr[suppliersList.size() - 1]);
+
     }
 
 
@@ -669,7 +668,7 @@ public class Inventory extends JDialog {
             contentStream.beginText();
             contentStream.setFont(PDType1Font.TIMES_BOLD,12);
             contentStream.newLineAtOffset(20,page.getMediaBox().getHeight()-52);
-            contentStream.showText("test");
+            contentStream.showText(listaVentass.toString());
             contentStream.endText();
             contentStream.close();
             document.save(filename);
