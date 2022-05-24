@@ -95,6 +95,7 @@ public class Inventory extends JDialog {
     private JLabel CphoneLabel;
     private JLabel CcategoryLabel;
     private JComboBox comboBoxCustomers;
+    private JLabel customerNameLAbel;
     private int rowSelection;
     private double ammountAcc;
 
@@ -254,9 +255,10 @@ public class Inventory extends JDialog {
         if (allFacturado()) {
             total = totalCaja();
             cantFacturas = listaVentass.size();
-            //hacer algo
-            listaVentass.clear();
             listStadisticTable(total, cantFacturas);
+            listaVentass.clear();
+            listaVentas();
+            setAmmountDay.setText("Total");
         } else {
             JOptionPane.showMessageDialog(null, "Faltan facturar");
         }
@@ -305,7 +307,6 @@ public class Inventory extends JDialog {
         return !supplierIDField.getText().equals("") && !supplierNameField.getText().equals("") && !supplierPhoneField.getText().equals("") && !supplierWorkingArea.getText().equals("");
     }
 
-
     private void addCustomer() {
         Customer aux = new Customer();
         if (!chekCustomerFields()) {
@@ -318,7 +319,6 @@ public class Inventory extends JDialog {
             customerList.add(aux);
             customerList();
             clearCustomerFields();
-
         }
         loadCustomerCombobox();
         listSuppliers();
@@ -345,7 +345,6 @@ public class Inventory extends JDialog {
     }
 
     private void clearCustomerFields() {
-
         CnameCustomer.setText("");
         CtaxPayerIDCustomer.setText("");
         CphoeNumberCustomer.setText("");
@@ -368,8 +367,6 @@ public class Inventory extends JDialog {
             comboBoxCustomers.addItem(o);
         }
     }
-
-
 
     private void confirmPruchase() {
         Venta nueva = new Venta();
@@ -464,7 +461,6 @@ public class Inventory extends JDialog {
     }
 
     private void deleteProductFromCart() {
-
         int row = 0;
         row = cartTable.getSelectedRow();
         int dialogButton = JOptionPane.YES_NO_OPTION;
@@ -563,7 +559,8 @@ public class Inventory extends JDialog {
         CphoneLabel.setForeground(Color.WHITE);
         CcategoryLabel.setForeground(Color.WHITE);
         CtaxLabel.setForeground(Color.WHITE);
-
+        customerNameLAbel.setForeground(Color.WHITE);
+        setAmmountDay.setForeground(Color.WHITE);
     }
 
     private void tableStyle() {
@@ -573,6 +570,8 @@ public class Inventory extends JDialog {
         ventasTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         supplierTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         customerTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
+        stadisticsTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
+        stadisticsTable.getTableHeader().setBackground(Color.GRAY);
         supplierTable.getTableHeader().setBackground(Color.GRAY);
         customerTable.getTableHeader().setBackground(Color.GRAY);
         ventasTable.getTableHeader().setBackground(Color.GRAY);
