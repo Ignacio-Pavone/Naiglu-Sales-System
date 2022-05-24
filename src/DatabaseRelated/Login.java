@@ -23,7 +23,6 @@ public class Login extends JDialog {
 
     public Login(JFrame parent) {
         super(parent);
-        setTitle("DatabaseRelated.Login");
         setContentPane(loginPanel);
         setMinimumSize(new Dimension(600, 550));
         setModal(true);

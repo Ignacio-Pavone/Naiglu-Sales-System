@@ -66,7 +66,7 @@ public class Inventory extends JDialog {
     private Inventory productData;
     private JTable ventasTable;
     private JPanel addSells;
-    private JButton generarFacturaButton;
+    private JButton GENERARFACTURAButton;
     private JTable supplierTable;
     private JButton addSupplierButton;
     private JTextField supplierNameField;
@@ -102,6 +102,7 @@ public class Inventory extends JDialog {
     public Inventory(JFrame parent) {
         super(parent);
         tableStyle();
+
         setMinimumSize(new Dimension(650, 600));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setContentPane(products1);
@@ -109,21 +110,6 @@ public class Inventory extends JDialog {
         setUndecorated(true);
         setLocationRelativeTo(null);
         listingCollections();
-
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(final MouseEvent e) {
-                offset.setLocation(e.getPoint());
-            }
-        });
-
-        addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseDragged(final MouseEvent e) {
-                setLocation(e.getXOnScreen()-offset.x, e.getYOnScreen()-offset.y);
-            }
-        });
 
         exitButton.addActionListener(new ActionListener() {
             @Override
@@ -266,7 +252,6 @@ public class Inventory extends JDialog {
         }
 
     }
-
 
     private void listSuppliers() {
         DefaultTableModel model = new DefaultTableModel(
