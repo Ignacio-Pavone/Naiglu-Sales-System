@@ -24,7 +24,6 @@ public class Register extends JDialog {
 
     public Register(JFrame parent) {
         super(parent);
-        setTitle("DatabaseRelated.Register");
         setContentPane(register);
         setMinimumSize(new Dimension(600, 550));
         setModal(true);
@@ -37,6 +36,7 @@ public class Register extends JDialog {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 registerButtonLogic();
             }
             });

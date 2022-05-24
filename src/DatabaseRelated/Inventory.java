@@ -93,7 +93,6 @@ public class Inventory extends JDialog {
     private JLabel lineLabel2;
     private int rowSelection;
     private double ammountAcc;
-    final Point offset = new Point();
 
     private Employee employee = new Employee();
     private HashMap<String, Product> productList = new HashMap<>(); // lista Productos
@@ -105,7 +104,7 @@ public class Inventory extends JDialog {
     public Inventory(JFrame parent) {
         super(parent);
         tableStyle();
-
+       // fillProducts();
         setMinimumSize(new Dimension(650, 600));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setContentPane(products1);
@@ -527,11 +526,11 @@ public class Inventory extends JDialog {
         String id = String.valueOf(clientProductList.getValueAt(rowSelection, 0));
         String supplier = String.valueOf(clientProductList.getValueAt(rowSelection, 1));
         String nombre = String.valueOf(clientProductList.getValueAt(rowSelection, 2));
-        int stock = Integer.parseInt(String.valueOf(clientProductList.getValueAt(rowSelection, 3)));
+        int stock = Integer.parseInt(String.valueOf(clientProductList.getValueAt(rowSelection, 3))); // 7
         double precio = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 4)));
         double sellPrice = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 5)));
+        int newStock = Integer.parseInt(userAmmount.getText()); // 5
 
-        int newStock = Integer.parseInt(userAmmount.getText());
         if (newStock > 0 && newStock <= stock) {
             auxStock = stock - newStock;
             Product aux = new Product(id, supplier, nombre, newStock, precio, sellPrice);
@@ -617,7 +616,7 @@ public class Inventory extends JDialog {
             }
         };
         for (Map.Entry<String, Product> entry : productList.entrySet()) {
-            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), "$" +entry.getValue().getPrice(), "$" + entry.getValue().getSellPrice()});
+            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), +entry.getValue().getPrice(), entry.getValue().getSellPrice()});
         }
         productsTable.setModel(model);
     }

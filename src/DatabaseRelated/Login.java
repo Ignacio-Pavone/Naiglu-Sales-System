@@ -78,8 +78,7 @@ public class Login extends JDialog {
             nuevo.setEmployee(employee);
             nuevo.setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(Login.this,
-                    "Incorrect email or password.", "Try again",
+            JOptionPane.showMessageDialog(Login.this, "Incorrect email or password.", "Try again",
                     JOptionPane.ERROR_MESSAGE);
         }
     }
