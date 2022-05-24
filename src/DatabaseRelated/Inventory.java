@@ -47,7 +47,6 @@ public class Inventory extends JDialog {
     private JButton addToCartButton;
     private JTextField userAmmount;
     private JButton CONFIRMPURCHASEButton;
-    private JButton CANCELButton;
     private JScrollPane tabl;
     private JLabel ammountValueLabel;
     private JButton deleteCartElement;
@@ -96,6 +95,7 @@ public class Inventory extends JDialog {
     private JLabel CcategoryLabel;
     private JComboBox comboBoxCustomers;
     private JLabel customerNameLAbel;
+    private JButton xButton;
     private int rowSelection;
     private double ammountAcc;
 
@@ -117,23 +117,10 @@ public class Inventory extends JDialog {
         setMinimumSize(new Dimension(800, 700));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setContentPane(products1);
-        setModal(true);
         setUndecorated(true);
         setLocationRelativeTo(null);
         listingCollections();
 
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
-        exitingButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
 
         addButton.addActionListener(new ActionListener() {
             @Override
@@ -190,12 +177,6 @@ public class Inventory extends JDialog {
             }
         });
 
-        exitUserList.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
         addToCartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -244,6 +225,12 @@ public class Inventory extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 addCustomer();
+            }
+        });
+        xButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
             }
         });
     }

@@ -8,7 +8,7 @@
     <properties>
       <background color="-13882315"/>
     </properties>
-    <border type="none"/>
+    <border type="line"/>
     <children>
       <component id="a092" class="javax.swing.JTextField" binding="nameTextField">
         <constraints>
