@@ -8,6 +8,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import javax.swing.*;
@@ -16,6 +17,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -219,6 +222,19 @@ public class Inventory extends JDialog {
                 deleteSupplierFromList();
             }
         });
+        GENERARFACTURAButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rowSelection = ventasTable.getSelectedRow();
+                if (rowSelection!=-1){
+                    //0 comprobante
+                    //1 cliente
+                    //2 precio
+                    //3 fecha
+                    createInvoice((Double) ventasTable.getValueAt(rowSelection,0), (String) ventasTable.getValueAt(rowSelection,1), (Double) ventasTable.getValueAt(rowSelection,2), (String) ventasTable.getValueAt(rowSelection,3));
+                }
+            }
+        });
     }
 
     private boolean checkSupplierRequirements() {
@@ -400,7 +416,6 @@ public class Inventory extends JDialog {
                 deleteSupplier(aux.getName());
                 listSuppliers();
                 setComboBoxConfig();
-
             }
         }else{
             JOptionPane.showMessageDialog(null, "Select a row");
@@ -677,6 +692,38 @@ public class Inventory extends JDialog {
         listCart();
         listSuppliers();
         listaVentas();
+    }
+    public void createInvoice(double Comprobante, String cliente, double precio, String fecha){
+        PDDocument doc = new PDDocument();
+        PDPage firstPage = new PDPage(PDRectangle.A4);
+        doc.addPage(firstPage);
+        String name = "Empresa S.A";
+        String number = "223456789";
+        String time = LocalDateTime.now().toString();
+        int pagewidth = (int) firstPage.getTrimBox().getWidth();
+        int pageHeight = (int) firstPage.getTrimBox().getHeight();
+
+        try{
+        PDPageContentStream contentStream = new PDPageContentStream(doc,firstPage);
+        PDFTextClass pdfTextClass = new PDFTextClass(doc,contentStream);
+        PDFont font = PDType1Font.HELVETICA;
+
+        String[] contactInfo = new String[]{"nazarenoorodriguez@gmail.com","ignacionpavone@gmail.com"};
+        pdfTextClass.addMultiLineText(contactInfo,18,(int)(pagewidth-font.getStringWidth("nazarenoorodriguez@gmail.com")/1000*15-10),pageHeight-25,font,15,Color.BLACK);
+        pdfTextClass.addLineOfText("EMPRESA S.A",25,pageHeight-150,font,16,Color.BLACK);
+        pdfTextClass.addLineOfText("COMPROBANTE: "+Comprobante,25,pageHeight-250,font,16,Color.BLACK);
+        pdfTextClass.addLineOfText("CLIENTE: "+cliente,25,pageHeight-275,font,16,Color.BLACK);
+        pdfTextClass.addLineOfText("PRECIO: "+precio,25,pageHeight-300,font,16,Color.BLACK);
+        pdfTextClass.addLineOfText("FECHA: "+fecha,25,pageHeight-325,font,16,Color.BLACK);
+
+        contentStream.close();
+        doc.save("testing.pdf");
+        doc.close();
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
 
