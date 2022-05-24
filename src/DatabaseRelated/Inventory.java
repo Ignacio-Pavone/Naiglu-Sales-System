@@ -1,21 +1,17 @@
 package DatabaseRelated;
-
+import PersonRelated.Customer;
 import PersonRelated.Supplier;
 import UserRelated.Employee;
-
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -88,6 +84,16 @@ public class Inventory extends JDialog {
     private JLabel lineLabel2;
     private JButton CERRARCAJAButton;
     private JTable stadisticsTable;
+    private JTable customerTable;
+    private JTextField CnameCustomer;
+    private JTextField CphoeNumberCustomer;
+    private JTextField CtaxPayerIDCustomer;
+    private JTextField CcategoryCustomer;
+    private JButton ADDButton;
+    private JLabel CnameLabel;
+    private JLabel CtaxLabel;
+    private JLabel CphoneLabel;
+    private JLabel CcategoryLabel;
     private int rowSelection;
     private double ammountAcc;
 
@@ -96,6 +102,7 @@ public class Inventory extends JDialog {
     private HashMap<String, Product> shopList = new HashMap<>(); // lista Carrito
     private ArrayList<Venta> listaVentass = new ArrayList<>(); // lista ventas Concretadas
     private HashSet<Supplier> suppliersList = new HashSet<>(); // lista proveedores
+    private ArrayList<Customer> customerList = new ArrayList<>(); // lista clientes
     private Collection<Product> mapTolist;
     private ArrayList<Product> finalProductPDF = new ArrayList<>();
 
@@ -104,7 +111,7 @@ public class Inventory extends JDialog {
         super(parent);
         hardCode();
         tableStyle();
-        setMinimumSize(new Dimension(750, 700));
+        setMinimumSize(new Dimension(800, 700));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setContentPane(products1);
         setModal(true);
@@ -230,6 +237,12 @@ public class Inventory extends JDialog {
                 cerrarCaja();
             }
         });
+        ADDButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addCustomer();
+            }
+        });
     }
 
     private void cerrarCaja() {
@@ -240,7 +253,7 @@ public class Inventory extends JDialog {
             cantFacturas = listaVentass.size();
             //hacer algo
             listaVentass.clear();
-            listStadisticTable(total,cantFacturas);
+            listStadisticTable(total, cantFacturas);
         } else {
             JOptionPane.showMessageDialog(null, "Faltan facturar");
         }
@@ -289,6 +302,28 @@ public class Inventory extends JDialog {
         return !supplierIDField.getText().equals("") && !supplierNameField.getText().equals("") && !supplierPhoneField.getText().equals("") && !supplierWorkingArea.getText().equals("");
     }
 
+
+    private void addCustomer() {
+        Customer aux = new Customer();
+        if (!chekCustomerFields()) {
+            JOptionPane.showMessageDialog(null, "Ingresa todos los datos necesarios");
+        } else {
+            aux.setName(CnameCustomer.getText());
+            aux.setTaxpayerID(CtaxPayerIDCustomer.getText());
+            aux.setPhoneNumber(CphoeNumberCustomer.getText());
+            aux.setCategory(CcategoryCustomer.getText());
+            customerList.add(aux);
+            customerList();
+            clearCustomerFields();
+
+        }
+        listSuppliers();
+    }
+
+    private boolean chekCustomerFields() {
+        return !CnameCustomer.getText().equals("") && !CtaxPayerIDCustomer.getText().equals("") && !CphoeNumberCustomer.getText().equals("") && !CcategoryCustomer.getText().equals("");
+    }
+
     private void addSupplier() {
         Supplier aux = new Supplier();
         if (!checkSupplierRequirements()) {
@@ -300,10 +335,17 @@ public class Inventory extends JDialog {
             aux.setWorkingArea(supplierWorkingArea.getText());
             suppliersList.add(aux);
             setComboBoxConfig();
-            clearSupplierFields();
-
+            clearCustomerFields();
         }
         listSuppliers();
+    }
+
+    private void clearCustomerFields() {
+
+        CnameCustomer.setText("");
+        CtaxPayerIDCustomer.setText("");
+        CphoeNumberCustomer.setText("");
+        CcategoryCustomer.setText("");
     }
 
     private void setComboBoxConfig() {
@@ -315,19 +357,7 @@ public class Inventory extends JDialog {
         }
     }
 
-    private void listSuppliers() {
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Name", "Taxpayer ID", "Phone", "Area"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        for (Supplier s : suppliersList) {
-            model.addRow(new Object[]{s.getName(), s.getTaxpayerID(), s.getPhoneNumber(), s.getWorkingArea()});
-        }
-        supplierTable.setModel(model);
-    }
+
 
     private void confirmPruchase() {
         Venta nueva = new Venta();
@@ -443,8 +473,6 @@ public class Inventory extends JDialog {
                 listCart();
                 setTotalPrice();
             }
-        } else {
-
         }
     }
 
@@ -517,8 +545,11 @@ public class Inventory extends JDialog {
         phoneLabel.setForeground(Color.WHITE);
         WorkigAreaLabel.setForeground(Color.WHITE);
         sellPriceLabel.setForeground(Color.WHITE);
+        CnameLabel.setForeground(Color.WHITE);
+        CphoneLabel.setForeground(Color.WHITE);
+        CcategoryLabel.setForeground(Color.WHITE);
+        CtaxLabel.setForeground(Color.WHITE);
 
-        setAmmountDay.setForeground(Color.GRAY);
     }
 
     private void tableStyle() {
@@ -527,7 +558,9 @@ public class Inventory extends JDialog {
         productsTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         ventasTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         supplierTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
+        customerTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         supplierTable.getTableHeader().setBackground(Color.GRAY);
+        customerTable.getTableHeader().setBackground(Color.GRAY);
         ventasTable.getTableHeader().setBackground(Color.GRAY);
         productsTable.getTableHeader().setBackground(Color.GRAY);
         cartTable.getTableHeader().setBackground(Color.GRAY);
@@ -654,6 +687,20 @@ public class Inventory extends JDialog {
         }
     }
 
+    private void listSuppliers() {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"Name", "Taxpayer ID", "Phone", "Area"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        for (Supplier s : suppliersList) {
+            model.addRow(new Object[]{s.getName(), s.getTaxpayerID(), s.getPhoneNumber(), s.getWorkingArea()});
+        }
+        supplierTable.setModel(model);
+    }
+
     private void listProducts() {
         DefaultTableModel model = new DefaultTableModel(
                 new Object[]{"Code", "Supplier", "Name", "Stock", "Price", "Sell Price"}, 0) {
@@ -676,15 +723,14 @@ public class Inventory extends JDialog {
                 return false;
             }
         };
-            model.addRow(new Object[]{total,cantVentas});
-            stadisticsTable.setModel(model);
-        }
-
+        model.addRow(new Object[]{total, cantVentas});
+        stadisticsTable.setModel(model);
+    }
 
 
     private void listCart() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Code", "Supplier", "Name", "Ammount", "Unity price", "Total price"}, 0) {
+                new Object[]{"Code", "Customer", "Name", "Ammount", "Unity price", "Total price"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -724,6 +770,20 @@ public class Inventory extends JDialog {
         ventasTable.setModel(model);
     }
 
+    private void customerList() {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"Name", "ID", "Phone Number", "Category"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        for (int i = 0; i < customerList.size(); i++) {
+            model.addRow(new Object[]{customerList.get(i).getName(), customerList.get(i).getTaxpayerID(), customerList.get(i).getPhoneNumber(), customerList.get(i).getCategory()});
+        }
+        customerTable.setModel(model);
+    }
+
     private void listingCollections() {
         labelStyle();
         tableStyle();
@@ -733,6 +793,7 @@ public class Inventory extends JDialog {
         listCart();
         listSuppliers();
         listaVentas();
+        customerList();
     }
 
     public void createInvoice(double Comprobante, String cliente, double precio, String fecha) {
@@ -749,30 +810,24 @@ public class Inventory extends JDialog {
             PDPageContentStream contentStream = new PDPageContentStream(doc, firstPage);
             PDFTextClass pdfTextClass = new PDFTextClass(doc, contentStream);
             PDFont font = PDType1Font.COURIER;
-
             String[] contactInfo = new String[]{"nazarenoorodriguez@gmail.com", "ignaciopavone@gmail.com", "talliercioluis1@gmail.com"};
-            //pdfTextClass.addMultiLineText(contactInfo,18,(int)(pagewidth-font.getStringWidth("nazarenorodriguez@gmail.com")/1000*15-10),pageHeight-25,font,15,Color.BLACK);
             pdfTextClass.addLineOfText("EMPRESA S.A", 250, pageHeight - 50, font, 20, Color.GREEN);
             pdfTextClass.addLineOfText("COMPROBANTE: " + Comprobante, 25, pageHeight - 100, font, 14, Color.BLACK);
             pdfTextClass.addLineOfText("CLIENTE: " + cliente, 25, pageHeight - 125, font, 14, Color.BLACK);
-            //pdfTextClass.addLineOfText("DETALLE: " + finalProductPDF, 25, pageHeight - 150, font, 14, Color.BLACK);
-            //pdfTextClass.addLineOfText("PRECIO: $" + precio, 25, pageHeight - 175, font, 14, Color.BLACK);
             pdfTextClass.addLineOfText("FECHA: " + fecha, 25, pageHeight - 200, font, 14, Color.BLACK);
-            pdfTextClass.addLineOfText("FINAL PRICE: $" + precio, 25, pageHeight-225 , font, 14, Color.BLACK);
+            pdfTextClass.addLineOfText("FINAL PRICE: $" + precio, 25, pageHeight - 225, font, 14, Color.BLACK);
+            PDFTableClass table = new PDFTableClass(doc, contentStream);
 
-            PDFTableClass table = new PDFTableClass(doc,contentStream);
+            int[] cellWidth = {130, 130, 130, 130};
+            table.setTable(cellWidth, 30, 25, pageHeight - 350);
+            table.setTableFont(font, 14, Color.BLACK);
+            Color tableBodyColor = new Color(187, 187, 187);
+            Color tableHeadColor = new Color(39, 114, 30);
 
-            int[] cellWidth = {130,130,130,130};
-            table.setTable(cellWidth,30,25,pageHeight-350);
-            table.setTableFont(font,14,Color.BLACK);
-            Color tableBodyColor = new Color(187,187,187);
-            Color tableHeadColor = new Color(39,114,30);
-
-
-            table.addCell("Item name",tableHeadColor);
-            table.addCell("Item ammount",tableHeadColor);
-            table.addCell("Unit price",tableHeadColor);
-            table.addCell("Total price",tableHeadColor);
+            table.addCell("Item name", tableHeadColor);
+            table.addCell("Item ammount", tableHeadColor);
+            table.addCell("Unit price", tableHeadColor);
+            table.addCell("Total price", tableHeadColor);
 
 
             for (Product product : finalProductPDF) {
@@ -781,8 +836,6 @@ public class Inventory extends JDialog {
                 table.addCell(String.valueOf(product.getSellPrice()), tableBodyColor);
                 table.addCell(String.valueOf(product.getSellPrice() * product.getStock()), tableBodyColor);
             }
-
-
             contentStream.close();
             String idConcat = "[" + Comprobante + "]" + employee.getName();
             String namePDF = idConcat.concat(".pdf");
@@ -793,24 +846,33 @@ public class Inventory extends JDialog {
         }
     }
 
-    private void hardCode (){
-        Supplier aux = new Supplier("Fravega", "3333333","155757575","IT");
-        Supplier aux1 = new Supplier("Compumundo", "6555555","22333333","IT");
-        Supplier aux2 = new Supplier("Ribeiro", "11111111","44444444","IT");
-        Supplier aux3 = new Supplier("Delta", "22222222","2222222","IT");
+    private void hardCode() {
+        Supplier aux = new Supplier("Fravega", "3333333", "155757575", "IT");
+        Supplier aux1 = new Supplier("Compumundo", "6555555", "22333333", "IT");
+        Supplier aux2 = new Supplier("Ribeiro", "11111111", "44444444", "IT");
+        Supplier aux3 = new Supplier("Delta", "22222222", "2222222", "IT");
         suppliersList.add(aux);
         suppliersList.add(aux1);
         suppliersList.add(aux2);
         suppliersList.add(aux3);
 
-        Product new1 = new Product("1", aux.getName(), "PC", 200, 70000.00,100000.00);
-        Product new2 = new Product("2", aux1.getName(), "TECLADO", 150, 5000.00,5000.00);
-        Product new3 = new Product("3", aux2.getName(), "MOUSE", 500, 3000.00,4000.00);
-        Product new4 = new Product("4", aux3.getName(), "AURICULAR", 100, 6000.00,8000.00);
-        productList.put(new1.getId(),new1);
-        productList.put(new2.getId(),new2);
-        productList.put(new3.getId(),new3);
-        productList.put(new4.getId(),new4);
+        Product new1 = new Product("1", aux.getName(), "PC", 200, 70000.00, 100000.00);
+        Product new2 = new Product("2", aux1.getName(), "TECLADO", 150, 5000.00, 5000.00);
+        Product new3 = new Product("3", aux2.getName(), "MOUSE", 500, 3000.00, 4000.00);
+        Product new4 = new Product("4", aux3.getName(), "AURICULAR", 100, 6000.00, 8000.00);
+        productList.put(new1.getId(), new1);
+        productList.put(new2.getId(), new2);
+        productList.put(new3.getId(), new3);
+        productList.put(new4.getId(), new4);
+
+        Customer auxC1 = new Customer("Juan","22233333","15550000","IT");
+        Customer auxC2 = new Customer("Pedro","111111111","222222222","IT");
+        Customer auxC3 = new Customer("Ignacio","555555555","3333333","IT");
+        Customer auxC4 = new Customer("Naza","66666666","99999999","IT");
+        customerList.add(auxC1);
+        customerList.add(auxC2);
+        customerList.add(auxC3);
+        customerList.add(auxC4);
         setComboBoxConfig();
 
     }
