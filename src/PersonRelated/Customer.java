@@ -15,20 +15,14 @@ public class Customer extends Entity implements I_SaleAndPurchase{
         this.category = category;
     }
 
-    @Override
-    public String generateDataForBills() {
-        return this.getName() +
-                "\n" +
-                this.getTaxpayerID() +
-                "\n" +
-                this.getPhoneNumber() +
-                "\n" +
-                this.getCategory() +
-                "\n";
-
-    }
-
     public String getCategory() {
         return category;
+    }
+    @Override
+    public String generateDataForBills() {
+        return "+ Customer name name: "+ this.getName() + "," +
+                "+ Taxpayer ID:" + this.getTaxpayerID() + "," +
+                "+ Phone number: "+this.getPhoneNumber() + ","+
+                "+ Category " + this.getCategory() +",";
     }
 }

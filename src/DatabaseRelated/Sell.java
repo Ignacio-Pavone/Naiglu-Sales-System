@@ -10,6 +10,7 @@ public class Sell {
     private LocalDateTime date;
     private String dateFormatted;
     private boolean invoiced;
+    private String customerId;
 
     public Sell(){
         this.invoiced = false;
@@ -24,6 +25,22 @@ public class Sell {
         date = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         this.dateFormatted = date.format(formatter);
+    }
+
+    public Sell(String nameAux, double amount, String id) {
+        this.operationNumber = Math.floor((Math.random() * 500 + 1));
+        this.customerName = nameAux;
+        this.totalAmmount = totalAmmount;
+        date = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        this.dateFormatted = date.format(formatter);
+        this.totalAmmount = amount;
+        this.customerId = id;
+
+    }
+
+    public String getCustomerId() {
+        return customerId;
     }
 
     public boolean isInvoiced() {

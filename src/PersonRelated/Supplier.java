@@ -2,7 +2,7 @@ package PersonRelated;
 
 import java.util.Objects;
 
-public class Supplier extends Entity implements I_SaleAndPurchase{
+public class Supplier extends Entity {
     private String workingArea;
 
     public Supplier() {
@@ -25,18 +25,6 @@ public class Supplier extends Entity implements I_SaleAndPurchase{
 
     public void setWorkingArea(String workingArea) {
         this.workingArea = workingArea;
-    }
-
-    @Override
-    public String generateDataForBills() {
-        return this.getName() +
-                "\n" +
-                this.getTaxpayerID() +
-                "\n" +
-                this.getPhoneNumber() +
-                "\n" +
-                this.getWorkingArea() +
-                "\n";
     }
 
     @Override

@@ -1,5 +1,6 @@
 package DatabaseRelated;
 import PersonRelated.Customer;
+import PersonRelated.MyBusiness;
 import PersonRelated.Supplier;
 import UserRelated.Employee;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -18,6 +19,7 @@ import java.util.*;
 
 public class Inventory extends JDialog {
 
+    private MyBusiness placeholderBusiness = new MyBusiness("Name","123321","2222222");
     private JPanel products1;
     private JTabbedPane sellTable;
     private JButton exitButton;
@@ -100,11 +102,11 @@ public class Inventory extends JDialog {
     private double ammountAcc;
 
     private Employee employee = new Employee();
-    private HashMap<String, Product> productList = new HashMap<>(); // lista Productos
-    private HashMap<String, Product> shopList = new HashMap<>(); // lista Carrito
-    private ArrayList<Sell> sellsList = new ArrayList<>(); // lista ventas Concretadas
-    private HashSet<Supplier> suppliersList = new HashSet<>(); // lista proveedores
-    private ArrayList<Customer> customerList = new ArrayList<>(); // lista clientes
+    private final HashMap<String, Product> productList = new HashMap<>(); // lista Productos
+    private final HashMap<String, Product> shopList = new HashMap<>(); // lista Carrito
+    private final ArrayList<Sell> sellsList = new ArrayList<>(); // lista ventas Concretadas
+    private final HashSet<Supplier> suppliersList = new HashSet<>(); // lista proveedores
+    private final ArrayList<Customer> customerList = new ArrayList<>(); // lista clientes
     private Collection<Product> mapTolist;
     private ArrayList<Product> finalProductPDF = new ArrayList<>();
 
@@ -360,8 +362,10 @@ public class Inventory extends JDialog {
             double amount = ammountAcc;
             Customer aux = (Customer) comboBoxCustomers.getSelectedItem();
             assert aux != null;
-            String nameAux = aux.getName().toString();
-            newSell = new Sell(nameAux, amount);
+            String id = aux.getTaxpayerID();
+            System.out.println(aux.getTaxpayerID());
+            String nameAux = aux.getName();
+            newSell = new Sell(nameAux, amount,id);
             if (!sellExist(newSell)) {
                 sellsList.add(newSell);
                 textFinalPrice.setText("Total Price");
@@ -564,9 +568,7 @@ public class Inventory extends JDialog {
     }
 
     private void deleteProductShop(String id) {
-        if (shopList.containsKey(id)) {
-            shopList.remove(id);
-        }
+        shopList.remove(id);
     }
 
     private void deleteProduct(String id) {
@@ -760,8 +762,8 @@ public class Inventory extends JDialog {
                 return false;
             }
         };
-        for (int i = 0; i < sellsList.size(); i++) {
-            model.addRow(new Object[]{sellsList.get(i).getOperationNumber(), sellsList.get(i).getCustomerName(), sellsList.get(i).getTotalAmmount(), sellsList.get(i).getDateFormatted(), sellsList.get(i).isInvoiced()});
+        for (Sell sell : sellsList) {
+            model.addRow(new Object[]{sell.getOperationNumber(), sell.getCustomerName(), sell.getTotalAmmount(), sell.getDateFormatted(), sell.isInvoiced()});
         }
         sellsTable.setModel(model);
     }
@@ -774,8 +776,8 @@ public class Inventory extends JDialog {
                 return false;
             }
         };
-        for (int i = 0; i < customerList.size(); i++) {
-            model.addRow(new Object[]{customerList.get(i).getName(), customerList.get(i).getTaxpayerID(), customerList.get(i).getPhoneNumber(), customerList.get(i).getCategory()});
+        for (Customer customer : customerList) {
+            model.addRow(new Object[]{customer.getName(), customer.getTaxpayerID(), customer.getPhoneNumber(), customer.getCategory()});
         }
         customerTable.setModel(model);
     }
@@ -806,16 +808,29 @@ public class Inventory extends JDialog {
             PDPageContentStream contentStream = new PDPageContentStream(doc, firstPage);
             PDFTextClass pdfTextClass = new PDFTextClass(doc, contentStream);
             PDFont font = PDType1Font.COURIER;
-            String[] contactInfo = new String[]{"nazarenoorodriguez@gmail.com", "ignaciopavone@gmail.com", "talliercioluis1@gmail.com"};
-            pdfTextClass.addLineOfText("MYCOMPANY S.A", 250, pageHeight - 50, font, 20, Color.GREEN);
-            pdfTextClass.addLineOfText("OPERATION N°: " + operation, 25, pageHeight - 100, font, 14, Color.BLACK);
-            pdfTextClass.addLineOfText("CUSTOMER: " + customer, 25, pageHeight - 125, font, 14, Color.BLACK);
-            pdfTextClass.addLineOfText("DATE: " + formattedDate, 25, pageHeight - 200, font, 14, Color.BLACK);
-            pdfTextClass.addLineOfText("FINAL PRICE: $" + price, 25, pageHeight - 225, font, 14, Color.BLACK);
+            String [] businessData = new String[finalProductPDF.size()];
+            businessData = placeholderBusiness.generateDataForBills().split(",");
+
+            Customer aux  = lookForCustomer(customer);
+            String buyerDataString = aux.generateDataForBills();
+            String[]buyerDataStringArray = buyerDataString.split(",");
+
+
+
+            //buyerData =
+
+            pdfTextClass.addLineOfText("BUSINESS INFORMATION: ", 25, pageHeight - 25, font, 14, Color.BLACK);
+            pdfTextClass.addMultiLineText(businessData, 14.50f,25,pageHeight-50,font,14,Color.BLACK);
+            //pdfTextClass.addLineOfText("COMPANY:" + contactInfo,25,pageHeight-50,font,14,Color.BLACK);
+            pdfTextClass.addLineOfText("BUYER INFORMATION: ", 25, pageHeight - 100, font, 14, Color.BLACK);
+            //pdfTextClass.addLineOfText("OPERATION N°: " + operation, 25, pageHeight - 120, font, 14, Color.BLACK);
+            pdfTextClass.addMultiLineText(buyerDataStringArray, 14.50f,25,pageHeight-125,font,14,Color.BLACK);
+            pdfTextClass.addLineOfText("DATE: " + formattedDate, 25, pageHeight - 220, font, 14, Color.BLACK);
+            pdfTextClass.addLineOfText("FINAL PRICE: $" + price, 25, pageHeight - 245, font, 14, Color.BLACK);
             PDFTableClass table = new PDFTableClass(doc, contentStream);
 
             int[] cellWidth = {130, 130, 130, 130};
-            table.setTable(cellWidth, 30, 25, pageHeight - 350);
+            table.setTable(cellWidth, 30, 25, pageHeight - 370);
             table.setTableFont(font, 14, Color.BLACK);
             Color tableBodyColor = new Color(187, 187, 187);
             Color tableHeadColor = new Color(39, 114, 30);
@@ -824,7 +839,6 @@ public class Inventory extends JDialog {
             table.addCell("Item ammount", tableHeadColor);
             table.addCell("Unit price", tableHeadColor);
             table.addCell("Total price", tableHeadColor);
-
 
             for (Product product : finalProductPDF) {
                 table.addCell(product.getName(), tableBodyColor);
@@ -841,6 +855,17 @@ public class Inventory extends JDialog {
             e.printStackTrace();
         }
     }
+
+    private Customer lookForCustomer(String name){
+        for (Customer c: customerList) {
+            if (c.getName().equals(name)){
+                return c;
+            }
+        }
+        return null;
+    }
+
+
 
     private void hardCode() {
         Supplier aux = new Supplier("Fravega", "3333333", "155757575", "IT");
@@ -861,10 +886,10 @@ public class Inventory extends JDialog {
         productList.put(new3.getId(), new3);
         productList.put(new4.getId(), new4);
 
-        Customer auxC1 = new Customer("Juan","22233333","15550000","IT");
-        Customer auxC2 = new Customer("Pedro","111111111","222222222","IT");
-        Customer auxC3 = new Customer("Ignacio","555555555","3333333","IT");
-        Customer auxC4 = new Customer("Naza","66666666","99999999","IT");
+        Customer auxC1 = new Customer("Juan","22233333","15550000","A");
+        Customer auxC2 = new Customer("Pedro","111111111","222222222","B");
+        Customer auxC3 = new Customer("Ignacio","555555555","3333333","B");
+        Customer auxC4 = new Customer("Naza","66666666","99999999","C");
         customerList.add(auxC1);
         customerList.add(auxC2);
         customerList.add(auxC3);
