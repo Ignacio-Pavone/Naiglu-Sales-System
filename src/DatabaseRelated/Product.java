@@ -1,14 +1,12 @@
 package DatabaseRelated;
 
-import java.util.Objects;
-
 public class Product {
     private String id;
     private String name;
     private String supplierName;
     private int stock;
     private Double price;
-    private Double sellPrice;
+    private Double sellingPrice;
 
 
 
@@ -22,7 +20,7 @@ public class Product {
         this.name = name;
         this.stock = stock;
         this.price = normalPrice;
-        this.sellPrice = price;
+        this.sellingPrice = price;
     }
 
     public Product(String id, String name, int stock, Double price) {
@@ -72,16 +70,16 @@ public class Product {
         this.price = price;
     }
 
-    public Double getSellPrice() {
-        return sellPrice;
+    public Double getSellingPrice() {
+        return sellingPrice;
     }
 
-    public void setSellPrice(Double sellPrice) {
-        this.sellPrice = sellPrice;
+    public void setSellingPrice(Double sellingPrice) {
+        this.sellingPrice = sellingPrice;
     }
 
     @Override
     public String toString() {
-        return  "Product: " + name + " ,Quantity: " + stock + " ,Price: " + sellPrice ;
+        return  "Product: " + name + " ,Quantity: " + stock + " ,Price: " + sellingPrice;
     }
 }

@@ -45,7 +45,7 @@ public class Inventory extends JDialog {
     private JTable clientProductList;
     private JButton exitUserList;
     private JButton addToCartButton;
-    private JTextField userAmmount;
+    private JTextField userAmount;
     private JButton CONFIRMPURCHASEButton;
     private JScrollPane tabl;
     private JLabel ammountValueLabel;
@@ -57,7 +57,7 @@ public class Inventory extends JDialog {
     private JTextField cantField;
     private JButton refreshButton;
     private Inventory productData;
-    private JTable ventasTable;
+    private JTable sellsTable;
     private JPanel addSells;
     private JButton GENERARFACTURAButton;
     private JTable supplierTable;
@@ -78,11 +78,11 @@ public class Inventory extends JDialog {
     private JTextField updateSellPrice;
     private JButton DELETEELEMENTButton;
     private JPanel supplierTab;
-    private JLabel setAmmountDay;
+    private JLabel setAmountDay;
     private JLabel lineLabel1;
     private JLabel lineLabel2;
-    private JButton CERRARCAJAButton;
-    private JTable stadisticsTable;
+    private JButton deskClosing;
+    private JTable statisticsTable;
     private JTable customerTable;
     private JTextField CnameCustomer;
     private JTextField CphoeNumberCustomer;
@@ -102,7 +102,7 @@ public class Inventory extends JDialog {
     private Employee employee = new Employee();
     private HashMap<String, Product> productList = new HashMap<>(); // lista Productos
     private HashMap<String, Product> shopList = new HashMap<>(); // lista Carrito
-    private ArrayList<Venta> listaVentass = new ArrayList<>(); // lista ventas Concretadas
+    private ArrayList<Sell> sellsList = new ArrayList<>(); // lista ventas Concretadas
     private HashSet<Supplier> suppliersList = new HashSet<>(); // lista proveedores
     private ArrayList<Customer> customerList = new ArrayList<>(); // lista clientes
     private Collection<Product> mapTolist;
@@ -212,13 +212,13 @@ public class Inventory extends JDialog {
         GENERARFACTURAButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                generarFactura();
+                generateInvoice();
             }
         });
-        CERRARCAJAButton.addActionListener(new ActionListener() {
+        deskClosing.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cerrarCaja();
+                deskClosing();
             }
         });
         ADDButton.addActionListener(new ActionListener() {
@@ -235,29 +235,29 @@ public class Inventory extends JDialog {
         });
     }
 
-    private void cerrarCaja() {
+    private void deskClosing() {
         double total = 0;
-        int cantFacturas = 0;
-        if (allFacturado()) {
+        int invoiceAmount = 0;
+        if (allInvoiced()) {
             total = totalCaja();
-            cantFacturas = listaVentass.size();
-            listStadisticTable(total, cantFacturas);
-            listaVentass.clear();
+            invoiceAmount = sellsList.size();
+            listStadisticTable(total, invoiceAmount);
+            sellsList.clear();
             listaVentas();
-            setAmmountDay.setText("Total");
+            setAmountDay.setText("Total");
         } else {
-            JOptionPane.showMessageDialog(null, "Faltan facturar");
+            JOptionPane.showMessageDialog(null, "No invoices");
         }
     }
 
-    private void generarFactura() {
+    private void generateInvoice() {
         int dialogButton = JOptionPane.YES_NO_OPTION;
-        rowSelection = ventasTable.getSelectedRow();
+        rowSelection = sellsTable.getSelectedRow();
         if (rowSelection != -1) {
             dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
             if (dialogButton == JOptionPane.YES_OPTION) {
-                createInvoice((Double) ventasTable.getValueAt(rowSelection, 0), (String) ventasTable.getValueAt(rowSelection, 1), (Double) ventasTable.getValueAt(rowSelection, 2), (String) ventasTable.getValueAt(rowSelection, 3));
-                isFacturado((Double) ventasTable.getValueAt(rowSelection, 0));
+                createInvoice((Double) sellsTable.getValueAt(rowSelection, 0), (String) sellsTable.getValueAt(rowSelection, 1), (Double) sellsTable.getValueAt(rowSelection, 2), (String) sellsTable.getValueAt(rowSelection, 3));
+                isInvoiced((Double) sellsTable.getValueAt(rowSelection, 0));
                 listaVentas();
             }
         }
@@ -265,26 +265,26 @@ public class Inventory extends JDialog {
 
     private double totalCaja() {
         double acum = 0;
-        for (int i = 0; i < listaVentass.size(); i++) {
-            acum += listaVentass.get(i).getTotalAmmount();
+        for (Sell sell : sellsList) {
+            acum += sell.getTotalAmmount();
         }
         return acum;
     }
 
-    private boolean allFacturado() {
+    private boolean allInvoiced() {
         boolean flag = true;
-        for (int i = 0; i < listaVentass.size(); i++) {
-            if (!listaVentass.get(i).isFacturado()) {
+        for (Sell sell : sellsList) {
+            if (!sell.isInvoiced()) {
                 flag = false;
             }
         }
         return flag;
     }
 
-    private void isFacturado(Double comprobante) {
-        for (int i = 0; i < listaVentass.size(); i++) {
-            if (listaVentass.get(i).getNumero().equals(comprobante)) {
-                listaVentass.get(i).setFacturado(true);
+    private void isInvoiced(Double paymentProof) {
+        for (Sell sell : sellsList) {
+            if (sell.getOperationNumber().equals(paymentProof)) {
+                sell.setInvoiced(true);
             }
         }
     }
@@ -296,7 +296,7 @@ public class Inventory extends JDialog {
     private void addCustomer() {
         Customer aux = new Customer();
         if (!chekCustomerFields()) {
-            JOptionPane.showMessageDialog(null, "Ingresa todos los datos necesarios");
+            JOptionPane.showMessageDialog(null, "Please fill all the required fields");
         } else {
             aux.setName(CnameCustomer.getText());
             aux.setTaxpayerID(CtaxPayerIDCustomer.getText());
@@ -317,7 +317,7 @@ public class Inventory extends JDialog {
     private void addSupplier() {
         Supplier aux = new Supplier();
         if (!checkSupplierRequirements()) {
-            JOptionPane.showMessageDialog(null, "Ingresa todos los datos necesarios");
+            JOptionPane.showMessageDialog(null, "Please fill all the required fields");
         } else {
             aux.setName(supplierNameField.getText());
             aux.setTaxpayerID(supplierIDField.getText());
@@ -355,14 +355,15 @@ public class Inventory extends JDialog {
     }
 
     private void confirmPruchase() {
-        Venta nueva = new Venta();
+        Sell newSell = new Sell();
         if (tableHaveData()) {
-            Double ammount = ammountAcc;
+            double amount = ammountAcc;
             Customer aux = (Customer) comboBoxCustomers.getSelectedItem();
+            assert aux != null;
             String nameAux = aux.getName().toString();
-            nueva = new Venta(nameAux, ammount);
-            if (!sellExist(nueva)) {
-                listaVentass.add(nueva);
+            newSell = new Sell(nameAux, amount);
+            if (!sellExist(newSell)) {
+                sellsList.add(newSell);
                 textFinalPrice.setText("Total Price");
                 mapTolist = shopList.values();
                 finalProductPDF = new ArrayList<>(mapTolist);
@@ -374,17 +375,13 @@ public class Inventory extends JDialog {
     }
 
     private boolean tableHaveData() {
-        boolean flag = false;
-        if (shopList.size() > 0 && !flag) {
-            flag = true;
-        }
-        return flag;
+        return shopList.size() > 0;
     }
 
-    private boolean sellExist(Venta aux) {
-        Boolean flag = false;
-        for (int i = 0; i < listaVentass.size(); i++) {
-            if (listaVentass.get(i).getNumero().equals(aux.getNumero()) && !flag) {
+    private boolean sellExist(Sell aux) {
+        boolean flag = false;
+        for (Sell sell : sellsList) {
+            if (sell.getOperationNumber().equals(aux.getOperationNumber()) && !flag) {
                 flag = true;
             }
         }
@@ -417,7 +414,7 @@ public class Inventory extends JDialog {
             listCart();
             listProducts();
             listClientProducts();
-            userAmmount.setText("");
+            userAmount.setText("");
             setTotalPrice();
         } else {
             JOptionPane.showMessageDialog(null, "Select a row");
@@ -438,12 +435,12 @@ public class Inventory extends JDialog {
 
     private void setTotalDay() {
         double totalprice = 0;
-        for (int i = 0; i < ventasTable.getRowCount(); i++) {
-            totalprice = totalprice + Double.parseDouble(String.valueOf(ventasTable.getValueAt(i, 2)));
+        for (int i = 0; i < sellsTable.getRowCount(); i++) {
+            totalprice = totalprice + Double.parseDouble(String.valueOf(sellsTable.getValueAt(i, 2)));
         }
-        setAmmountDay.setVisible(true);
-        setAmmountDay.setText(""+totalprice);
-        setAmmountDay.setForeground(Color.GREEN);
+        setAmountDay.setVisible(true);
+        setAmountDay.setText(""+totalprice);
+        setAmountDay.setForeground(Color.GREEN);
     }
 
     private void deleteProductFromCart() {
@@ -546,21 +543,21 @@ public class Inventory extends JDialog {
         CcategoryLabel.setForeground(Color.WHITE);
         CtaxLabel.setForeground(Color.WHITE);
         customerNameLAbel.setForeground(Color.WHITE);
-        setAmmountDay.setForeground(Color.WHITE);
+        setAmountDay.setForeground(Color.WHITE);
     }
 
     private void tableStyle() {
         clientProductList.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         cartTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         productsTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
-        ventasTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
+        sellsTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         supplierTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         customerTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
-        stadisticsTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
-        stadisticsTable.getTableHeader().setBackground(Color.GRAY);
+        statisticsTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
+        statisticsTable.getTableHeader().setBackground(Color.GRAY);
         supplierTable.getTableHeader().setBackground(Color.GRAY);
         customerTable.getTableHeader().setBackground(Color.GRAY);
-        ventasTable.getTableHeader().setBackground(Color.GRAY);
+        sellsTable.getTableHeader().setBackground(Color.GRAY);
         productsTable.getTableHeader().setBackground(Color.GRAY);
         cartTable.getTableHeader().setBackground(Color.GRAY);
         clientProductList.getTableHeader().setBackground(Color.GRAY);
@@ -604,19 +601,19 @@ public class Inventory extends JDialog {
 
         String id = String.valueOf(clientProductList.getValueAt(rowSelection, 0));
         String supplier = String.valueOf(clientProductList.getValueAt(rowSelection, 1));
-        String nombre = String.valueOf(clientProductList.getValueAt(rowSelection, 2));
+        String name = String.valueOf(clientProductList.getValueAt(rowSelection, 2));
         int stock = Integer.parseInt(String.valueOf(clientProductList.getValueAt(rowSelection, 3))); // 7
-        double precio = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 4)));
-        double sellPrice = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 5)));
-        int newStock = Integer.parseInt(userAmmount.getText()); // 5
+        double price = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 4)));
+        double sellingPrice = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 5)));
+        int newStock = Integer.parseInt(userAmount.getText()); // 5
 
         if (newStock > 0 && newStock <= stock) {
             auxStock = stock - newStock;
-            Product aux = new Product(id, supplier, nombre, newStock, precio, sellPrice);
-            Product aux2 = new Product(id, supplier, nombre, auxStock, precio, sellPrice);
+            Product aux = new Product(id, supplier, name, newStock, price, sellingPrice);
+            Product aux2 = new Product(id, supplier, name, auxStock, price, sellingPrice);
             if (shopList.containsKey(id)) {
                 int stockAux = productStockShopList(id) + newStock;
-                Product aux3 = new Product(id, supplier, nombre, stockAux, precio, sellPrice);
+                Product aux3 = new Product(id, supplier, name, stockAux, price, sellingPrice);
                 shopList.put(aux3.getId(), aux3);
                 productList.put(aux2.getId(), aux2);
             } else {
@@ -625,7 +622,7 @@ public class Inventory extends JDialog {
             }
 
         } else {
-            JOptionPane.showMessageDialog(null, "Unavailable stock");
+            JOptionPane.showMessageDialog(null, "Unavailable stock for this operation");
         }
 
     }
@@ -635,14 +632,14 @@ public class Inventory extends JDialog {
         String supplier = String.valueOf(productsTable.getValueAt(rowSelection, 1));
         String name = String.valueOf(productsTable.getValueAt(rowSelection, 2));
         int stock = Integer.parseInt(String.valueOf(productsTable.getValueAt(rowSelection, 3)));
-        double precio = Double.parseDouble(String.valueOf(productsTable.getValueAt(rowSelection, 4)));
-        double sellPrice = Double.parseDouble(String.valueOf(productsTable.getValueAt(rowSelection, 5)));
+        double price = Double.parseDouble(String.valueOf(productsTable.getValueAt(rowSelection, 4)));
+        double sellingPrice = Double.parseDouble(String.valueOf(productsTable.getValueAt(rowSelection, 5)));
         updateID.setText(id);
         updateSupplier.setText(supplier);
         updateName.setText(name);
         updateStock.setText(String.valueOf(stock));
-        updatePrice.setText(String.valueOf(precio));
-        updateSellPrice.setText(String.valueOf(sellPrice));
+        updatePrice.setText(String.valueOf(price));
+        updateSellPrice.setText(String.valueOf(sellingPrice));
     }
 
     private void updateProduct() {
@@ -652,8 +649,8 @@ public class Inventory extends JDialog {
             String supplier = updateSupplier.getText();
             int stock = Integer.parseInt(updateStock.getText());
             Double price = Double.parseDouble(updatePrice.getText());
-            Double sellprice = Double.parseDouble(updateSellPrice.getText());
-            Product aux = new Product(id, supplier, name, stock, price, sellprice);
+            Double sellingPrice = Double.parseDouble(updateSellPrice.getText());
+            Product aux = new Product(id, supplier, name, stock, price, sellingPrice);
             productList.put(aux.getId(), aux);
         } else {
             JOptionPane.showMessageDialog(null, "Select a product you want to modify");
@@ -679,7 +676,7 @@ public class Inventory extends JDialog {
             data.setName(nameField.getText());
             data.setStock(Integer.parseInt(stockField.getText()));
             data.setPrice(Double.parseDouble(priceField.getText()));
-            data.setSellPrice(Double.parseDouble(sellPriceField.getText()));
+            data.setSellingPrice(Double.parseDouble(sellPriceField.getText()));
             productList.put(data.getId(), data);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -709,7 +706,7 @@ public class Inventory extends JDialog {
             }
         };
         for (Map.Entry<String, Product> entry : productList.entrySet()) {
-            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), +entry.getValue().getPrice(), entry.getValue().getSellPrice()});
+            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), +entry.getValue().getPrice(), entry.getValue().getSellingPrice()});
         }
         productsTable.setModel(model);
     }
@@ -723,7 +720,7 @@ public class Inventory extends JDialog {
             }
         };
         model.addRow(new Object[]{total, cantVentas});
-        stadisticsTable.setModel(model);
+        statisticsTable.setModel(model);
     }
 
 
@@ -736,7 +733,7 @@ public class Inventory extends JDialog {
             }
         };
         for (Map.Entry<String, Product> entry : shopList.entrySet()) {
-            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getSellPrice(), entry.getValue().getSellPrice() * entry.getValue().getStock()});
+            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getSellingPrice(), entry.getValue().getSellingPrice() * entry.getValue().getStock()});
         }
         cartTable.setModel(model);
     }
@@ -750,23 +747,23 @@ public class Inventory extends JDialog {
             }
         };
         for (Map.Entry<String, Product> entry : productList.entrySet()) {
-            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getSellPrice()});
+            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getSellingPrice()});
         }
         clientProductList.setModel(model);
     }
 
     private void listaVentas() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Comprobante Nº", "Client Name", "Total Ammount", "Date", "Facturado"}, 0) {
+                new Object[]{"Operation Nº", "Client Name", "Total Ammount", "Date", "Facturado"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        for (int i = 0; i < listaVentass.size(); i++) {
-            model.addRow(new Object[]{listaVentass.get(i).getNumero(), listaVentass.get(i).getNombreCliente(), listaVentass.get(i).getTotalAmmount(), listaVentass.get(i).getFecha(), listaVentass.get(i).isFacturado()});
+        for (int i = 0; i < sellsList.size(); i++) {
+            model.addRow(new Object[]{sellsList.get(i).getOperationNumber(), sellsList.get(i).getCustomerName(), sellsList.get(i).getTotalAmmount(), sellsList.get(i).getDateFormatted(), sellsList.get(i).isInvoiced()});
         }
-        ventasTable.setModel(model);
+        sellsTable.setModel(model);
     }
 
     private void customerList() {
@@ -795,7 +792,7 @@ public class Inventory extends JDialog {
         customerList();
     }
 
-    public void createInvoice(double Comprobante, String cliente, double precio, String fecha) {
+    public void createInvoice(double operation, String customer, double price, String formattedDate) {
         PDDocument doc = new PDDocument();
         PDPage firstPage = new PDPage(PDRectangle.A4);
         doc.addPage(firstPage);
@@ -810,11 +807,11 @@ public class Inventory extends JDialog {
             PDFTextClass pdfTextClass = new PDFTextClass(doc, contentStream);
             PDFont font = PDType1Font.COURIER;
             String[] contactInfo = new String[]{"nazarenoorodriguez@gmail.com", "ignaciopavone@gmail.com", "talliercioluis1@gmail.com"};
-            pdfTextClass.addLineOfText("EMPRESA S.A", 250, pageHeight - 50, font, 20, Color.GREEN);
-            pdfTextClass.addLineOfText("COMPROBANTE: " + Comprobante, 25, pageHeight - 100, font, 14, Color.BLACK);
-            pdfTextClass.addLineOfText("CLIENTE: " + cliente, 25, pageHeight - 125, font, 14, Color.BLACK);
-            pdfTextClass.addLineOfText("FECHA: " + fecha, 25, pageHeight - 200, font, 14, Color.BLACK);
-            pdfTextClass.addLineOfText("FINAL PRICE: $" + precio, 25, pageHeight - 225, font, 14, Color.BLACK);
+            pdfTextClass.addLineOfText("MYCOMPANY S.A", 250, pageHeight - 50, font, 20, Color.GREEN);
+            pdfTextClass.addLineOfText("OPERATION N°: " + operation, 25, pageHeight - 100, font, 14, Color.BLACK);
+            pdfTextClass.addLineOfText("CUSTOMER: " + customer, 25, pageHeight - 125, font, 14, Color.BLACK);
+            pdfTextClass.addLineOfText("DATE: " + formattedDate, 25, pageHeight - 200, font, 14, Color.BLACK);
+            pdfTextClass.addLineOfText("FINAL PRICE: $" + price, 25, pageHeight - 225, font, 14, Color.BLACK);
             PDFTableClass table = new PDFTableClass(doc, contentStream);
 
             int[] cellWidth = {130, 130, 130, 130};
@@ -832,11 +829,11 @@ public class Inventory extends JDialog {
             for (Product product : finalProductPDF) {
                 table.addCell(product.getName(), tableBodyColor);
                 table.addCell(String.valueOf(product.getStock()), tableBodyColor);
-                table.addCell(String.valueOf(product.getSellPrice()), tableBodyColor);
-                table.addCell(String.valueOf(product.getSellPrice() * product.getStock()), tableBodyColor);
+                table.addCell(String.valueOf(product.getSellingPrice()), tableBodyColor);
+                table.addCell(String.valueOf(product.getSellingPrice() * product.getStock()), tableBodyColor);
             }
             contentStream.close();
-            String idConcat = "Comprobante N "+Comprobante +" " +cliente;
+            String idConcat = "Operation N° "+operation +" " +customer;
             String namePDF = idConcat.concat(".pdf");
             doc.save(namePDF);
             doc.close();
@@ -856,9 +853,9 @@ public class Inventory extends JDialog {
         suppliersList.add(aux3);
 
         Product new1 = new Product("1", aux.getName(), "PC", 200, 70000.00, 100000.00);
-        Product new2 = new Product("2", aux1.getName(), "TECLADO", 150, 5000.00, 5000.00);
+        Product new2 = new Product("2", aux1.getName(), "KEYBOARD", 150, 5000.00, 5000.00);
         Product new3 = new Product("3", aux2.getName(), "MOUSE", 500, 3000.00, 4000.00);
-        Product new4 = new Product("4", aux3.getName(), "AURICULAR", 100, 6000.00, 8000.00);
+        Product new4 = new Product("4", aux3.getName(), "HEADPHONES", 100, 6000.00, 8000.00);
         productList.put(new1.getId(), new1);
         productList.put(new2.getId(), new2);
         productList.put(new3.getId(), new3);
