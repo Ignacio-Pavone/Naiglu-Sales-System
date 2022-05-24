@@ -98,6 +98,8 @@ public class Inventory extends JDialog {
     private JComboBox comboBoxCustomers;
     private JLabel customerNameLAbel;
     private JButton xButton;
+    private JButton DELETEButton;
+    private JLabel employeeName;
     private int rowSelection;
     private double ammountAcc;
 
@@ -140,6 +142,8 @@ public class Inventory extends JDialog {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
+                employeeName.setForeground(Color.GREEN);
+                employeeName.setText("Logged"+"-["+employee.getName()+"]");
                 if (!employee.isAdmin()) {
                     sellTable.remove(adminPanel);
                     sellTable.remove(addProducts);
@@ -235,6 +239,12 @@ public class Inventory extends JDialog {
                 dispose();
             }
         });
+        DELETEButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteCustomerFromList();
+            }
+        });
     }
 
     private void deskClosing() {
@@ -312,6 +322,37 @@ public class Inventory extends JDialog {
         listSuppliers();
     }
 
+    private void deleteCustomerFromList() {
+        int row = 0;
+        row = customerTable.getSelectedRow();
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        if (row != -1) {
+            dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
+            if (dialogButton == JOptionPane.YES_OPTION) {
+                String name = String.valueOf(customerTable.getValueAt(row, 0));
+                String taxpayerID = String.valueOf(customerTable.getValueAt(row, 1));
+                String phoneNumber = String.valueOf(customerTable.getValueAt(row, 2));
+                String category = String.valueOf(customerTable.getValueAt(row, 3));
+                Customer aux = new Customer(name, taxpayerID, phoneNumber, category);
+                deleteCustomer(aux);
+                customerList();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Select a row");
+        }
+    }
+
+    private void deleteCustomer (Customer aux){
+        int pos = 0;
+        boolean flag = false;
+        for (int i = 0; i < customerList.size() ; i++) {
+            if (aux.getTaxpayerID().equals(customerList.get(i).getTaxpayerID()) && !flag){
+                pos = i;
+            }
+        }
+        customerList.remove(pos);
+    }
+
     private boolean chekCustomerFields() {
         return !CnameCustomer.getText().equals("") && !CtaxPayerIDCustomer.getText().equals("") && !CphoeNumberCustomer.getText().equals("") && !CcategoryCustomer.getText().equals("");
     }
@@ -358,20 +399,22 @@ public class Inventory extends JDialog {
 
     private void confirmPruchase() {
         Sell newSell = new Sell();
+        int dialogButton = JOptionPane.YES_NO_OPTION;
         if (tableHaveData()) {
-            double amount = ammountAcc;
-            Customer aux = (Customer) comboBoxCustomers.getSelectedItem();
-            assert aux != null;
-            String id = aux.getTaxpayerID();
-            System.out.println(aux.getTaxpayerID());
-            String nameAux = aux.getName();
-            newSell = new Sell(nameAux, amount,id);
-            if (!sellExist(newSell)) {
-                sellsList.add(newSell);
-                textFinalPrice.setText("Total Price");
-                mapTolist = shopList.values();
-                finalProductPDF = new ArrayList<>(mapTolist);
-                shopList.clear();
+            dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
+            if (dialogButton == JOptionPane.YES_OPTION) {
+                double amount = ammountAcc;
+                Customer aux = (Customer) comboBoxCustomers.getSelectedItem();
+                String id = aux.getTaxpayerID();
+                String nameAux = aux.getName();
+                newSell = new Sell(nameAux, amount, id);
+                if (!sellExist(newSell)) {
+                    sellsList.add(newSell);
+                    textFinalPrice.setText("Total Price");
+                    mapTolist = shopList.values();
+                    finalProductPDF = new ArrayList<>(mapTolist);
+                    shopList.clear();
+                }
             }
         }
         listCart();
