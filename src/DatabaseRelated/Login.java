@@ -14,6 +14,7 @@ public class Login extends JDialog {
     private JPanel loginPanel;
     private JTextField email;
     private JButton registerButton;
+    private JButton xButton;
     public static Employee employee;
     final Point offset = new Point();
     Connection con;
@@ -34,13 +35,6 @@ public class Login extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 loginUser();
-            }
-        });
-
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
             }
         });
 
@@ -65,6 +59,14 @@ public class Login extends JDialog {
             }
         });
         setVisible(true);
+
+
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
     }
 
     private void loginUser() {
