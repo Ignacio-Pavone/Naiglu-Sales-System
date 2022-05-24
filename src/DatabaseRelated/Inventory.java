@@ -99,7 +99,6 @@ public class Inventory extends JDialog {
     private int rowSelection;
     private double ammountAcc;
 
-
     private Employee employee = new Employee();
     private HashMap<String, Product> productList = new HashMap<>(); // lista Productos
     private HashMap<String, Product> shopList = new HashMap<>(); // lista Carrito
@@ -445,7 +444,7 @@ public class Inventory extends JDialog {
             totalprice = totalprice + Double.parseDouble(String.valueOf(cartTable.getValueAt(i, 5)));
         }
         textFinalPrice.setVisible(true);
-        textFinalPrice.setText("Final price: $" + totalprice);
+        textFinalPrice.setText("" + totalprice);
         textFinalPrice.setForeground(Color.GREEN);
         ammountAcc = totalprice;
     }
@@ -456,7 +455,7 @@ public class Inventory extends JDialog {
             totalprice = totalprice + Double.parseDouble(String.valueOf(ventasTable.getValueAt(i, 2)));
         }
         setAmmountDay.setVisible(true);
-        setAmmountDay.setText("Today $" + totalprice);
+        setAmmountDay.setText(""+totalprice);
         setAmmountDay.setForeground(Color.GREEN);
     }
 

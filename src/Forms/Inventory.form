@@ -57,12 +57,18 @@
                   <component id="dc947" class="javax.swing.JTable" binding="clientProductList">
                     <constraints/>
                     <properties>
-                      <autoResizeMode value="4"/>
+                      <autoCreateRowSorter value="false"/>
+                      <autoResizeMode value="2"/>
                       <background color="-9934485"/>
                       <fillsViewportHeight value="true"/>
                       <font name="Consolas" size="12" style="0"/>
+                      <foreground color="-13946826"/>
                       <gridColor color="-15985889"/>
-                      <selectionForeground color="-1"/>
+                      <selectionBackground color="-1"/>
+                      <selectionForeground color="-8942951"/>
+                      <showHorizontalLines value="true"/>
+                      <showVerticalLines value="true"/>
+                      <surrendersFocusOnKeystroke value="false"/>
                     </properties>
                   </component>
                 </children>
@@ -138,8 +144,11 @@
                       <background color="-9934485"/>
                       <fillsViewportHeight value="true"/>
                       <font name="Consolas" size="12" style="0"/>
+                      <foreground color="-1"/>
                       <gridColor color="-15985889"/>
+                      <selectionBackground color="-1"/>
                       <selectionForeground color="-1"/>
+                      <showVerticalLines value="true"/>
                     </properties>
                   </component>
                 </children>
@@ -161,8 +170,9 @@
                 <properties>
                   <background color="-1"/>
                   <font name="Consolas" size="12" style="0"/>
+                  <icon value="Img/money.png"/>
                   <opaque value="false"/>
-                  <text value="Total price"/>
+                  <text value=""/>
                 </properties>
               </component>
               <component id="2be83" class="javax.swing.JButton" binding="CONFIRMPURCHASEButton" default-binding="true">
@@ -199,12 +209,20 @@
                 </constraints>
                 <properties>
                   <font name="Consolas" size="12" style="0"/>
-                  <text value="Customer Name"/>
+                  <horizontalAlignment value="0"/>
+                  <horizontalTextPosition value="0"/>
+                  <icon value="Img/icons8-client-64.png"/>
+                  <text value=""/>
                 </properties>
               </component>
               <vspacer id="da7e3">
                 <constraints>
                   <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <vspacer id="5378b">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                 </constraints>
               </vspacer>
             </children>
@@ -234,6 +252,7 @@
                       <fillsViewportHeight value="true"/>
                       <font name="Consolas" size="12" style="0"/>
                       <gridColor color="-15985889"/>
+                      <selectionBackground color="-1"/>
                     </properties>
                   </component>
                 </children>
@@ -254,7 +273,8 @@
                 </constraints>
                 <properties>
                   <font name="Consolas" size="12" style="0"/>
-                  <text value="TOTAL"/>
+                  <icon value="Img/money.png"/>
+                  <text value=""/>
                 </properties>
               </component>
               <hspacer id="c1440">
@@ -415,7 +435,8 @@
                   <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="SUPPLIED ITEM DATA"/>
+                  <font name="Consolas" size="12" style="0"/>
+                  <text value="Supplier Data"/>
                 </properties>
               </component>
               <vspacer id="475ff">
@@ -482,6 +503,7 @@
                           <background color="-9934485"/>
                           <fillsViewportHeight value="true"/>
                           <font name="Consolas" size="12" style="0"/>
+                          <selectionBackground color="-1"/>
                         </properties>
                       </component>
                     </children>
@@ -791,6 +813,8 @@
                           <background color="-9934485"/>
                           <fillsViewportHeight value="true"/>
                           <font name="Consolas" size="12" style="0"/>
+                          <gridColor color="-15985889"/>
+                          <selectionBackground color="-1"/>
                         </properties>
                       </component>
                     </children>
@@ -830,6 +854,8 @@
                           <background color="-9934485"/>
                           <fillsViewportHeight value="true"/>
                           <font name="Consolas" size="12" style="0"/>
+                          <gridColor color="-15985889"/>
+                          <selectionBackground color="-1"/>
                         </properties>
                       </component>
                     </children>
