@@ -55,7 +55,7 @@ public abstract class Entity {
 
     @Override
     public String toString() {
-        return "Name:" + name + '\'' +
-                "|| Taxpayer ID:" + taxpayerID + '\'';
+        return "Name:" + name;
+
     }
 }

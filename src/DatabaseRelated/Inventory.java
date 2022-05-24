@@ -94,8 +94,10 @@ public class Inventory extends JDialog {
     private JLabel CtaxLabel;
     private JLabel CphoneLabel;
     private JLabel CcategoryLabel;
+    private JComboBox comboBoxCustomers;
     private int rowSelection;
     private double ammountAcc;
+
 
     private Employee employee = new Employee();
     private HashMap<String, Product> productList = new HashMap<>(); // lista Productos
@@ -109,6 +111,7 @@ public class Inventory extends JDialog {
 
     public Inventory(JFrame parent) {
         super(parent);
+
         hardCode();
         tableStyle();
         setMinimumSize(new Dimension(800, 700));
@@ -317,6 +320,7 @@ public class Inventory extends JDialog {
             clearCustomerFields();
 
         }
+        loadCustomerCombobox();
         listSuppliers();
     }
 
@@ -357,13 +361,23 @@ public class Inventory extends JDialog {
         }
     }
 
+    private void loadCustomerCombobox(){
+        comboBoxCustomers.removeAllItems();
+        Object[]arr = customerList.toArray();
+        for (Object o:arr) {
+            comboBoxCustomers.addItem(o);
+        }
+    }
+
 
 
     private void confirmPruchase() {
         Venta nueva = new Venta();
         if (tableHaveData()) {
             Double ammount = ammountAcc;
-            nueva = new Venta(employee.getName(), ammount);
+            Customer aux = (Customer) comboBoxCustomers.getSelectedItem();
+            String nameAux = aux.getName().toString();
+            nueva = new Venta(nameAux, ammount);
             if (!sellExist(nueva)) {
                 listaVentass.add(nueva);
                 textFinalPrice.setText("Total Price");
@@ -837,7 +851,7 @@ public class Inventory extends JDialog {
                 table.addCell(String.valueOf(product.getSellPrice() * product.getStock()), tableBodyColor);
             }
             contentStream.close();
-            String idConcat = "[" + Comprobante + "]" + employee.getName();
+            String idConcat = "Comprobante N "+Comprobante +" " +cliente;
             String namePDF = idConcat.concat(".pdf");
             doc.save(namePDF);
             doc.close();
@@ -874,6 +888,7 @@ public class Inventory extends JDialog {
         customerList.add(auxC3);
         customerList.add(auxC4);
         setComboBoxConfig();
+        loadCustomerCombobox();
 
     }
 }
