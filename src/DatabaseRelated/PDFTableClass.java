@@ -30,8 +30,8 @@ public class PDFTableClass {
     void setTable(int[] colWidth, int cellHeight, int xPos, int yPos){
         this.colwidth = colWidth;
         this.cellHeight = cellHeight;
-        this.xPos = yPos;
-        this.yPos = xPos;
+        this.xPos = xPos;
+        this.yPos = yPos;
         this.xInitialPos = xPos;
     }
 

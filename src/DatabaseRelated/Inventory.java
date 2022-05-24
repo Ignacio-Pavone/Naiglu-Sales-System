@@ -751,12 +751,36 @@ public class Inventory extends JDialog {
 
             String[] contactInfo = new String[]{"nazarenoorodriguez@gmail.com", "ignaciopavone@gmail.com", "talliercioluis1@gmail.com"};
             //pdfTextClass.addMultiLineText(contactInfo,18,(int)(pagewidth-font.getStringWidth("nazarenorodriguez@gmail.com")/1000*15-10),pageHeight-25,font,15,Color.BLACK);
-            pdfTextClass.addLineOfText("EMPRESA S.A", 250, pageHeight - 50, font, 14, Color.GREEN);
-            pdfTextClass.addLineOfText("COMPROBANTE: " + Comprobante, 25, pageHeight - 100, font, 10, Color.BLACK);
-            pdfTextClass.addLineOfText("CLIENTE: " + cliente, 25, pageHeight - 125, font, 10, Color.BLACK);
-            pdfTextClass.addLineOfText("DETALLE: " + finalProductPDF, 25, pageHeight - 150, font, 10, Color.BLACK);
-            pdfTextClass.addLineOfText("PRECIO: $" + precio, 25, pageHeight - 175, font, 10, Color.BLACK);
-            pdfTextClass.addLineOfText("FECHA: " + fecha, 25, pageHeight - 200, font, 10, Color.BLACK);
+            pdfTextClass.addLineOfText("EMPRESA S.A", 250, pageHeight - 50, font, 20, Color.GREEN);
+            pdfTextClass.addLineOfText("COMPROBANTE: " + Comprobante, 25, pageHeight - 100, font, 14, Color.BLACK);
+            pdfTextClass.addLineOfText("CLIENTE: " + cliente, 25, pageHeight - 125, font, 14, Color.BLACK);
+            //pdfTextClass.addLineOfText("DETALLE: " + finalProductPDF, 25, pageHeight - 150, font, 14, Color.BLACK);
+            //pdfTextClass.addLineOfText("PRECIO: $" + precio, 25, pageHeight - 175, font, 14, Color.BLACK);
+            pdfTextClass.addLineOfText("FECHA: " + fecha, 25, pageHeight - 200, font, 14, Color.BLACK);
+            pdfTextClass.addLineOfText("FINAL PRICE: $" + precio, 25, pageHeight-225 , font, 14, Color.BLACK);
+
+            PDFTableClass table = new PDFTableClass(doc,contentStream);
+
+            int[] cellWidth = {130,130,130,130};
+            table.setTable(cellWidth,30,25,pageHeight-350);
+            table.setTableFont(font,14,Color.BLACK);
+            Color tableBodyColor = new Color(187,187,187);
+            Color tableHeadColor = new Color(39,114,30);
+
+
+            table.addCell("Item name",tableHeadColor);
+            table.addCell("Item ammount",tableHeadColor);
+            table.addCell("Unit price",tableHeadColor);
+            table.addCell("Total price",tableHeadColor);
+
+
+            for (Product product : finalProductPDF) {
+                table.addCell(product.getName(), tableBodyColor);
+                table.addCell(String.valueOf(product.getStock()), tableBodyColor);
+                table.addCell(String.valueOf(product.getSellPrice()), tableBodyColor);
+                table.addCell(String.valueOf(product.getSellPrice() * product.getStock()), tableBodyColor);
+            }
+
 
             contentStream.close();
             String idConcat = "[" + Comprobante + "]" + employee.getName();
