@@ -610,7 +610,7 @@ public class Inventory extends JDialog {
 
     private void listProducts() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Item ID", "Supplier Name", "Name", "Stock", "Price", "Sell Price"}, 0) {
+                new Object[]{"Code", "Supplier", "Name", "Stock", "Price", "Sell Price"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -624,7 +624,7 @@ public class Inventory extends JDialog {
 
     private void listCart() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Item ID", "Supplier Name", "Name", "Ammount", "Unity price", "Total price"}, 0) {
+                new Object[]{"Code", "Supplier", "Name", "Ammount", "Unity price", "Total price"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -638,7 +638,7 @@ public class Inventory extends JDialog {
 
     private void listClientProducts() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Item ID", "Supplier", "Name", "Stock", "Price", "Sell Price"}, 0) {
+                new Object[]{"Code", "Supplier", "Name", "Stock", "Price", "Sell Price"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;

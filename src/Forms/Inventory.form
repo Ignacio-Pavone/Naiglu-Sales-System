@@ -8,7 +8,7 @@
     <properties>
       <background color="-13882315"/>
     </properties>
-    <border type="none"/>
+    <border type="empty"/>
     <children>
       <tabbedpane id="ce46" binding="sellTable">
         <constraints>
@@ -20,6 +20,7 @@
           <background color="-14192098"/>
           <doubleBuffered value="true"/>
           <enabled value="true"/>
+          <focusTraversalPolicyProvider value="false"/>
           <font name="Consolas" size="12" style="0"/>
           <foreground color="-12609246"/>
           <inheritsPopupMenu value="false"/>
