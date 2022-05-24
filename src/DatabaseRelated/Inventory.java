@@ -19,10 +19,7 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 
 public class Inventory extends JDialog {
@@ -99,12 +96,13 @@ public class Inventory extends JDialog {
     private HashMap<String, Product> shopList = new HashMap<>(); // lista Carrito
     private ArrayList<Venta> listaVentass = new ArrayList<>(); // lista ventas Concretadas
     private HashSet<Supplier> suppliersList = new HashSet<>(); // lista proveedores
+    private Collection<Product> mapTolist;
+    private ArrayList<Product> finalProductPDF = new ArrayList<>();
 
 
     public Inventory(JFrame parent) {
         super(parent);
         tableStyle();
-       // fillProducts();
         setMinimumSize(new Dimension(650, 600));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setContentPane(products1);
@@ -143,7 +141,6 @@ public class Inventory extends JDialog {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-
                 if (!employee.isAdmin()) {
                     sellTable.remove(adminPanel);
                     sellTable.remove(addProducts);
@@ -225,12 +222,12 @@ public class Inventory extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 rowSelection = ventasTable.getSelectedRow();
-                if (rowSelection!=-1){
+                if (rowSelection != -1) {
                     //0 comprobante
                     //1 cliente
                     //2 precio
                     //3 fecha
-                    createInvoice((Double) ventasTable.getValueAt(rowSelection,0), (String) ventasTable.getValueAt(rowSelection,1), (Double) ventasTable.getValueAt(rowSelection,2), (String) ventasTable.getValueAt(rowSelection,3));
+                    createInvoice((Double) ventasTable.getValueAt(rowSelection, 0), (String) ventasTable.getValueAt(rowSelection, 1), (Double) ventasTable.getValueAt(rowSelection, 2), (String) ventasTable.getValueAt(rowSelection, 3));
                 }
             }
         });
@@ -252,7 +249,6 @@ public class Inventory extends JDialog {
             suppliersList.add(aux);
             setComboBoxConfig();
             clearSupplierFields();
-            createDocument();
 
         }
         listSuppliers();
@@ -262,10 +258,9 @@ public class Inventory extends JDialog {
         comboBox1.removeAllItems();
         Object[] arr = new Object[suppliersList.size()];
         arr = suppliersList.toArray();
-        for (Object o: arr) {
+        for (Object o : arr) {
             comboBox1.addItem(o);
         }
-
     }
 
     private void listSuppliers() {
@@ -290,6 +285,8 @@ public class Inventory extends JDialog {
             if (!sellExist(nueva)) {
                 listaVentass.add(nueva);
                 textFinalPrice.setText("Total Price");
+                mapTolist = shopList.values();
+                finalProductPDF = new ArrayList<>(mapTolist);
                 shopList.clear();
             }
         }
@@ -400,23 +397,23 @@ public class Inventory extends JDialog {
         }
     }
 
-    private void deleteSupplierFromList(){
+    private void deleteSupplierFromList() {
         int row = 0;
         row = supplierTable.getSelectedRow();
         int dialogButton = JOptionPane.YES_NO_OPTION;
-        if (row != -1){
+        if (row != -1) {
             dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
             if (dialogButton == JOptionPane.YES_OPTION) {
                 String name = String.valueOf(supplierTable.getValueAt(row, 0));
                 String taxpayerID = String.valueOf(supplierTable.getValueAt(row, 1));
                 String phoneNumber = String.valueOf(supplierTable.getValueAt(row, 2));
                 String workingArea = String.valueOf(supplierTable.getValueAt(row, 3));
-                Supplier aux = new Supplier(name,taxpayerID,phoneNumber,workingArea);
+                Supplier aux = new Supplier(name, taxpayerID, phoneNumber, workingArea);
                 deleteSupplier(aux.getName());
                 listSuppliers();
                 setComboBoxConfig();
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Select a row");
         }
     }
@@ -511,9 +508,9 @@ public class Inventory extends JDialog {
         }
     }
 
-    private Supplier searchSupplier(String name){
-        for (Supplier s:suppliersList) {
-            if (s.getName().equals(name)){
+    private Supplier searchSupplier(String name) {
+        for (Supplier s : suppliersList) {
+            if (s.getName().equals(name)) {
                 return s;
             }
         }
@@ -630,7 +627,7 @@ public class Inventory extends JDialog {
             }
         };
         for (Map.Entry<String, Product> entry : shopList.entrySet()) {
-            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(),  entry.getValue().getSellPrice(),entry.getValue().getSellPrice() * entry.getValue().getStock()});
+            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getSellPrice(), entry.getValue().getSellPrice() * entry.getValue().getStock()});
         }
         cartTable.setModel(model);
     }
@@ -663,26 +660,7 @@ public class Inventory extends JDialog {
         ventasTable.setModel(model);
     }
 
-    public void createDocument()  {
-        String filename = "name.pdf";
-        PDDocument document = new PDDocument();
-        PDPage page = new PDPage(PDRectangle.A4);
-        document.addPage(page);
-        try{
-            PDPageContentStream contentStream = new PDPageContentStream(document,page);
-            contentStream.beginText();
-            contentStream.setFont(PDType1Font.TIMES_BOLD,12);
-            contentStream.newLineAtOffset(20,page.getMediaBox().getHeight()-52);
-            contentStream.showText(listaVentass.toString());
-            contentStream.endText();
-            contentStream.close();
-            document.save(filename);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private void listingCollections(){
+    private void listingCollections() {
         labelStyle();
         tableStyle();
         setLocationRelativeTo(null);
@@ -692,7 +670,8 @@ public class Inventory extends JDialog {
         listSuppliers();
         listaVentas();
     }
-    public void createInvoice(double Comprobante, String cliente, double precio, String fecha){
+
+    public void createInvoice(double Comprobante, String cliente, double precio, String fecha) {
         PDDocument doc = new PDDocument();
         PDPage firstPage = new PDPage(PDRectangle.A4);
         doc.addPage(firstPage);
@@ -702,25 +681,26 @@ public class Inventory extends JDialog {
         int pagewidth = (int) firstPage.getTrimBox().getWidth();
         int pageHeight = (int) firstPage.getTrimBox().getHeight();
 
-        try{
-        PDPageContentStream contentStream = new PDPageContentStream(doc,firstPage);
-        PDFTextClass pdfTextClass = new PDFTextClass(doc,contentStream);
-        PDFont font = PDType1Font.HELVETICA;
+        try {
+            PDPageContentStream contentStream = new PDPageContentStream(doc, firstPage);
+            PDFTextClass pdfTextClass = new PDFTextClass(doc, contentStream);
+            PDFont font = PDType1Font.COURIER;
 
-        String[] contactInfo = new String[]{"nazarenoorodriguez@gmail.com","ignacionpavone@gmail.com"};
-        pdfTextClass.addMultiLineText(contactInfo,18,(int)(pagewidth-font.getStringWidth("nazarenoorodriguez@gmail.com")/1000*15-10),pageHeight-25,font,15,Color.BLACK);
-        pdfTextClass.addLineOfText("EMPRESA S.A",25,pageHeight-150,font,16,Color.BLACK);
-        pdfTextClass.addLineOfText("COMPROBANTE: "+Comprobante,25,pageHeight-250,font,16,Color.BLACK);
-        pdfTextClass.addLineOfText("CLIENTE: "+cliente,25,pageHeight-275,font,16,Color.BLACK);
-        pdfTextClass.addLineOfText("PRECIO: "+precio,25,pageHeight-300,font,16,Color.BLACK);
-        pdfTextClass.addLineOfText("FECHA: "+fecha,25,pageHeight-325,font,16,Color.BLACK);
+            String[] contactInfo = new String[]{"nazarenoorodriguez@gmail.com", "ignaciopavone@gmail.com", "talliercioluis1@gmail.com"};
+            //pdfTextClass.addMultiLineText(contactInfo,18,(int)(pagewidth-font.getStringWidth("nazarenorodriguez@gmail.com")/1000*15-10),pageHeight-25,font,15,Color.BLACK);
+            pdfTextClass.addLineOfText("EMPRESA S.A", 250, pageHeight - 50, font, 14, Color.GREEN);
+            pdfTextClass.addLineOfText("COMPROBANTE: " + Comprobante, 25, pageHeight - 100, font, 10, Color.BLACK);
+            pdfTextClass.addLineOfText("CLIENTE: " + cliente, 25, pageHeight - 125, font, 10, Color.BLACK);
+            pdfTextClass.addLineOfText("DETALLE: " + finalProductPDF, 25, pageHeight - 150, font, 10, Color.BLACK);
+            pdfTextClass.addLineOfText("PRECIO: $" + precio, 25, pageHeight - 175, font, 10, Color.BLACK);
+            pdfTextClass.addLineOfText("FECHA: " + fecha, 25, pageHeight - 200, font, 10, Color.BLACK);
 
-        contentStream.close();
-        doc.save("testing.pdf");
-        doc.close();
-
-
-        }catch (Exception e){
+            contentStream.close();
+            String idConcat = "[" + Comprobante + "]" + employee.getName();
+            String namePDF = idConcat.concat(".pdf");
+            doc.save(namePDF);
+            doc.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
