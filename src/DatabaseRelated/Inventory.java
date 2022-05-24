@@ -88,6 +88,7 @@ public class Inventory extends JDialog {
     private JLabel setAmmountDay;
     private JLabel lineLabel1;
     private JLabel lineLabel2;
+    private JButton CERRARCAJAButton;
     private int rowSelection;
     private double ammountAcc;
 
@@ -114,7 +115,6 @@ public class Inventory extends JDialog {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(employee);
                 dispose();
             }
         });
@@ -221,12 +221,67 @@ public class Inventory extends JDialog {
         GENERARFACTURAButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                rowSelection = ventasTable.getSelectedRow();
-                if (rowSelection != -1) {
-                    createInvoice((Double) ventasTable.getValueAt(rowSelection, 0), (String) ventasTable.getValueAt(rowSelection, 1), (Double) ventasTable.getValueAt(rowSelection, 2), (String) ventasTable.getValueAt(rowSelection, 3));
-                }
+                generarFactura();
             }
         });
+        CERRARCAJAButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cerrarCaja();
+            }
+        });
+    }
+
+    private void cerrarCaja() {
+        double total = 0;
+        int cantFacturas = 0;
+        if (allFacturado()) {
+            total = totalCaja();
+            cantFacturas = listaVentass.size();
+            //hacer algo
+            listaVentass.clear();
+        } else {
+            JOptionPane.showMessageDialog(null, "Faltan facturar");
+        }
+    }
+
+    private void generarFactura() {
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        rowSelection = ventasTable.getSelectedRow();
+        if (rowSelection != -1) {
+            dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
+            if (dialogButton == JOptionPane.YES_OPTION) {
+                createInvoice((Double) ventasTable.getValueAt(rowSelection, 0), (String) ventasTable.getValueAt(rowSelection, 1), (Double) ventasTable.getValueAt(rowSelection, 2), (String) ventasTable.getValueAt(rowSelection, 3));
+                isFacturado((Double) ventasTable.getValueAt(rowSelection, 0));
+                listaVentas();
+            }
+        }
+    }
+
+    private double totalCaja() {
+        double acum = 0;
+        for (int i = 0; i < listaVentass.size(); i++) {
+            acum += listaVentass.get(i).getTotalAmmount();
+        }
+        return acum;
+    }
+
+    private boolean allFacturado() {
+        boolean flag = true;
+        for (int i = 0; i < listaVentass.size(); i++) {
+            if (!listaVentass.get(i).isFacturado()) {
+                flag = false;
+            }
+        }
+        return flag;
+    }
+
+    private void isFacturado(Double comprobante) {
+        for (int i = 0; i < listaVentass.size(); i++) {
+            if (listaVentass.get(i).getNumero().equals(comprobante)) {
+                listaVentass.get(i).setFacturado(true);
+            }
+        }
     }
 
     private boolean checkSupplierRequirements() {
@@ -461,8 +516,7 @@ public class Inventory extends JDialog {
         phoneLabel.setForeground(Color.WHITE);
         WorkigAreaLabel.setForeground(Color.WHITE);
         sellPriceLabel.setForeground(Color.WHITE);
-        lineLabel1.setForeground(Color.BLACK);
-        lineLabel2.setForeground(Color.BLACK);
+
         setAmmountDay.setForeground(Color.GRAY);
     }
 
@@ -643,14 +697,14 @@ public class Inventory extends JDialog {
 
     private void listaVentas() {
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Comprobante Nº", "Client Name", "Total Ammount", "Date"}, 0) {
+                new Object[]{"Comprobante Nº", "Client Name", "Total Ammount", "Date", "Facturado"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
         for (int i = 0; i < listaVentass.size(); i++) {
-            model.addRow(new Object[]{listaVentass.get(i).getNumero(), listaVentass.get(i).getNombreCliente(), listaVentass.get(i).getTotalAmmount(), listaVentass.get(i).getFecha()});
+            model.addRow(new Object[]{listaVentass.get(i).getNumero(), listaVentass.get(i).getNombreCliente(), listaVentass.get(i).getTotalAmmount(), listaVentass.get(i).getFecha(), listaVentass.get(i).isFacturado()});
         }
         ventasTable.setModel(model);
     }

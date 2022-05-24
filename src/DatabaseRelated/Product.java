@@ -11,10 +11,12 @@ public class Product {
     private Double sellPrice;
 
 
+
     public Product(){
 
     }
-    public Product(String id,String supplierName, String name, int stock,Double normalPrice, Double price) {
+
+    public Product(String id, String supplierName, String name, int stock, Double normalPrice, Double price) {
         this.id = id;
         this.supplierName = supplierName;
         this.name = name;

@@ -185,7 +185,7 @@
               </component>
             </children>
           </grid>
-          <grid id="77a29" binding="addSells" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="77a29" binding="addSells" layout-manager="GridLayoutManager" row-count="3" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="Ventas"/>
@@ -197,7 +197,7 @@
             <children>
               <scrollpane id="d3a2f">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="5" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
@@ -216,7 +216,7 @@
               </scrollpane>
               <component id="9c6d9" class="javax.swing.JButton" binding="GENERARFACTURAButton" default-binding="true">
                 <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <background color="-14192098"/>
@@ -224,30 +224,34 @@
                   <text value="GENERAR FACTURA"/>
                 </properties>
               </component>
-              <component id="a7ae8" class="javax.swing.JLabel" binding="lineLabel1">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="---------------------------------------"/>
-                </properties>
-              </component>
-              <component id="cbcb5" class="javax.swing.JLabel" binding="lineLabel2">
-                <constraints>
-                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="------------------------------------------"/>
-                </properties>
-              </component>
               <component id="11465" class="javax.swing.JLabel" binding="setAmmountDay">
                 <constraints>
-                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="TOTAL"/>
                 </properties>
               </component>
+              <hspacer id="c1440">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </hspacer>
+              <component id="1cc5e" class="javax.swing.JButton" binding="CERRARCAJAButton" default-binding="true">
+                <constraints>
+                  <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-14192098"/>
+                  <font name="Consolas" size="12" style="0"/>
+                  <text value="CERRAR CAJA"/>
+                </properties>
+              </component>
+              <hspacer id="53edb">
+                <constraints>
+                  <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </hspacer>
             </children>
           </grid>
           <grid id="17eef" binding="addProducts" layout-manager="GridLayoutManager" row-count="10" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -438,7 +442,7 @@
                 <children>
                   <scrollpane id="968c1">
                     <constraints>
-                      <grid row="0" column="0" row-span="12" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="13" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <background color="-9934485"/>
@@ -543,7 +547,7 @@
                   </component>
                   <component id="bd132" class="javax.swing.JButton" binding="addSupplierButton" default-binding="true">
                     <constraints>
-                      <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <background color="-14192098"/>
@@ -551,14 +555,9 @@
                       <text value="ADD SUPPLIER"/>
                     </properties>
                   </component>
-                  <vspacer id="28a76">
-                    <constraints>
-                      <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                  </vspacer>
                   <component id="2f353" class="javax.swing.JButton" binding="DELETEELEMENTButton" default-binding="true">
                     <constraints>
-                      <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <background color="-14192098"/>
@@ -567,6 +566,11 @@
                       <text value="DELETE ELEMENT"/>
                     </properties>
                   </component>
+                  <vspacer id="ce6ae">
+                    <constraints>
+                      <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </vspacer>
                 </children>
               </grid>
             </children>

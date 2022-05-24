@@ -12,10 +12,12 @@ public class Venta {
     private double totalAmmount;
     private LocalDateTime date;
     private String fecha;
+    private boolean facturado;
 
     public Venta(){
-
+        this.facturado = false;
     }
+
 
     public Venta(String nombreCliente, double totalAmmount) {
 
@@ -25,6 +27,14 @@ public class Venta {
         date = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         this.fecha = date.format(formatter);
+    }
+
+    public boolean isFacturado() {
+        return facturado;
+    }
+
+    public void setFacturado(boolean facturado) {
+        this.facturado = facturado;
     }
 
     public String getFecha() {
