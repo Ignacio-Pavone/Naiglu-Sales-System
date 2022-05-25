@@ -12,6 +12,9 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
@@ -971,6 +974,10 @@ public class Inventory extends JDialog {
         String taxpayerID = businesstaxText.getText();
         String phoneNumber = businessphoneText.getText();
         company = new MyBusiness(nameString, taxpayerID, phoneNumber);
+        Border eBorder = new LineBorder(Color.BLACK, 1, true);
+
+        sellTable.setBorder(BorderFactory.createTitledBorder(eBorder, " "+ company.getName()+" ", TitledBorder.CENTER, TitledBorder.CENTER,new Font("Consolas",Font.ITALIC,12) ,Color.green));
+        UIManager.put("TabbedPane.contentAreaColor", Color.BLACK);
     }
 }
 

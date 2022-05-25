@@ -58,8 +58,6 @@ public class Login extends JDialog {
                 showRegister();
             }
         });
-        setVisible(true);
-
 
         cancelButton.addActionListener(new ActionListener() {
             @Override
@@ -67,6 +65,7 @@ public class Login extends JDialog {
                 dispose();
             }
         });
+        setVisible(true);
     }
 
     private void loginUser() {

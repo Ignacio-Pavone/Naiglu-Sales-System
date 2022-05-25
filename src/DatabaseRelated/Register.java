@@ -40,7 +40,13 @@ public class Register extends JDialog {
                 registerButtonLogic();
             }
             });
-        }
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+    }
 
         public void registerButtonLogic () {
             Employee employee = new Employee();

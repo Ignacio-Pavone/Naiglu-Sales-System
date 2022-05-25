@@ -29,7 +29,7 @@
           <tabLayoutPolicy value="0"/>
           <tabPlacement value="1"/>
         </properties>
-        <border type="line" title="By Babel Group" title-justification="2" title-position="2">
+        <border type="none" title-justification="2" title-position="2">
           <font name="Consolas" size="12" style="0"/>
           <title-color color="-6936527"/>
           <color color="-16777216"/>
@@ -1111,9 +1111,10 @@
           <hideActionText value="false"/>
           <opaque value="false"/>
           <requestFocusEnabled value="false"/>
-          <rolloverEnabled value="false"/>
+          <rolloverEnabled value="true"/>
           <selected value="false"/>
           <text value="X"/>
+          <toolTipText value="Exit"/>
         </properties>
       </component>
       <component id="a107" class="javax.swing.JLabel" binding="employeeName">
