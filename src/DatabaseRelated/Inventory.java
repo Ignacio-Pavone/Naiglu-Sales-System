@@ -115,6 +115,7 @@ public class Inventory extends JDialog {
     private JLabel companyLabel;
     private JLabel taxpayerLabel;
     private JLabel phoneLabelBusiness;
+    private JPanel businesstab;
     private int rowSelection;
     private double ammountAcc;
     MyBusiness company = new MyBusiness();
@@ -158,13 +159,14 @@ public class Inventory extends JDialog {
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
                 employeeName.setForeground(Color.GREEN);
-                employeeName.setText("Logged" + "-[" + employee.getName() + "]");
+                employeeName.setText("Logged" + "-[" + employee.getName() + "]" + " Admin Status" + "-[" + employee.isAdmin()+ "]" );
                 if (!employee.isAdmin()) {
                     sellTable.remove(adminPanel);
                     sellTable.remove(addProducts);
                     sellTable.remove(supplierTab);
                     sellTable.remove(customerTab);
                     sellTable.remove(statisticsTab);
+                    sellTable.remove(businesstab);
                 }
             }
         });

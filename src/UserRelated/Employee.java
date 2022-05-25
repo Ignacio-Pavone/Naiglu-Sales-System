@@ -7,6 +7,7 @@ public class Employee extends User{
     public Employee() {
     }
 
+
     public boolean isAdmin() {
         return admin;
     }
