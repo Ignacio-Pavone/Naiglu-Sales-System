@@ -367,6 +367,7 @@ public class Inventory extends JDialog {
                 String category = String.valueOf(customerTable.getValueAt(row, 3));
                 Customer aux = new Customer(name, taxpayerID, phoneNumber, category);
                 deleteCustomer(aux);
+                loadCustomerCombobox();
                 customerList();
             }
         } else {
