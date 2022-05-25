@@ -867,15 +867,9 @@ public class Inventory extends JDialog {
             String buyerDataString = aux.generateDataForBills();
             String[]buyerDataStringArray = buyerDataString.split(",");
 
-
-
-            //buyerData =
-
             pdfTextClass.addLineOfText("BUSINESS INFORMATION: ", 25, pageHeight - 25, font, 14, Color.BLACK);
             pdfTextClass.addMultiLineText(businessData, 14.50f,25,pageHeight-50,font,14,Color.BLACK);
-            //pdfTextClass.addLineOfText("COMPANY:" + contactInfo,25,pageHeight-50,font,14,Color.BLACK);
             pdfTextClass.addLineOfText("BUYER INFORMATION: ", 25, pageHeight - 100, font, 14, Color.BLACK);
-            //pdfTextClass.addLineOfText("OPERATION N°: " + operation, 25, pageHeight - 120, font, 14, Color.BLACK);
             pdfTextClass.addMultiLineText(buyerDataStringArray, 14.50f,25,pageHeight-125,font,14,Color.BLACK);
             pdfTextClass.addLineOfText("DATE: " + formattedDate, 25, pageHeight - 220, font, 14, Color.BLACK);
             pdfTextClass.addLineOfText("FINAL PRICE: $" + price, 25, pageHeight - 245, font, 14, Color.BLACK);
@@ -917,8 +911,6 @@ public class Inventory extends JDialog {
         return null;
     }
 
-
-
     private void hardCode() {
         Supplier aux = new Supplier("Fravega", "3333333", "155757575", "IT");
         Supplier aux1 = new Supplier("Compumundo", "6555555", "22333333", "IT");
@@ -928,7 +920,6 @@ public class Inventory extends JDialog {
         suppliersList.add(aux1);
         suppliersList.add(aux2);
         suppliersList.add(aux3);
-
         Product new1 = new Product("1", aux.getName(), "PC", 200, 70000.00, 100000.00);
         Product new2 = new Product("2", aux1.getName(), "KEYBOARD", 150, 5000.00, 5000.00);
         Product new3 = new Product("3", aux2.getName(), "MOUSE", 500, 3000.00, 4000.00);
@@ -937,7 +928,6 @@ public class Inventory extends JDialog {
         productList.put(new2.getId(), new2);
         productList.put(new3.getId(), new3);
         productList.put(new4.getId(), new4);
-
         Customer auxC1 = new Customer("Juan","22233333","15550000","A");
         Customer auxC2 = new Customer("Pedro","111111111","222222222","B");
         Customer auxC3 = new Customer("Ignacio","555555555","3333333","B");
