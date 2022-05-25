@@ -183,12 +183,7 @@ public class Inventory extends JDialog {
         modifyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                rowSelection = productsTable.getSelectedRow();
-                if (rowSelection != -1) {
-                    rowData();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Select a row");
-                }
+                modifyProduct();
             }
         });
         updateButton.addActionListener(new ActionListener() {
@@ -270,13 +265,17 @@ public class Inventory extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 createMyBusiness();
-                companyNameLabel.setForeground(Color.GREEN);
-                companyNameLabel.setText("" + company.getName());
-                businessNameText.setText("");
-                businesstaxText.setText("");
-                businessphoneText.setText("");
+                companyLabelsStyle();
             }
         });
+    }
+
+    private void companyLabelsStyle(){
+        companyNameLabel.setForeground(Color.GREEN);
+        companyNameLabel.setText("" + company.getName());
+        businessNameText.setText("");
+        businesstaxText.setText("");
+        businessphoneText.setText("");
     }
 
     private void deskClosing() {
@@ -711,19 +710,24 @@ public class Inventory extends JDialog {
 
     }
 
-    private void rowData() {
-        String id = String.valueOf(productsTable.getValueAt(rowSelection, 0));
-        String supplier = String.valueOf(productsTable.getValueAt(rowSelection, 1));
-        String name = String.valueOf(productsTable.getValueAt(rowSelection, 2));
-        int stock = Integer.parseInt(String.valueOf(productsTable.getValueAt(rowSelection, 3)));
-        double price = Double.parseDouble(String.valueOf(productsTable.getValueAt(rowSelection, 4)));
-        double sellingPrice = Double.parseDouble(String.valueOf(productsTable.getValueAt(rowSelection, 5)));
-        updateID.setText(id);
-        updateSupplier.setText(supplier);
-        updateName.setText(name);
-        updateStock.setText(String.valueOf(stock));
-        updatePrice.setText(String.valueOf(price));
-        updateSellPrice.setText(String.valueOf(sellingPrice));
+    private void modifyProduct() {
+        int rowSelection = productsTable.getSelectedRow();
+        if (rowSelection != -1) {
+            String id = String.valueOf(productsTable.getValueAt(rowSelection, 0));
+            String supplier = String.valueOf(productsTable.getValueAt(rowSelection, 1));
+            String name = String.valueOf(productsTable.getValueAt(rowSelection, 2));
+            int stock = Integer.parseInt(String.valueOf(productsTable.getValueAt(rowSelection, 3)));
+            double price = Double.parseDouble(String.valueOf(productsTable.getValueAt(rowSelection, 4)));
+            double sellingPrice = Double.parseDouble(String.valueOf(productsTable.getValueAt(rowSelection, 5)));
+            updateID.setText(id);
+            updateSupplier.setText(supplier);
+            updateName.setText(name);
+            updateStock.setText(String.valueOf(stock));
+            updatePrice.setText(String.valueOf(price));
+            updateSellPrice.setText(String.valueOf(sellingPrice));
+        } else {
+            JOptionPane.showMessageDialog(null, "Select a row");
+        }
     }
 
     private void updateProduct() {
