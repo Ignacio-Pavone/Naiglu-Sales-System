@@ -1,4 +1,5 @@
 package DatabaseRelated;
+
 import PersonRelated.Customer;
 import PersonRelated.MyBusiness;
 import PersonRelated.Supplier;
@@ -9,6 +10,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -19,7 +21,7 @@ import java.util.*;
 
 public class Inventory extends JDialog {
 
-    private MyBusiness placeholderBusiness = new MyBusiness("Name","123321","2222222");
+    private MyBusiness placeholderBusiness = new MyBusiness("Name", "123321", "2222222");
     private JPanel products1;
     private JTabbedPane sellTable;
     private JButton exitButton;
@@ -105,9 +107,17 @@ public class Inventory extends JDialog {
     private JLabel updateNameLabel;
     private JLabel updateStockLabel;
     private JLabel updatePriceLabel;
+    private JTextField businessphoneText;
+    private JTextField businesstaxText;
+    private JTextField businessNameText;
+    private JLabel companyNameLabel;
+    private JButton ACCEPTButton;
+    private JLabel companyLabel;
+    private JLabel taxpayerLabel;
+    private JLabel phoneLabelBusiness;
     private int rowSelection;
     private double ammountAcc;
-
+    MyBusiness company = new MyBusiness();
     private Employee employee = new Employee();
     private final HashMap<String, Product> productList = new HashMap<>(); // lista Productos
     private final HashMap<String, Product> shopList = new HashMap<>(); // lista Carrito
@@ -123,7 +133,7 @@ public class Inventory extends JDialog {
 
         hardCode();
         tableStyle();
-        setMinimumSize(new Dimension(800, 700));
+        setMinimumSize(new Dimension(900, 700));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setContentPane(products1);
         setUndecorated(true);
@@ -148,7 +158,7 @@ public class Inventory extends JDialog {
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
                 employeeName.setForeground(Color.GREEN);
-                employeeName.setText("Logged"+"-["+employee.getName()+"]");
+                employeeName.setText("Logged" + "-[" + employee.getName() + "]");
                 if (!employee.isAdmin()) {
                     sellTable.remove(adminPanel);
                     sellTable.remove(addProducts);
@@ -251,6 +261,17 @@ public class Inventory extends JDialog {
                 deleteCustomerFromList();
             }
         });
+        ACCEPTButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createMyBusiness();
+                companyNameLabel.setForeground(Color.GREEN);
+                companyNameLabel.setText(""+ company.getName());
+                businessNameText.setText("");
+                businesstaxText.setText("");
+                businessphoneText.setText("");
+            }
+        });
     }
 
     private void deskClosing() {
@@ -348,11 +369,11 @@ public class Inventory extends JDialog {
         }
     }
 
-    private void deleteCustomer (Customer aux){
+    private void deleteCustomer(Customer aux) {
         int pos = 0;
         boolean flag = false;
-        for (int i = 0; i < customerList.size() ; i++) {
-            if (aux.getTaxpayerID().equals(customerList.get(i).getTaxpayerID()) && !flag){
+        for (int i = 0; i < customerList.size(); i++) {
+            if (aux.getTaxpayerID().equals(customerList.get(i).getTaxpayerID()) && !flag) {
                 pos = i;
             }
         }
@@ -395,10 +416,10 @@ public class Inventory extends JDialog {
         }
     }
 
-    private void loadCustomerCombobox(){
+    private void loadCustomerCombobox() {
         comboBoxCustomers.removeAllItems();
-        Object[]arr = customerList.toArray();
-        for (Object o:arr) {
+        Object[] arr = customerList.toArray();
+        for (Object o : arr) {
             comboBoxCustomers.addItem(o);
         }
     }
@@ -492,7 +513,7 @@ public class Inventory extends JDialog {
             totalprice = totalprice + Double.parseDouble(String.valueOf(sellsTable.getValueAt(i, 2)));
         }
         setAmountDay.setVisible(true);
-        setAmountDay.setText(""+totalprice);
+        setAmountDay.setText("" + totalprice);
         setAmountDay.setForeground(Color.GREEN);
     }
 
@@ -600,6 +621,9 @@ public class Inventory extends JDialog {
         updateNameLabel.setForeground(Color.WHITE);
         updateStockLabel.setForeground(Color.WHITE);
         updatePriceLabel.setForeground(Color.WHITE);
+        companyLabel.setForeground(Color.WHITE);
+        taxpayerLabel.setForeground(Color.WHITE);
+        phoneLabelBusiness.setForeground(Color.WHITE);
     }
 
     private void tableStyle() {
@@ -860,17 +884,17 @@ public class Inventory extends JDialog {
             PDPageContentStream contentStream = new PDPageContentStream(doc, firstPage);
             PDFTextClass pdfTextClass = new PDFTextClass(doc, contentStream);
             PDFont font = PDType1Font.COURIER;
-            String [] businessData = new String[finalProductPDF.size()];
+            String[] businessData = new String[finalProductPDF.size()];
             businessData = placeholderBusiness.generateDataForBills().split(",");
 
-            Customer aux  = lookForCustomer(customer);
+            Customer aux = lookForCustomer(customer);
             String buyerDataString = aux.generateDataForBills();
-            String[]buyerDataStringArray = buyerDataString.split(",");
+            String[] buyerDataStringArray = buyerDataString.split(",");
 
             pdfTextClass.addLineOfText("BUSINESS INFORMATION: ", 25, pageHeight - 25, font, 14, Color.BLACK);
-            pdfTextClass.addMultiLineText(businessData, 14.50f,25,pageHeight-50,font,14,Color.BLACK);
+            pdfTextClass.addMultiLineText(businessData, 14.50f, 25, pageHeight - 50, font, 14, Color.BLACK);
             pdfTextClass.addLineOfText("BUYER INFORMATION: ", 25, pageHeight - 100, font, 14, Color.BLACK);
-            pdfTextClass.addMultiLineText(buyerDataStringArray, 14.50f,25,pageHeight-125,font,14,Color.BLACK);
+            pdfTextClass.addMultiLineText(buyerDataStringArray, 14.50f, 25, pageHeight - 125, font, 14, Color.BLACK);
             pdfTextClass.addLineOfText("DATE: " + formattedDate, 25, pageHeight - 220, font, 14, Color.BLACK);
             pdfTextClass.addLineOfText("FINAL PRICE: $" + price, 25, pageHeight - 245, font, 14, Color.BLACK);
             PDFTableClass table = new PDFTableClass(doc, contentStream);
@@ -893,7 +917,7 @@ public class Inventory extends JDialog {
                 table.addCell(String.valueOf(product.getSellingPrice() * product.getStock()), tableBodyColor);
             }
             contentStream.close();
-            String idConcat = "Operation N° "+operation +" " +customer;
+            String idConcat = "Operation N° " + operation + " " + customer;
             String namePDF = idConcat.concat(".pdf");
             doc.save(namePDF);
             doc.close();
@@ -902,9 +926,9 @@ public class Inventory extends JDialog {
         }
     }
 
-    private Customer lookForCustomer(String name){
-        for (Customer c: customerList) {
-            if (c.getName().equals(name)){
+    private Customer lookForCustomer(String name) {
+        for (Customer c : customerList) {
+            if (c.getName().equals(name)) {
                 return c;
             }
         }
@@ -928,17 +952,23 @@ public class Inventory extends JDialog {
         productList.put(new2.getId(), new2);
         productList.put(new3.getId(), new3);
         productList.put(new4.getId(), new4);
-        Customer auxC1 = new Customer("Juan","22233333","15550000","A");
-        Customer auxC2 = new Customer("Pedro","111111111","222222222","B");
-        Customer auxC3 = new Customer("Ignacio","555555555","3333333","B");
-        Customer auxC4 = new Customer("Naza","66666666","99999999","C");
+        Customer auxC1 = new Customer("Juan", "22233333", "15550000", "A");
+        Customer auxC2 = new Customer("Pedro", "111111111", "222222222", "B");
+        Customer auxC3 = new Customer("Ignacio", "555555555", "3333333", "B");
+        Customer auxC4 = new Customer("Naza", "66666666", "99999999", "C");
         customerList.add(auxC1);
         customerList.add(auxC2);
         customerList.add(auxC3);
         customerList.add(auxC4);
         setComboBoxConfig();
         loadCustomerCombobox();
+    }
 
+    private void createMyBusiness() {
+        String nameString = businessNameText.getText();
+        String taxpayerID = businesstaxText.getText();
+        String phoneNumber = businessphoneText.getText();
+        company = new MyBusiness(nameString, taxpayerID, phoneNumber);
     }
 }
 
