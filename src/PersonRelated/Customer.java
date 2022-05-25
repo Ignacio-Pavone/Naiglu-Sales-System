@@ -20,7 +20,7 @@ public class Customer extends Entity implements I_SaleAndPurchase{
     }
     @Override
     public String generateDataForBills() {
-        return "+ Customer name name: "+ this.getName() + "," +
+        return "+ Customer name: "+ this.getName() + "," +
                 "+ Taxpayer ID:" + this.getTaxpayerID() + "," +
                 "+ Phone number: "+this.getPhoneNumber() + ","+
                 "+ Category " + this.getCategory() +",";
