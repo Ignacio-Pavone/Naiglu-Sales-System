@@ -100,6 +100,11 @@ public class Inventory extends JDialog {
     private JButton xButton;
     private JButton DELETEButton;
     private JLabel employeeName;
+    private JPanel customerTab;
+    private JPanel statisticsTab;
+    private JLabel updateNameLabel;
+    private JLabel updateStockLabel;
+    private JLabel updatePriceLabel;
     private int rowSelection;
     private double ammountAcc;
 
@@ -147,8 +152,9 @@ public class Inventory extends JDialog {
                 if (!employee.isAdmin()) {
                     sellTable.remove(adminPanel);
                     sellTable.remove(addProducts);
-                    sellTable.remove(addSells);
                     sellTable.remove(supplierTab);
+                    sellTable.remove(customerTab);
+                    sellTable.remove(statisticsTab);
                 }
             }
         });
@@ -591,6 +597,9 @@ public class Inventory extends JDialog {
         CtaxLabel.setForeground(Color.WHITE);
         customerNameLAbel.setForeground(Color.WHITE);
         setAmountDay.setForeground(Color.WHITE);
+        updateNameLabel.setForeground(Color.WHITE);
+        updateStockLabel.setForeground(Color.WHITE);
+        updatePriceLabel.setForeground(Color.WHITE);
     }
 
     private void tableStyle() {
