@@ -266,7 +266,7 @@ public class Inventory extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 createMyBusiness();
                 companyNameLabel.setForeground(Color.GREEN);
-                companyNameLabel.setText(""+ company.getName());
+                companyNameLabel.setText("" + company.getName());
                 businessNameText.setText("");
                 businesstaxText.setText("");
                 businessphoneText.setText("");
