@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -280,11 +281,16 @@ public class Inventory extends JDialog {
 
     private void deskClosing() {
         double total = 0;
+        LocalDateTime fecha;
+        String dateFormatted;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         int invoiceAmount = 0;
         if (allInvoiced()) {
             total = totalCaja();
+            fecha = LocalDateTime.now();
+            dateFormatted = fecha.format(formatter);
             invoiceAmount = sellsList.size();
-            listStadisticTable(total, invoiceAmount);
+            listStadisticTable(dateFormatted, total, invoiceAmount);
             sellsList.clear();
             listaVentas();
             setAmountDay.setText("Total");
@@ -799,16 +805,15 @@ public class Inventory extends JDialog {
         productsTable.setModel(model);
     }
 
-    private void listStadisticTable(double total, int cantVentas) { //Borra las estadisticas si se genera una nueva factura.
+    private void listStadisticTable(String fecha, double total, int cantVentas) { //Borra las estadisticas si se genera una nueva factura.
         DefaultTableModel model = (DefaultTableModel) statisticsTable.getModel();
-                //new Object[]{"Total/Day", "N° Sales"}, 0);
-        model.addRow(new Object[]{total, cantVentas});
+        model.addRow(new Object[]{fecha, total, cantVentas});
         statisticsTable.setModel(model);
     }
 
-    private void refreshStatisticsTable() { //Borra las estadisticas si se genera una nueva factura.
+    private void createStatisticsTable() { //Borra las estadisticas si se genera una nueva factura.
         DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Total/Day", "N° Sales"}, 0) {
+                new Object[]{"Date", "Total/Day", "N° Sales"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -883,7 +888,7 @@ public class Inventory extends JDialog {
         listSuppliers();
         listaVentas();
         customerList();
-        refreshStatisticsTable();
+        createStatisticsTable();
     }
 
     public void createInvoice(double operation, String customer, double price, String formattedDate) {
