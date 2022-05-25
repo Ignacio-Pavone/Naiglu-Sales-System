@@ -807,6 +807,16 @@ public class Inventory extends JDialog {
         statisticsTable.setModel(model);
     }
 
+    private void refreshStatisticsTable() { //Borra las estadisticas si se genera una nueva factura.
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"Total/Day", "N° Sales"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        statisticsTable.setModel(model);
+    }
 
     private void listCart() {
         DefaultTableModel model = new DefaultTableModel(
@@ -874,6 +884,7 @@ public class Inventory extends JDialog {
         listSuppliers();
         listaVentas();
         customerList();
+        refreshStatisticsTable();
     }
 
     public void createInvoice(double operation, String customer, double price, String formattedDate) {
