@@ -800,13 +800,8 @@ public class Inventory extends JDialog {
     }
 
     private void listStadisticTable(double total, int cantVentas) { //Borra las estadisticas si se genera una nueva factura.
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Total/Day", "N° Sales"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        DefaultTableModel model = (DefaultTableModel) statisticsTable.getModel();
+                //new Object[]{"Total/Day", "N° Sales"}, 0);
         model.addRow(new Object[]{total, cantVentas});
         statisticsTable.setModel(model);
     }
