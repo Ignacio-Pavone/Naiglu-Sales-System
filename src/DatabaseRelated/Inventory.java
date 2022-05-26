@@ -163,7 +163,7 @@ public class Inventory extends JDialog {
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
                 employeeName.setForeground(Color.GREEN);
-                employeeName.setText("Logged" + "-[" + employee.getName() + "]" + " Admin Status" + "-[" + employee.isAdmin()+ "]" );
+                employeeName.setText("Logged" + "-[" + employee.getName() + "]" + " Admin Status" + "-[" + employee.isAdmin() + "]");
                 if (!employee.isAdmin()) {
                     sellTable.remove(adminPanel);
                     sellTable.remove(addProducts);
@@ -271,7 +271,7 @@ public class Inventory extends JDialog {
         });
     }
 
-    private void companyLabelsStyle(){
+    private void companyLabelsStyle() {
         companyNameLabel.setForeground(Color.GREEN);
         companyNameLabel.setText("" + company.getName());
         businessNameText.setText("");
@@ -311,7 +311,7 @@ public class Inventory extends JDialog {
                 listaVentas();
             }
         } else {
-            JOptionPane.showMessageDialog(null,"Venta ya facturada");
+            JOptionPane.showMessageDialog(null, "Venta ya facturada");
         }
     }
 
@@ -995,7 +995,7 @@ public class Inventory extends JDialog {
         company = new MyBusiness(nameString, taxpayerID, phoneNumber);
         Border eBorder = new LineBorder(Color.BLACK, 1, true);
 
-        sellTable.setBorder(BorderFactory.createTitledBorder(eBorder, " "+ company.getName()+" ", TitledBorder.CENTER, TitledBorder.CENTER,new Font("Consolas",Font.ITALIC,12) ,Color.green));
+        sellTable.setBorder(BorderFactory.createTitledBorder(eBorder, " " + company.getName() + " ", TitledBorder.CENTER, TitledBorder.CENTER, new Font("Consolas", Font.ITALIC, 12), Color.green));
         UIManager.put("TabbedPane.contentAreaColor", Color.BLACK);
     }
 }
