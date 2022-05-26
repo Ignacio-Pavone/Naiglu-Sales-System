@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
-public class Inventory extends JDialog {
+public class MainMenu extends JDialog {
 
     private MyBusiness placeholderBusiness = new MyBusiness("Name", "123321", "2222222");
     private JPanel products1;
@@ -62,7 +62,7 @@ public class Inventory extends JDialog {
     private JButton exitButton2;
     private JTextField cantField;
     private JButton refreshButton;
-    private Inventory productData;
+    private MainMenu productData;
     private JTable sellsTable;
     private JPanel addSells;
     private JButton GENERARFACTURAButton;
@@ -131,7 +131,7 @@ public class Inventory extends JDialog {
     private ArrayList<Product> finalProductPDF = new ArrayList<>();
 
 
-    public Inventory(JFrame parent) {
+    public MainMenu(JFrame parent) {
         super(parent);
 
         hardCode();

@@ -75,7 +75,7 @@ public class Login extends JDialog {
         if (employee != null) {
             dispose();
             JOptionPane.showMessageDialog(null, "Welcome " + employee.getName());
-            Inventory nuevo = new Inventory(null);
+            MainMenu nuevo = new MainMenu(null);
             nuevo.setEmployee(employee);
             nuevo.setVisible(true);
         } else {
