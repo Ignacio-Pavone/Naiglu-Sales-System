@@ -1,5 +1,4 @@
 package DatabaseRelated;
-
 import PersonRelated.Customer;
 import PersonRelated.MyBusiness;
 import PersonRelated.Supplier;
@@ -10,7 +9,6 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
