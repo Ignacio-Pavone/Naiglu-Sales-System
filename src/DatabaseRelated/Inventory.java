@@ -302,13 +302,16 @@ public class Inventory extends JDialog {
     private void generateInvoice() {
         int dialogButton = JOptionPane.YES_NO_OPTION;
         rowSelection = sellsTable.getSelectedRow();
-        if (rowSelection != -1) {
+        Boolean aux = (Boolean) sellsTable.getValueAt(rowSelection, 4);
+        if (rowSelection != -1 && aux.equals(false)) {
             dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
             if (dialogButton == JOptionPane.YES_OPTION) {
                 createInvoice((Double) sellsTable.getValueAt(rowSelection, 0), (String) sellsTable.getValueAt(rowSelection, 1), (Double) sellsTable.getValueAt(rowSelection, 2), (String) sellsTable.getValueAt(rowSelection, 3));
                 isInvoiced((Double) sellsTable.getValueAt(rowSelection, 0));
                 listaVentas();
             }
+        } else {
+            JOptionPane.showMessageDialog(null,"Venta ya facturada");
         }
     }
 

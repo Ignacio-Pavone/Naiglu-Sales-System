@@ -16,6 +16,10 @@ public class Sell {
         this.invoiced = false;
     }
 
+    public Sell(boolean invoiced){
+        this.invoiced = invoiced;
+    }
+
 
     public Sell(String customerName, double totalAmmount) {
 
