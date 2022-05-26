@@ -63,8 +63,8 @@ public class MainMenu extends JDialog {
     private JTextField cantField;
     private JButton refreshButton;
     private MainMenu productData;
-    private JTable sellsTable;
-    private JPanel addSells;
+    private JTable salesTable;
+    private JPanel addSales;
     private JButton GENERARFACTURAButton;
     private JTable supplierTable;
     private JButton addSupplierButton;
@@ -124,7 +124,7 @@ public class MainMenu extends JDialog {
     private Employee employee = new Employee();
     private final HashMap<String, Product> productList = new HashMap<>(); // lista Productos
     private final HashMap<String, Product> shopList = new HashMap<>(); // lista Carrito
-    private final ArrayList<Sell> sellsList = new ArrayList<>(); // lista ventas Concretadas
+    private final ArrayList<Sell> salesList = new ArrayList<>(); // lista ventas Concretadas
     private final HashSet<Supplier> suppliersList = new HashSet<>(); // lista proveedores
     private final ArrayList<Customer> customerList = new ArrayList<>(); // lista clientes
     private Collection<Product> mapTolist;
@@ -287,9 +287,9 @@ public class MainMenu extends JDialog {
             total = totalCaja();
             fecha = LocalDateTime.now();
             dateFormatted = fecha.format(formatter);
-            invoiceAmount = sellsList.size();
+            invoiceAmount = salesList.size();
             listStadisticTable(dateFormatted, total, invoiceAmount);
-            sellsList.clear();
+            salesList.clear();
             listaVentas();
             setAmountDay.setText("Total");
         } else {
@@ -299,13 +299,13 @@ public class MainMenu extends JDialog {
 
     private void generateInvoice() {
         int dialogButton = JOptionPane.YES_NO_OPTION;
-        rowSelection = sellsTable.getSelectedRow();
-        Boolean aux = (Boolean) sellsTable.getValueAt(rowSelection, 4);
+        rowSelection = salesTable.getSelectedRow();
+        Boolean aux = (Boolean) salesTable.getValueAt(rowSelection, 4);
         if (rowSelection != -1 && aux.equals(false)) {
             dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
             if (dialogButton == JOptionPane.YES_OPTION) {
-                createInvoice((Double) sellsTable.getValueAt(rowSelection, 0), (String) sellsTable.getValueAt(rowSelection, 1), (Double) sellsTable.getValueAt(rowSelection, 2), (String) sellsTable.getValueAt(rowSelection, 3));
-                isInvoiced((Double) sellsTable.getValueAt(rowSelection, 0));
+                createInvoice((Double) salesTable.getValueAt(rowSelection, 0), (String) salesTable.getValueAt(rowSelection, 1), (Double) salesTable.getValueAt(rowSelection, 2), (String) salesTable.getValueAt(rowSelection, 3));
+                isInvoiced((Double) salesTable.getValueAt(rowSelection, 0));
                 listaVentas();
             }
         } else {
@@ -315,7 +315,7 @@ public class MainMenu extends JDialog {
 
     private double totalCaja() {
         double acum = 0;
-        for (Sell sell : sellsList) {
+        for (Sell sell : salesList) {
             acum += sell.getTotalAmmount();
         }
         return acum;
@@ -323,7 +323,7 @@ public class MainMenu extends JDialog {
 
     private boolean allInvoiced() {
         boolean flag = true;
-        for (Sell sell : sellsList) {
+        for (Sell sell : salesList) {
             if (!sell.isInvoiced()) {
                 flag = false;
             }
@@ -332,7 +332,7 @@ public class MainMenu extends JDialog {
     }
 
     private void isInvoiced(Double paymentProof) {
-        for (Sell sell : sellsList) {
+        for (Sell sell : salesList) {
             if (sell.getOperationNumber().equals(paymentProof)) {
                 sell.setInvoiced(true);
             }
@@ -448,7 +448,7 @@ public class MainMenu extends JDialog {
                 String nameAux = aux.getName();
                 newSell = new Sell(nameAux, amount, id);
                 if (!sellExist(newSell)) {
-                    sellsList.add(newSell);
+                    salesList.add(newSell);
                     textFinalPrice.setText("Total Price");
                     mapTolist = shopList.values();
                     finalProductPDF = new ArrayList<>(mapTolist);
@@ -466,7 +466,7 @@ public class MainMenu extends JDialog {
 
     private boolean sellExist(Sell aux) {
         boolean flag = false;
-        for (Sell sell : sellsList) {
+        for (Sell sell : salesList) {
             if (sell.getOperationNumber().equals(aux.getOperationNumber()) && !flag) {
                 flag = true;
             }
@@ -521,8 +521,8 @@ public class MainMenu extends JDialog {
 
     private void setTotalDay() {
         double totalprice = 0;
-        for (int i = 0; i < sellsTable.getRowCount(); i++) {
-            totalprice = totalprice + Double.parseDouble(String.valueOf(sellsTable.getValueAt(i, 2)));
+        for (int i = 0; i < salesTable.getRowCount(); i++) {
+            totalprice = totalprice + Double.parseDouble(String.valueOf(salesTable.getValueAt(i, 2)));
         }
         setAmountDay.setVisible(true);
         setAmountDay.setText("" + totalprice);
@@ -642,14 +642,14 @@ public class MainMenu extends JDialog {
         clientProductList.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         cartTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         productsTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
-        sellsTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
+        salesTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         supplierTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         customerTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         statisticsTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         statisticsTable.getTableHeader().setBackground(Color.GRAY);
         supplierTable.getTableHeader().setBackground(Color.GRAY);
         customerTable.getTableHeader().setBackground(Color.GRAY);
-        sellsTable.getTableHeader().setBackground(Color.GRAY);
+        salesTable.getTableHeader().setBackground(Color.GRAY);
         productsTable.getTableHeader().setBackground(Color.GRAY);
         cartTable.getTableHeader().setBackground(Color.GRAY);
         clientProductList.getTableHeader().setBackground(Color.GRAY);
@@ -859,10 +859,10 @@ public class MainMenu extends JDialog {
                 return false;
             }
         };
-        for (Sell sell : sellsList) {
+        for (Sell sell : salesList) {
             model.addRow(new Object[]{sell.getOperationNumber(), sell.getCustomerName(), sell.getTotalAmmount(), sell.getDateFormatted(), sell.isInvoiced()});
         }
-        sellsTable.setModel(model);
+        salesTable.setModel(model);
     }
 
     private void customerList() {
