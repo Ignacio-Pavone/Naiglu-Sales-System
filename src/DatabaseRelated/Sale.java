@@ -43,6 +43,10 @@ public class Sale {
 
     }
 
+    public LocalDateTime getDate() {
+        return date;
+    }
+
     public String getCustomerId() {
         return customerId;
     }

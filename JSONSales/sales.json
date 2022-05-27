@@ -1,0 +1,43 @@
+{
+  "sales": [
+    {
+      "date": "2022-05-27T12:06:27.520681700",
+      "Products": [
+        [
+          {
+            "supplierName": "Delta",
+            "sellingPrice": 8000,
+            "price": 6000,
+            "name": "HEADPHONES",
+            "id": "4",
+            "stock": 1
+          }
+        ]
+      ],
+      "operationNumber": 347,
+      "customerName": "Juan",
+      "totalAmmount": 8000
+    }
+  ]
+}{
+  "sales": [
+    {
+      "date": "2022-05-27T12:07:05.231387100",
+      "Products": [
+        [
+          {
+            "supplierName": "Ribeiro",
+            "sellingPrice": 4000,
+            "price": 3000,
+            "name": "MOUSE",
+            "id": "3",
+            "stock": 1
+          }
+        ]
+      ],
+      "operationNumber": 61,
+      "customerName": "Juan",
+      "totalAmmount": 4000
+    }
+  ]
+}
