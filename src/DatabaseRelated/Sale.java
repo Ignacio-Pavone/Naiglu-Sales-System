@@ -3,7 +3,7 @@ package DatabaseRelated;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Sell {
+public class Sale {
     private double operationNumber;
     private String customerName;
     private double totalAmmount;
@@ -12,16 +12,16 @@ public class Sell {
     private boolean invoiced;
     private String customerId;
 
-    public Sell(){
+    public Sale(){
         this.invoiced = false;
     }
 
-    public Sell(boolean invoiced){
+    public Sale(boolean invoiced){
         this.invoiced = invoiced;
     }
 
 
-    public Sell(String customerName, double totalAmmount) {
+    public Sale(String customerName, double totalAmmount) {
 
         this.operationNumber = Math.floor((Math.random() * 500 + 1));
         this.customerName = customerName;
@@ -31,7 +31,7 @@ public class Sell {
         this.dateFormatted = date.format(formatter);
     }
 
-    public Sell(String nameAux, double amount, String id) {
+    public Sale(String nameAux, double amount, String id) {
         this.operationNumber = Math.floor((Math.random() * 500 + 1));
         this.customerName = nameAux;
         this.totalAmmount = totalAmmount;

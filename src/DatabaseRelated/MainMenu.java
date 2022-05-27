@@ -1,4 +1,5 @@
 package DatabaseRelated;
+
 import PersonRelated.Customer;
 import PersonRelated.MyBusiness;
 import PersonRelated.Supplier;
@@ -9,6 +10,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
@@ -118,13 +120,15 @@ public class MainMenu extends JDialog {
     private JLabel taxpayerLabel;
     private JLabel phoneLabelBusiness;
     private JPanel businesstab;
+    private JTextField enterProductSearch;
+    private JLabel searchProduct;
     private int rowSelection;
     private double ammountAcc;
-    MyBusiness company = new MyBusiness();
+    private MyBusiness company = new MyBusiness();
     private Employee employee = new Employee();
     private final HashMap<String, Product> productList = new HashMap<>(); // lista Productos
     private final HashMap<String, Product> shopList = new HashMap<>(); // lista Carrito
-    private final ArrayList<Sell> salesList = new ArrayList<>(); // lista ventas Concretadas
+    private final ArrayList<Sale> salesList = new ArrayList<>(); // lista ventas Concretadas
     private final HashSet<Supplier> suppliersList = new HashSet<>(); // lista proveedores
     private final ArrayList<Customer> customerList = new ArrayList<>(); // lista clientes
     private Collection<Product> mapTolist;
@@ -267,6 +271,12 @@ public class MainMenu extends JDialog {
                 companyLabelsStyle();
             }
         });
+        enterProductSearch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                searchProduct();
+            }
+        });
     }
 
     private void companyLabelsStyle() {
@@ -315,16 +325,16 @@ public class MainMenu extends JDialog {
 
     private double totalCaja() {
         double acum = 0;
-        for (Sell sell : salesList) {
-            acum += sell.getTotalAmmount();
+        for (Sale sale : salesList) {
+            acum += sale.getTotalAmmount();
         }
         return acum;
     }
 
     private boolean allInvoiced() {
         boolean flag = true;
-        for (Sell sell : salesList) {
-            if (!sell.isInvoiced()) {
+        for (Sale sale : salesList) {
+            if (!sale.isInvoiced()) {
                 flag = false;
             }
         }
@@ -332,9 +342,9 @@ public class MainMenu extends JDialog {
     }
 
     private void isInvoiced(Double paymentProof) {
-        for (Sell sell : salesList) {
-            if (sell.getOperationNumber().equals(paymentProof)) {
-                sell.setInvoiced(true);
+        for (Sale sale : salesList) {
+            if (sale.getOperationNumber().equals(paymentProof)) {
+                sale.setInvoiced(true);
             }
         }
     }
@@ -437,7 +447,7 @@ public class MainMenu extends JDialog {
     }
 
     private void confirmPruchase() {
-        Sell newSell = new Sell();
+        Sale newSale = new Sale();
         int dialogButton = JOptionPane.YES_NO_OPTION;
         if (tableHaveData()) {
             dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
@@ -446,9 +456,9 @@ public class MainMenu extends JDialog {
                 Customer aux = (Customer) comboBoxCustomers.getSelectedItem();
                 String id = aux.getTaxpayerID();
                 String nameAux = aux.getName();
-                newSell = new Sell(nameAux, amount, id);
-                if (!sellExist(newSell)) {
-                    salesList.add(newSell);
+                newSale = new Sale(nameAux, amount, id);
+                if (!sellExist(newSale)) {
+                    salesList.add(newSale);
                     textFinalPrice.setText("Total Price");
                     mapTolist = shopList.values();
                     finalProductPDF = new ArrayList<>(mapTolist);
@@ -464,10 +474,10 @@ public class MainMenu extends JDialog {
         return shopList.size() > 0;
     }
 
-    private boolean sellExist(Sell aux) {
+    private boolean sellExist(Sale aux) {
         boolean flag = false;
-        for (Sell sell : salesList) {
-            if (sell.getOperationNumber().equals(aux.getOperationNumber()) && !flag) {
+        for (Sale sale : salesList) {
+            if (sale.getOperationNumber().equals(aux.getOperationNumber()) && !flag) {
                 flag = true;
             }
         }
@@ -636,6 +646,7 @@ public class MainMenu extends JDialog {
         companyLabel.setForeground(Color.WHITE);
         taxpayerLabel.setForeground(Color.WHITE);
         phoneLabelBusiness.setForeground(Color.WHITE);
+        searchProduct.setForeground(Color.WHITE);
     }
 
     private void tableStyle() {
@@ -695,308 +706,337 @@ public class MainMenu extends JDialog {
         int stock = Integer.parseInt(String.valueOf(clientProductList.getValueAt(rowSelection, 3))); // 7
         double price = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 4)));
         double sellingPrice = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 5)));
-        int newStock = Integer.parseInt(userAmount.getText()); // 5
+        int newStock = 0;
+        if (!userAmount.getText().isEmpty()) {
+            newStock = Integer.parseInt(userAmount.getText()); // 5
+            if (newStock > 0 && newStock <= stock) {
+                auxStock = stock - newStock;
+                Product aux = new Product(id, supplier, name, newStock, price, sellingPrice);
+                Product aux2 = new Product(id, supplier, name, auxStock, price, sellingPrice);
+                if (shopList.containsKey(id)) {
+                    int stockAux = productStockShopList(id) + newStock;
+                    Product aux3 = new Product(id, supplier, name, stockAux, price, sellingPrice);
+                    shopList.put(aux3.getId(), aux3);
+                    productList.put(aux2.getId(), aux2);
+                } else {
+                    shopList.put(aux.getId(), aux);
+                    productList.put(aux2.getId(), aux2);
+                }
 
-        if (newStock > 0 && newStock <= stock) {
-            auxStock = stock - newStock;
-            Product aux = new Product(id, supplier, name, newStock, price, sellingPrice);
-            Product aux2 = new Product(id, supplier, name, auxStock, price, sellingPrice);
-            if (shopList.containsKey(id)) {
-                int stockAux = productStockShopList(id) + newStock;
-                Product aux3 = new Product(id, supplier, name, stockAux, price, sellingPrice);
-                shopList.put(aux3.getId(), aux3);
-                productList.put(aux2.getId(), aux2);
             } else {
-                shopList.put(aux.getId(), aux);
-                productList.put(aux2.getId(), aux2);
+                JOptionPane.showMessageDialog(null, "Unavailable stock for this operation");
             }
+
 
         } else {
-            JOptionPane.showMessageDialog(null, "Unavailable stock for this operation");
-        }
-
-    }
-
-    private void modifyProduct() {
-        int rowSelection = productsTable.getSelectedRow();
-        if (rowSelection != -1) {
-            String id = String.valueOf(productsTable.getValueAt(rowSelection, 0));
-            String supplier = String.valueOf(productsTable.getValueAt(rowSelection, 1));
-            String name = String.valueOf(productsTable.getValueAt(rowSelection, 2));
-            int stock = Integer.parseInt(String.valueOf(productsTable.getValueAt(rowSelection, 3)));
-            double price = Double.parseDouble(String.valueOf(productsTable.getValueAt(rowSelection, 4)));
-            double sellingPrice = Double.parseDouble(String.valueOf(productsTable.getValueAt(rowSelection, 5)));
-            updateID.setText(id);
-            updateSupplier.setText(supplier);
-            updateName.setText(name);
-            updateStock.setText(String.valueOf(stock));
-            updatePrice.setText(String.valueOf(price));
-            updateSellPrice.setText(String.valueOf(sellingPrice));
-        } else {
-            JOptionPane.showMessageDialog(null, "Select a row");
+            JOptionPane.showMessageDialog(null, "Enter a valid value");
         }
     }
 
-    private void updateProduct() {
-        String id = updateID.getText();
-        if (!id.equals("")) {
-            String name = updateName.getText();
-            String supplier = updateSupplier.getText();
-            int stock = Integer.parseInt(updateStock.getText());
-            Double price = Double.parseDouble(updatePrice.getText());
-            Double sellingPrice = Double.parseDouble(updateSellPrice.getText());
-            Product aux = new Product(id, supplier, name, stock, price, sellingPrice);
-            productList.put(aux.getId(), aux);
-        } else {
-            JOptionPane.showMessageDialog(null, "Select a product you want to modify");
-        }
-        cleanLabels();
-        listClientProducts();
-        listProducts();
-    }
 
-    private void cleanLabels() {
-        updateID.setText("");
-        updateName.setText("");
-        updateStock.setText("");
-        updatePrice.setText("");
-    }
-
-    private void addProduct() {
-        try {
-            Product data = new Product();
-            data.setId(codeField.getText());
-            Supplier aux = (Supplier) comboBox1.getSelectedItem();
-            data.setSupplierName(aux.getName());
-            data.setName(nameField.getText());
-            data.setStock(Integer.parseInt(stockField.getText()));
-            data.setPrice(Double.parseDouble(priceField.getText()));
-            data.setSellingPrice(Double.parseDouble(sellPriceField.getText()));
-            productList.put(data.getId(), data);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private void listSuppliers() {
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Name", "Taxpayer ID", "Phone", "Area"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        for (Supplier s : suppliersList) {
-            model.addRow(new Object[]{s.getName(), s.getTaxpayerID(), s.getPhoneNumber(), s.getWorkingArea()});
-        }
-        supplierTable.setModel(model);
-    }
-
-    private void listProducts() {
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Code", "Supplier", "Name", "Stock", "Price", "Sell Price"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        for (Map.Entry<String, Product> entry : productList.entrySet()) {
-            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), +entry.getValue().getPrice(), entry.getValue().getSellingPrice()});
-        }
-        productsTable.setModel(model);
-    }
-
-    private void listStadisticTable(String fecha, double total, int cantVentas) { //Borra las estadisticas si se genera una nueva factura.
-        DefaultTableModel model = (DefaultTableModel) statisticsTable.getModel();
-        model.addRow(new Object[]{fecha, total, cantVentas});
-        statisticsTable.setModel(model);
-    }
-
-    private void createStatisticsTable() { //Borra las estadisticas si se genera una nueva factura.
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Date", "Total/Day", "N° Sales"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        statisticsTable.setModel(model);
-    }
-
-    private void listCart() {
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Code", "Customer", "Name", "Ammount", "Unity price", "Total price"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        for (Map.Entry<String, Product> entry : shopList.entrySet()) {
-            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getSellingPrice(), entry.getValue().getSellingPrice() * entry.getValue().getStock()});
-        }
-        cartTable.setModel(model);
-    }
-
-    private void listClientProducts() {
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Code", "Supplier", "Name", "Stock", "Price", "Sell Price"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        for (Map.Entry<String, Product> entry : productList.entrySet()) {
-            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getSellingPrice()});
-        }
-        clientProductList.setModel(model);
-    }
-
-    private void listaVentas() {
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Operation Nº", "Client Name", "Total Ammount", "Date", "Facturado"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        for (Sell sell : salesList) {
-            model.addRow(new Object[]{sell.getOperationNumber(), sell.getCustomerName(), sell.getTotalAmmount(), sell.getDateFormatted(), sell.isInvoiced()});
-        }
-        salesTable.setModel(model);
-    }
-
-    private void customerList() {
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Name", "ID", "Phone Number", "Category"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        for (Customer customer : customerList) {
-            model.addRow(new Object[]{customer.getName(), customer.getTaxpayerID(), customer.getPhoneNumber(), customer.getCategory()});
-        }
-        customerTable.setModel(model);
-    }
-
-    private void listingCollections() {
-        labelStyle();
-        tableStyle();
-        setLocationRelativeTo(null);
-        listProducts();
-        listClientProducts();
-        listCart();
-        listSuppliers();
-        listaVentas();
-        customerList();
-        createStatisticsTable();
-    }
-
-    public void createInvoice(double operation, String customer, double price, String formattedDate) {
-        PDDocument doc = new PDDocument();
-        PDPage firstPage = new PDPage(PDRectangle.A4);
-        doc.addPage(firstPage);
-        String name = "Empresa S.A";
-        String number = "223456789";
-        String time = LocalDateTime.now().toString();
-        int pagewidth = (int) firstPage.getTrimBox().getWidth();
-        int pageHeight = (int) firstPage.getTrimBox().getHeight();
-
-        try {
-            PDPageContentStream contentStream = new PDPageContentStream(doc, firstPage);
-            PDFTextClass pdfTextClass = new PDFTextClass(doc, contentStream);
-            PDFont font = PDType1Font.COURIER;
-            String[] businessData = new String[finalProductPDF.size()];
-            businessData = placeholderBusiness.generateDataForBills().split(",");
-
-            Customer aux = lookForCustomer(customer);
-            String buyerDataString = aux.generateDataForBills();
-            String[] buyerDataStringArray = buyerDataString.split(",");
-
-            pdfTextClass.addLineOfText("BUSINESS INFORMATION: ", 25, pageHeight - 25, font, 14, Color.BLACK);
-            pdfTextClass.addMultiLineText(businessData, 14.50f, 25, pageHeight - 50, font, 14, Color.BLACK);
-            pdfTextClass.addLineOfText("BUYER INFORMATION: ", 25, pageHeight - 100, font, 14, Color.BLACK);
-            pdfTextClass.addMultiLineText(buyerDataStringArray, 14.50f, 25, pageHeight - 125, font, 14, Color.BLACK);
-            pdfTextClass.addLineOfText("DATE: " + formattedDate, 25, pageHeight - 220, font, 14, Color.BLACK);
-            pdfTextClass.addLineOfText("FINAL PRICE: $" + price, 25, pageHeight - 245, font, 14, Color.BLACK);
-            PDFTableClass table = new PDFTableClass(doc, contentStream);
-
-            int[] cellWidth = {130, 130, 130, 130};
-            table.setTable(cellWidth, 30, 25, pageHeight - 370);
-            table.setTableFont(font, 14, Color.BLACK);
-            Color tableBodyColor = new Color(187, 187, 187);
-            Color tableHeadColor = new Color(39, 114, 30);
-
-            table.addCell("Item name", tableHeadColor);
-            table.addCell("Item ammount", tableHeadColor);
-            table.addCell("Unit price", tableHeadColor);
-            table.addCell("Total price", tableHeadColor);
-
-            for (Product product : finalProductPDF) {
-                table.addCell(product.getName(), tableBodyColor);
-                table.addCell(String.valueOf(product.getStock()), tableBodyColor);
-                table.addCell(String.valueOf(product.getSellingPrice()), tableBodyColor);
-                table.addCell(String.valueOf(product.getSellingPrice() * product.getStock()), tableBodyColor);
-            }
-            contentStream.close();
-            String idConcat = "Operation N° " + operation + " " + customer;
-            String namePDF = idConcat.concat(".pdf");
-            doc.save(namePDF);
-            doc.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private Customer lookForCustomer(String name) {
-        for (Customer c : customerList) {
-            if (c.getName().equals(name)) {
-                return c;
+        private void modifyProduct () {
+            int rowSelection = productsTable.getSelectedRow();
+            if (rowSelection != -1) {
+                String id = String.valueOf(productsTable.getValueAt(rowSelection, 0));
+                String supplier = String.valueOf(productsTable.getValueAt(rowSelection, 1));
+                String name = String.valueOf(productsTable.getValueAt(rowSelection, 2));
+                int stock = Integer.parseInt(String.valueOf(productsTable.getValueAt(rowSelection, 3)));
+                double price = Double.parseDouble(String.valueOf(productsTable.getValueAt(rowSelection, 4)));
+                double sellingPrice = Double.parseDouble(String.valueOf(productsTable.getValueAt(rowSelection, 5)));
+                updateID.setText(id);
+                updateSupplier.setText(supplier);
+                updateName.setText(name);
+                updateStock.setText(String.valueOf(stock));
+                updatePrice.setText(String.valueOf(price));
+                updateSellPrice.setText(String.valueOf(sellingPrice));
+            } else {
+                JOptionPane.showMessageDialog(null, "Select a row");
             }
         }
-        return null;
-    }
 
-    private void hardCode() {
-        Supplier aux = new Supplier("Fravega", "3333333", "155757575", "IT");
-        Supplier aux1 = new Supplier("Compumundo", "6555555", "22333333", "IT");
-        Supplier aux2 = new Supplier("Ribeiro", "11111111", "44444444", "IT");
-        Supplier aux3 = new Supplier("Delta", "22222222", "2222222", "IT");
-        suppliersList.add(aux);
-        suppliersList.add(aux1);
-        suppliersList.add(aux2);
-        suppliersList.add(aux3);
-        Product new1 = new Product("1", aux.getName(), "PC", 200, 70000.00, 100000.00);
-        Product new2 = new Product("2", aux1.getName(), "KEYBOARD", 150, 5000.00, 5000.00);
-        Product new3 = new Product("3", aux2.getName(), "MOUSE", 500, 3000.00, 4000.00);
-        Product new4 = new Product("4", aux3.getName(), "HEADPHONES", 100, 6000.00, 8000.00);
-        productList.put(new1.getId(), new1);
-        productList.put(new2.getId(), new2);
-        productList.put(new3.getId(), new3);
-        productList.put(new4.getId(), new4);
-        Customer auxC1 = new Customer("Juan", "22233333", "15550000", "A");
-        Customer auxC2 = new Customer("Pedro", "111111111", "222222222", "B");
-        Customer auxC3 = new Customer("Ignacio", "555555555", "3333333", "B");
-        Customer auxC4 = new Customer("Naza", "66666666", "99999999", "C");
-        customerList.add(auxC1);
-        customerList.add(auxC2);
-        customerList.add(auxC3);
-        customerList.add(auxC4);
-        setComboBoxConfig();
-        loadCustomerCombobox();
-    }
+        private void updateProduct () {
+            String id = updateID.getText();
+            if (!id.equals("")) {
+                String name = updateName.getText();
+                String supplier = updateSupplier.getText();
+                int stock = Integer.parseInt(updateStock.getText());
+                Double price = Double.parseDouble(updatePrice.getText());
+                Double sellingPrice = Double.parseDouble(updateSellPrice.getText());
+                Product aux = new Product(id, supplier, name, stock, price, sellingPrice);
+                productList.put(aux.getId(), aux);
+            } else {
+                JOptionPane.showMessageDialog(null, "Select a product you want to modify");
+            }
+            cleanLabels();
+            listClientProducts();
+            listProducts();
+        }
 
-    private void createMyBusiness() {
-        String nameString = businessNameText.getText();
-        String taxpayerID = businesstaxText.getText();
-        String phoneNumber = businessphoneText.getText();
-        company = new MyBusiness(nameString, taxpayerID, phoneNumber);
-        Border eBorder = new LineBorder(Color.BLACK, 1, true);
+        private void cleanLabels () {
+            updateID.setText("");
+            updateName.setText("");
+            updateStock.setText("");
+            updatePrice.setText("");
+        }
 
-        sellTable.setBorder(BorderFactory.createTitledBorder(eBorder, " " + company.getName() + " ", TitledBorder.CENTER, TitledBorder.CENTER, new Font("Consolas", Font.ITALIC, 12), Color.green));
-        UIManager.put("TabbedPane.contentAreaColor", Color.BLACK);
+        private void addProduct () {
+            try {
+                Product data = new Product();
+                data.setId(codeField.getText());
+                Supplier aux = (Supplier) comboBox1.getSelectedItem();
+                data.setSupplierName(aux.getName());
+                data.setName(nameField.getText());
+                data.setStock(Integer.parseInt(stockField.getText()));
+                data.setPrice(Double.parseDouble(priceField.getText()));
+                data.setSellingPrice(Double.parseDouble(sellPriceField.getText()));
+                productList.put(data.getId(), data);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        private void listSuppliers () {
+            DefaultTableModel model = new DefaultTableModel(
+                    new Object[]{"Name", "Taxpayer ID", "Phone", "Area"}, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+            for (Supplier s : suppliersList) {
+                model.addRow(new Object[]{s.getName(), s.getTaxpayerID(), s.getPhoneNumber(), s.getWorkingArea()});
+            }
+            supplierTable.setModel(model);
+        }
+
+        private void listProducts () {
+            DefaultTableModel model = new DefaultTableModel(
+                    new Object[]{"Code", "Supplier", "Name", "Stock", "Price", "Sell Price"}, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+            for (Map.Entry<String, Product> entry : productList.entrySet()) {
+                model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), +entry.getValue().getPrice(), entry.getValue().getSellingPrice()});
+            }
+            productsTable.setModel(model);
+        }
+
+        private void listStadisticTable (String fecha,double total, int cantVentas)
+        { //Borra las estadisticas si se genera una nueva factura.
+            DefaultTableModel model = (DefaultTableModel) statisticsTable.getModel();
+            model.addRow(new Object[]{fecha, total, cantVentas});
+            statisticsTable.setModel(model);
+        }
+
+        private void createStatisticsTable () { //Borra las estadisticas si se genera una nueva factura.
+            DefaultTableModel model = new DefaultTableModel(
+                    new Object[]{"Date", "Total/Day", "N° Sales"}, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+            statisticsTable.setModel(model);
+        }
+
+        private void listCart () {
+            DefaultTableModel model = new DefaultTableModel(
+                    new Object[]{"Code", "Customer", "Name", "Ammount", "Unity price", "Total price"}, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+            for (Map.Entry<String, Product> entry : shopList.entrySet()) {
+                model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getSellingPrice(), entry.getValue().getSellingPrice() * entry.getValue().getStock()});
+            }
+            cartTable.setModel(model);
+        }
+
+        private void listClientProducts () {
+            DefaultTableModel model = new DefaultTableModel(
+                    new Object[]{"Code", "Supplier", "Name", "Stock", "Price", "Sell Price"}, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+            for (Map.Entry<String, Product> entry : productList.entrySet()) {
+                model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getSellingPrice()});
+            }
+            clientProductList.setModel(model);
+        }
+
+        private void listaVentas () {
+            DefaultTableModel model = new DefaultTableModel(
+                    new Object[]{"Operation Nº", "Client Name", "Total Ammount", "Date", "Facturado"}, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+            for (Sale sale : salesList) {
+                model.addRow(new Object[]{sale.getOperationNumber(), sale.getCustomerName(), sale.getTotalAmmount(), sale.getDateFormatted(), sale.isInvoiced()});
+            }
+            salesTable.setModel(model);
+        }
+
+        private void customerList () {
+            DefaultTableModel model = new DefaultTableModel(
+                    new Object[]{"Name", "ID", "Phone Number", "Category"}, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+            for (Customer customer : customerList) {
+                model.addRow(new Object[]{customer.getName(), customer.getTaxpayerID(), customer.getPhoneNumber(), customer.getCategory()});
+            }
+            customerTable.setModel(model);
+        }
+
+        private void listingCollections () {
+            labelStyle();
+            tableStyle();
+            setLocationRelativeTo(null);
+            listProducts();
+            listClientProducts();
+            listCart();
+            listSuppliers();
+            listaVentas();
+            customerList();
+            createStatisticsTable();
+        }
+
+        public void createInvoice ( double operation, String customer,double price, String formattedDate){
+            PDDocument doc = new PDDocument();
+            PDPage firstPage = new PDPage(PDRectangle.A4);
+            doc.addPage(firstPage);
+            String name = "Empresa S.A";
+            String number = "223456789";
+            String time = LocalDateTime.now().toString();
+            int pagewidth = (int) firstPage.getTrimBox().getWidth();
+            int pageHeight = (int) firstPage.getTrimBox().getHeight();
+
+            try {
+                PDPageContentStream contentStream = new PDPageContentStream(doc, firstPage);
+                PDFTextClass pdfTextClass = new PDFTextClass(doc, contentStream);
+                PDFont font = PDType1Font.COURIER;
+                String[] businessData = new String[finalProductPDF.size()];
+                businessData = placeholderBusiness.generateDataForBills().split(",");
+
+                Customer aux = lookForCustomer(customer);
+                String buyerDataString = aux.generateDataForBills();
+                String[] buyerDataStringArray = buyerDataString.split(",");
+
+                pdfTextClass.addLineOfText("BUSINESS INFORMATION: ", 25, pageHeight - 25, font, 14, Color.BLACK);
+                pdfTextClass.addMultiLineText(businessData, 14.50f, 25, pageHeight - 50, font, 14, Color.BLACK);
+                pdfTextClass.addLineOfText("BUYER INFORMATION: ", 25, pageHeight - 100, font, 14, Color.BLACK);
+                pdfTextClass.addMultiLineText(buyerDataStringArray, 14.50f, 25, pageHeight - 125, font, 14, Color.BLACK);
+                pdfTextClass.addLineOfText("DATE: " + formattedDate, 25, pageHeight - 220, font, 14, Color.BLACK);
+                pdfTextClass.addLineOfText("FINAL PRICE: $" + price, 25, pageHeight - 245, font, 14, Color.BLACK);
+                PDFTableClass table = new PDFTableClass(doc, contentStream);
+
+                int[] cellWidth = {130, 130, 130, 130};
+                table.setTable(cellWidth, 30, 25, pageHeight - 370);
+                table.setTableFont(font, 14, Color.BLACK);
+                Color tableBodyColor = new Color(187, 187, 187);
+                Color tableHeadColor = new Color(39, 114, 30);
+
+                table.addCell("Item name", tableHeadColor);
+                table.addCell("Item ammount", tableHeadColor);
+                table.addCell("Unit price", tableHeadColor);
+                table.addCell("Total price", tableHeadColor);
+
+                for (Product product : finalProductPDF) {
+                    table.addCell(product.getName(), tableBodyColor);
+                    table.addCell(String.valueOf(product.getStock()), tableBodyColor);
+                    table.addCell(String.valueOf(product.getSellingPrice()), tableBodyColor);
+                    table.addCell(String.valueOf(product.getSellingPrice() * product.getStock()), tableBodyColor);
+                }
+                contentStream.close();
+                String idConcat = "Operation N° " + operation + " " + customer;
+                String namePDF = idConcat.concat(".pdf");
+                doc.save(namePDF);
+                doc.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void searchProduct () {
+            String productName = enterProductSearch.getText();
+            if (productName.isEmpty()) {
+                listClientProducts();
+            } else {
+                DefaultTableModel model = new DefaultTableModel(
+                        new Object[]{"Code", "Supplier", "Name", "Stock", "Price", "Sell Price"}, 0) {
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        return false;
+                    }
+                };
+                for (Map.Entry<String, Product> entry : productList.entrySet()) {
+                    if (entry.getValue().getName().equalsIgnoreCase(productName)) {
+                        model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getSellingPrice()});
+                    }
+                }
+                clientProductList.setModel(model);
+            }
+        }
+
+
+        private Customer lookForCustomer (String name){
+            for (Customer c : customerList) {
+                if (c.getName().equals(name)) {
+                    return c;
+                }
+            }
+            return null;
+        }
+
+        private void hardCode () {
+            Supplier aux = new Supplier("Fravega", "3333333", "155757575", "IT");
+            Supplier aux1 = new Supplier("Compumundo", "6555555", "22333333", "IT");
+            Supplier aux2 = new Supplier("Ribeiro", "11111111", "44444444", "IT");
+            Supplier aux3 = new Supplier("Delta", "22222222", "2222222", "IT");
+            suppliersList.add(aux);
+            suppliersList.add(aux1);
+            suppliersList.add(aux2);
+            suppliersList.add(aux3);
+            Product new1 = new Product("1", aux.getName(), "PC", 200, 70000.00, 100000.00);
+            Product new2 = new Product("2", aux1.getName(), "KEYBOARD", 150, 5000.00, 5000.00);
+            Product new3 = new Product("3", aux2.getName(), "MOUSE", 500, 3000.00, 4000.00);
+            Product new4 = new Product("4", aux3.getName(), "HEADPHONES", 100, 6000.00, 8000.00);
+            productList.put(new1.getId(), new1);
+            productList.put(new2.getId(), new2);
+            productList.put(new3.getId(), new3);
+            productList.put(new4.getId(), new4);
+            Customer auxC1 = new Customer("Juan", "22233333", "15550000", "A");
+            Customer auxC2 = new Customer("Pedro", "111111111", "222222222", "B");
+            Customer auxC3 = new Customer("Ignacio", "555555555", "3333333", "B");
+            Customer auxC4 = new Customer("Naza", "66666666", "99999999", "C");
+            customerList.add(auxC1);
+            customerList.add(auxC2);
+            customerList.add(auxC3);
+            customerList.add(auxC4);
+            setComboBoxConfig();
+            loadCustomerCombobox();
+        }
+
+        private void createMyBusiness () {
+            String nameString = businessNameText.getText();
+            String taxpayerID = businesstaxText.getText();
+            String phoneNumber = businessphoneText.getText();
+            company = new MyBusiness(nameString, taxpayerID, phoneNumber);
+            Border eBorder = new LineBorder(Color.BLACK, 1, true);
+
+            sellTable.setBorder(BorderFactory.createTitledBorder(eBorder, " " + company.getName() + " ", TitledBorder.CENTER, TitledBorder.CENTER, new Font("Consolas", Font.ITALIC, 12), Color.green));
+            UIManager.put("TabbedPane.contentAreaColor", Color.BLACK);
+        }
     }
-}
 
 
 
