@@ -1,5 +1,9 @@
 package DatabaseRelated;
 
+import DatabaseRelated.PDFCreation.PDFTableClass;
+import DatabaseRelated.PDFCreation.PDFTextClass;
+import Exceptions.FieldCompletionException;
+import Exceptions.RowNotSelectedException;
 import PersonRelated.Customer;
 import PersonRelated.MyBusiness;
 import PersonRelated.Supplier;
@@ -10,8 +14,6 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -20,13 +22,11 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static DatabaseRelated.JsonUtiles.createJSON;
-import static DatabaseRelated.JsonUtiles.readJson;
 
 
 public class MainMenu extends JDialog {
@@ -132,8 +132,9 @@ public class MainMenu extends JDialog {
     private double ammountAcc;
     private MyBusiness company = new MyBusiness();
     private Employee employee = new Employee();
-    private final HashMap<String, Product> productList = new HashMap<>(); // lista Productos
-    private final HashMap<String, Product> shopList = new HashMap<>(); // lista Carrito
+    private final GenericHashMap<String,Product> productList = new GenericHashMap<>();
+    private final GenericHashMap<String,Product> shopList = new GenericHashMap<>();
+    //private final HashMap<String, Product> productList = new HashMap<>(); // lista Productos
     private final ArrayList<Sale> salesList = new ArrayList<>(); // lista ventas Concretadas
     private final HashSet<Supplier> suppliersList = new HashSet<>(); // lista proveedores
     private final ArrayList<Customer> customerList = new ArrayList<>(); // lista clientes
@@ -192,26 +193,46 @@ public class MainMenu extends JDialog {
         modifyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                modifyProduct();
+                try {
+                    modifyProduct();
+                } catch (RowNotSelectedException ex) {
+                    JOptionPane.showMessageDialog(null, "Select a row");
+                    ex.printStackTrace();
+                }
             }
         });
         updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateProduct();
+                try {
+                    updateProduct();
+                } catch (RowNotSelectedException ex) {
+                    JOptionPane.showMessageDialog(null, "Select a row");
+                    ex.printStackTrace();
+                }
             }
         });
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deleteProductFromList();
+                try {
+                    deleteProductFromList();
+                } catch (RowNotSelectedException ex) {
+                    JOptionPane.showMessageDialog(null, "Select a row");
+                    ex.printStackTrace();
+                }
             }
         });
 
         addToCartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addToCart();
+                try {
+                    addToCart();
+                } catch (RowNotSelectedException ex) {
+                    JOptionPane.showMessageDialog(null, "Select a row");
+                    ex.printStackTrace();
+                }
 
             }
         });
@@ -231,13 +252,23 @@ public class MainMenu extends JDialog {
         addSupplierButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addSupplier();
+                try {
+                    addSupplier();
+                } catch (FieldCompletionException ex) {
+                    JOptionPane.showMessageDialog(null, "Please fill all the required fields");
+                    ex.printStackTrace();
+                }
             }
         });
         DELETEELEMENTButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deleteSupplierFromList();
+                try {
+                    deleteSupplierFromList();
+                } catch (RowNotSelectedException ex) {
+                    JOptionPane.showMessageDialog(null, "Select a row");
+                    ex.printStackTrace();
+                }
             }
         });
         GENERARFACTURAButton.addActionListener(new ActionListener() {
@@ -255,7 +286,12 @@ public class MainMenu extends JDialog {
         ADDButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addCustomer();
+                try {
+                    addCustomer();
+                } catch (FieldCompletionException ex) {
+                    JOptionPane.showMessageDialog(null, "Please fill all the required fields");
+                    ex.printStackTrace();
+                }
             }
         });
         xButton.addActionListener(new ActionListener() {
@@ -267,7 +303,12 @@ public class MainMenu extends JDialog {
         DELETEButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deleteCustomerFromList();
+                try {
+                    deleteCustomerFromList();
+                } catch (RowNotSelectedException ex) {
+                    JOptionPane.showMessageDialog(null, "Select a row");
+                    ex.printStackTrace();
+                }
             }
         });
         ACCEPTButton.addActionListener(new ActionListener() {
@@ -360,10 +401,10 @@ public class MainMenu extends JDialog {
         return !supplierIDField.getText().equals("") && !supplierNameField.getText().equals("") && !supplierPhoneField.getText().equals("") && !supplierWorkingArea.getText().equals("");
     }
 
-    private void addCustomer() {
+    private void addCustomer() throws FieldCompletionException {
         Customer aux = new Customer();
         if (!chekCustomerFields()) {
-            JOptionPane.showMessageDialog(null, "Please fill all the required fields");
+            throw new FieldCompletionException("Please fill all the required fields");
         } else {
             aux.setName(CnameCustomer.getText());
             aux.setTaxpayerID(CtaxPayerIDCustomer.getText());
@@ -377,7 +418,7 @@ public class MainMenu extends JDialog {
         listSuppliers();
     }
 
-    private void deleteCustomerFromList() {
+    private void deleteCustomerFromList() throws RowNotSelectedException {
         int row = 0;
         row = customerTable.getSelectedRow();
         int dialogButton = JOptionPane.YES_NO_OPTION;
@@ -394,7 +435,7 @@ public class MainMenu extends JDialog {
                 customerList();
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Select a row");
+            throw new RowNotSelectedException("Select a row");
         }
     }
 
@@ -413,10 +454,10 @@ public class MainMenu extends JDialog {
         return !CnameCustomer.getText().equals("") && !CtaxPayerIDCustomer.getText().equals("") && !CphoeNumberCustomer.getText().equals("") && !CcategoryCustomer.getText().equals("");
     }
 
-    private void addSupplier() {
+    private void addSupplier() throws FieldCompletionException {
         Supplier aux = new Supplier();
         if (!checkSupplierRequirements()) {
-            JOptionPane.showMessageDialog(null, "Please fill all the required fields");
+            throw new FieldCompletionException("Please fill all the required fields");
         } else {
             aux.setName(supplierNameField.getText());
             aux.setTaxpayerID(supplierIDField.getText());
@@ -467,9 +508,9 @@ public class MainMenu extends JDialog {
                 if (!sellExist(newSale)) {
                     salesList.add(newSale);
                     textFinalPrice.setText("Total Price");
-                    mapTolist = shopList.values();
+                    mapTolist = shopList.getHashMap().values();
                     finalProductPDF = new ArrayList<>(mapTolist);
-                    shopList.clear();
+                    shopList.hashmapClear();
                 }
             }
         }
@@ -478,7 +519,7 @@ public class MainMenu extends JDialog {
     }
 
     private boolean tableHaveData() {
-        return shopList.size() > 0;
+        return shopList.hashmapSize() > 0;
     }
 
     private boolean sellExist(Sale aux) {
@@ -495,7 +536,7 @@ public class MainMenu extends JDialog {
         this.employee = employee;
     }
 
-    private void deleteProductFromList() {
+    private void deleteProductFromList() throws RowNotSelectedException {
         int dialogButton = JOptionPane.YES_NO_OPTION;
         String id = updateID.getText();
         if (!id.equals("")) {
@@ -506,11 +547,11 @@ public class MainMenu extends JDialog {
                 listClientProducts();
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Select a product");
+            throw new RowNotSelectedException("Select a row");
         }
     }
 
-    private void addToCart() {
+    private void addToCart() throws RowNotSelectedException {
         rowSelection = clientProductList.getSelectedRow();
         if (rowSelection != -1 && !ammountValueLabel.getText().equals("")) {
             cartProductsData();
@@ -520,7 +561,7 @@ public class MainMenu extends JDialog {
             userAmount.setText("");
             setTotalPrice();
         } else {
-            JOptionPane.showMessageDialog(null, "Select a row");
+            throw new RowNotSelectedException("Select a row");
         }
 
     }
@@ -563,7 +604,7 @@ public class MainMenu extends JDialog {
                 newStock = productStock(id) + stock;
                 Product aux = new Product(id, supplier, name, newStock, price, sellPrice);
                 deleteProductShop(id);
-                productList.put(aux.getId(), aux);
+                productList.addElement(aux.getId(), aux);
                 listProducts();
                 listClientProducts();
                 listCart();
@@ -572,7 +613,7 @@ public class MainMenu extends JDialog {
         }
     }
 
-    private void deleteSupplierFromList() {
+    private void deleteSupplierFromList() throws RowNotSelectedException {
         int row = 0;
         row = supplierTable.getSelectedRow();
         int dialogButton = JOptionPane.YES_NO_OPTION;
@@ -589,27 +630,19 @@ public class MainMenu extends JDialog {
                 setComboBoxConfig();
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Select a row");
+            throw new RowNotSelectedException("Select a row");
         }
     }
 
     private int productStockShopList(String id) {
         int stock = 0;
-        for (Map.Entry<String, Product> entry : shopList.entrySet()) {
-            if (shopList.containsKey(id)) {
-                stock = shopList.get(id).getStock();
-            }
-        }
+        stock = shopList.getElementByKey(id).getStock();
         return stock;
     }
 
     private int productStock(String id) {
         int stock = 0;
-        for (Map.Entry<String, Product> entry : productList.entrySet()) {
-            if (productList.containsKey(id)) {
-                stock = productList.get(id).getStock();
-            }
-        }
+        stock = productList.getElementByKey(id).getStock();
         return stock;
     }
 
@@ -674,24 +707,23 @@ public class MainMenu extends JDialog {
     }
 
     private void deleteProductShop(String id) {
-        shopList.remove(id);
+        shopList.deleteElement(id);
     }
 
-    private void deleteProduct(String id) {
-        if (productList.containsKey(id)) {
-            productList.remove(id);
+    private void deleteProduct(String id) throws RowNotSelectedException {
+        if(productList.deleteElement(id)){
             cleanLabels();
         } else {
-            JOptionPane.showMessageDialog(null, "Select a product");
+            throw new RowNotSelectedException("Select a row");
         }
     }
 
-    private void deleteSupplier(String name) {
+    private void deleteSupplier(String name) throws RowNotSelectedException {
         Supplier aux = searchSupplier(name);
         if (suppliersList.contains(aux)) {
             suppliersList.remove(aux);
         } else {
-            JOptionPane.showMessageDialog(null, "Select a product");
+            throw new RowNotSelectedException("Select a row");
         }
     }
 
@@ -720,14 +752,14 @@ public class MainMenu extends JDialog {
                 auxStock = stock - newStock;
                 Product aux = new Product(id, supplier, name, newStock, price, sellingPrice);
                 Product aux2 = new Product(id, supplier, name, auxStock, price, sellingPrice);
-                if (shopList.containsKey(id)) {
+                if (shopList.keyExists(id)) {
                     int stockAux = productStockShopList(id) + newStock;
                     Product aux3 = new Product(id, supplier, name, stockAux, price, sellingPrice);
-                    shopList.put(aux3.getId(), aux3);
-                    productList.put(aux2.getId(), aux2);
+                    shopList.addElement(aux3.getId(), aux3);
+                    productList.addElement(aux2.getId(), aux2);
                 } else {
-                    shopList.put(aux.getId(), aux);
-                    productList.put(aux2.getId(), aux2);
+                    shopList.addElement(aux.getId(), aux);
+                    productList.addElement(aux2.getId(), aux2);
                 }
 
             } else {
@@ -741,7 +773,7 @@ public class MainMenu extends JDialog {
     }
 
 
-    private void modifyProduct() {
+    private void modifyProduct() throws RowNotSelectedException {
         int rowSelection = productsTable.getSelectedRow();
         if (rowSelection != -1) {
             String id = String.valueOf(productsTable.getValueAt(rowSelection, 0));
@@ -757,11 +789,11 @@ public class MainMenu extends JDialog {
             updatePrice.setText(String.valueOf(price));
             updateSellPrice.setText(String.valueOf(sellingPrice));
         } else {
-            JOptionPane.showMessageDialog(null, "Select a row");
+            throw new RowNotSelectedException("Select a row");
         }
     }
 
-    private void updateProduct() {
+    private void updateProduct() throws RowNotSelectedException {
         String id = updateID.getText();
         if (!id.equals("")) {
             String name = updateName.getText();
@@ -770,9 +802,9 @@ public class MainMenu extends JDialog {
             Double price = Double.parseDouble(updatePrice.getText());
             Double sellingPrice = Double.parseDouble(updateSellPrice.getText());
             Product aux = new Product(id, supplier, name, stock, price, sellingPrice);
-            productList.put(aux.getId(), aux);
+            productList.addElement(aux.getId(), aux);
         } else {
-            JOptionPane.showMessageDialog(null, "Select a product you want to modify");
+            throw new RowNotSelectedException("Select a row");
         }
         cleanLabels();
         listClientProducts();
@@ -796,7 +828,7 @@ public class MainMenu extends JDialog {
             data.setStock(Integer.parseInt(stockField.getText()));
             data.setPrice(Double.parseDouble(priceField.getText()));
             data.setSellingPrice(Double.parseDouble(sellPriceField.getText()));
-            productList.put(data.getId(), data);
+            productList.addElement(data.getId(), data);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -824,7 +856,7 @@ public class MainMenu extends JDialog {
                 return false;
             }
         };
-        for (Map.Entry<String, Product> entry : productList.entrySet()) {
+        for (Map.Entry<String, Product> entry : productList.getHashMap().entrySet()) {
             model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), +entry.getValue().getPrice(), entry.getValue().getSellingPrice()});
         }
         productsTable.setModel(model);
@@ -855,7 +887,7 @@ public class MainMenu extends JDialog {
                 return false;
             }
         };
-        for (Map.Entry<String, Product> entry : shopList.entrySet()) {
+        for (Map.Entry<String, Product> entry : shopList.getHashMap().entrySet()) {
             model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getSellingPrice(), entry.getValue().getSellingPrice() * entry.getValue().getStock()});
         }
         cartTable.setModel(model);
@@ -869,9 +901,14 @@ public class MainMenu extends JDialog {
                 return false;
             }
         };
-        for (Map.Entry<String, Product> entry : productList.entrySet()) {
+
+
+
+        for (Map.Entry<String, Product> entry : productList.getHashMap().entrySet()) {
             model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getSellingPrice()});
         }
+
+
         clientProductList.setModel(model);
     }
 
@@ -989,7 +1026,7 @@ public class MainMenu extends JDialog {
                     return false;
                 }
             };
-            for (Map.Entry<String, Product> entry : productList.entrySet()) {
+            for (Map.Entry<String, Product> entry : productList.getHashMap().entrySet()) {
                 if (entry.getValue().getName().equalsIgnoreCase(productName)) {
                     model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getSellingPrice()});
                 }
@@ -1021,10 +1058,10 @@ public class MainMenu extends JDialog {
         Product new2 = new Product("2", aux1.getName(), "KEYBOARD", 150, 5000.00, 5000.00);
         Product new3 = new Product("3", aux2.getName(), "MOUSE", 500, 3000.00, 4000.00);
         Product new4 = new Product("4", aux3.getName(), "HEADPHONES", 100, 6000.00, 8000.00);
-        productList.put(new1.getId(), new1);
-        productList.put(new2.getId(), new2);
-        productList.put(new3.getId(), new3);
-        productList.put(new4.getId(), new4);
+        productList.addElement(new1.getId(), new1);
+        productList.addElement(new2.getId(), new2);
+        productList.addElement(new3.getId(), new3);
+        productList.addElement(new4.getId(), new4);
         Customer auxC1 = new Customer("Juan", "22233333", "15550000", "A");
         Customer auxC2 = new Customer("Pedro", "111111111", "222222222", "B");
         Customer auxC3 = new Customer("Ignacio", "555555555", "3333333", "B");

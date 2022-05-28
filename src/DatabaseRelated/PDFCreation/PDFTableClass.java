@@ -1,4 +1,4 @@
-package DatabaseRelated;
+package DatabaseRelated.PDFCreation;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -27,7 +27,7 @@ public class PDFTableClass {
     }
 
 
-    void setTable(int[] colWidth, int cellHeight, int xPos, int yPos){
+    public void setTable(int[] colWidth, int cellHeight, int xPos, int yPos){
         this.colwidth = colWidth;
         this.cellHeight = cellHeight;
         this.xPos = xPos;
@@ -35,13 +35,13 @@ public class PDFTableClass {
         this.xInitialPos = xPos;
     }
 
-    void setTableFont(PDFont font, float fontSize, Color color){
+    public void setTableFont(PDFont font, float fontSize, Color color){
         this.font = font;
         this.fontSize = fontSize;
         this.fontColor = color;
     }
 
-    void addCell(String text, Color fillColor){
+    public void addCell(String text, Color fillColor){
         try {
             contentStream.setStrokingColor(1f);
             if (fillColor!=null){

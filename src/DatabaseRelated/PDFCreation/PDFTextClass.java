@@ -1,4 +1,4 @@
-package DatabaseRelated;
+package DatabaseRelated.PDFCreation;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -16,7 +16,7 @@ public class PDFTextClass {
         this.contentStream = contentStream;
     }
 
-    void addLineOfText(String text, int xPos, int yPos, PDFont font, float fontSize, Color color) {
+    public void addLineOfText(String text, int xPos, int yPos, PDFont font, float fontSize, Color color) {
         try {
             contentStream.beginText();
             contentStream.setFont(font, fontSize);
@@ -30,7 +30,7 @@ public class PDFTextClass {
         }
     }
 
-    void addMultiLineText(String[] textArray, float leading, int xPos, int yPos, PDFont font, float fontSize, Color color) {
+    public void addMultiLineText(String[] textArray, float leading, int xPos, int yPos, PDFont font, float fontSize, Color color) {
         try {
             contentStream.beginText();
             contentStream.setFont(font, fontSize);
@@ -49,7 +49,7 @@ public class PDFTextClass {
             e.printStackTrace();
         }
     }
-    float getTextWidth(String text, PDFont font, float fontSize){
+    public float getTextWidth(String text, PDFont font, float fontSize){
         try {
             return font.getStringWidth(text)/1000*fontSize;
         } catch (IOException e) {
