@@ -423,7 +423,8 @@
                 </constraints>
                 <properties>
                   <font name="Consolas" size="12" style="0"/>
-                  <text value="Supplier Data"/>
+                  <icon value="Img/icons8-supplier-40.png"/>
+                  <text value="Supplier"/>
                 </properties>
               </component>
               <vspacer id="475ff">
