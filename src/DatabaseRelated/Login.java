@@ -33,6 +33,13 @@ public class Login extends JDialog {
         setLocationRelativeTo(null);
         systemIcon.setForeground(Color.green);
 
+
+        xButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
         enterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -61,6 +68,7 @@ public class Login extends JDialog {
             }
         });
 
+
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,6 +76,8 @@ public class Login extends JDialog {
             }
         });
         setVisible(true);
+
+
     }
 
     private void loginUser() {
