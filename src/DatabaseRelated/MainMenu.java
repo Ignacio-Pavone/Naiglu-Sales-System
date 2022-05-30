@@ -128,7 +128,6 @@ public class MainMenu extends JDialog {
     private JPanel businesstab;
     private JTextField enterProductSearch;
     private JLabel searchProduct;
-    private int rowSelection;
     private double ammountAcc;
     private MyBusiness company = new MyBusiness();
     private Employee employee = new Employee();
