@@ -32,7 +32,7 @@ import static DatabaseRelated.JsonUtiles.createJSON;
 public class MainMenu extends JDialog {
 
     private MyBusiness placeholderBusiness = new MyBusiness("Name", "123321", "2222222");
-    private JPanel products1;
+    private JPanel MainMenuPanelMenu;
     private JTabbedPane mainMenuTabPanel;
     private JButton modifyButton;
     private JTable productsTable;
@@ -122,8 +122,8 @@ public class MainMenu extends JDialog {
     private double ammountAcc;
     private MyBusiness company = new MyBusiness();
     private Employee employee = new Employee();
-    private final GenericHashMap<String,Product> productList = new GenericHashMap<>();
-    private final GenericHashMap<String,Product> shopList = new GenericHashMap<>();
+    private final GenericHashMap<String, Product> productList = new GenericHashMap<>();
+    private final GenericHashMap<String, Product> shopList = new GenericHashMap<>();
     //private final HashMap<String, Product> productList = new HashMap<>(); // lista Productos
     private final ArrayList<Sale> salesList = new ArrayList<>(); // lista ventas Concretadas
     private final HashSet<Supplier> suppliersList = new HashSet<>(); // lista proveedores
@@ -133,15 +133,14 @@ public class MainMenu extends JDialog {
 
     public MainMenu(JFrame parent) {
         super(parent);
-
         hardCode();
         tableStyle();
         setMinimumSize(new Dimension(900, 700));
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setContentPane(products1);
+        setContentPane(MainMenuPanelMenu);
         setUndecorated(true);
         setLocationRelativeTo(null);
         listingCollections();
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 
         addButton.addActionListener(new ActionListener() {
@@ -313,7 +312,7 @@ public class MainMenu extends JDialog {
         businessphoneText.setText("");
     }
 
-    void adminSettings(){
+    void adminSettings() {
         employeeName.setForeground(Color.GREEN);
         employeeName.setText("Logged" + "-[" + employee.getName() + "]" + " Admin Status" + "-[" + employee.isAdmin() + "]");
         if (!employee.isAdmin()) {
@@ -544,7 +543,7 @@ public class MainMenu extends JDialog {
     }
 
     private void addToCart() throws RowNotSelectedException {
-       int rowSelection = clientProductList.getSelectedRow();
+        int rowSelection = clientProductList.getSelectedRow();
         if (rowSelection != -1 && !ammountValueLabel.getText().equals("")) {
             cartProductsData();
             listCart();
@@ -703,7 +702,7 @@ public class MainMenu extends JDialog {
     }
 
     private void deleteProduct(String id) throws RowNotSelectedException {
-        if(productList.deleteElement(id)){
+        if (productList.deleteElement(id)) {
             cleanLabels();
         } else {
             throw new RowNotSelectedException("Select a row");
@@ -896,7 +895,6 @@ public class MainMenu extends JDialog {
         };
 
 
-
         for (Map.Entry<String, Product> entry : productList.getHashMap().entrySet()) {
             model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getSellingPrice()});
         }
@@ -994,8 +992,8 @@ public class MainMenu extends JDialog {
             }
             Double doubleAux = operation;
             String operationAux = doubleAux.toString();
-            Sale auxSale = new Sale(aux.getName(),price, operationAux);
-            createJSON(auxSale,finalProductPDF);
+            Sale auxSale = new Sale(aux.getName(), price, operationAux);
+            createJSON(auxSale, finalProductPDF);
             //createJSON(auxSale,finalProductPDF);
             contentStream.close();
             String idConcat = "Operation N° " + operation + " " + customer;

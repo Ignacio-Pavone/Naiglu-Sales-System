@@ -14,6 +14,7 @@ public class Login extends JDialog {
     private JPanel loginPanel;
     private JTextField email;
     private JButton registerButton;
+    private JLabel systemIcon;
     private JButton xButton;
     public static Employee employee;
     final Point offset = new Point();
@@ -25,11 +26,12 @@ public class Login extends JDialog {
     public Login(JFrame parent) {
         super(parent);
         setContentPane(loginPanel);
-        setMinimumSize(new Dimension(600, 550));
+        setMinimumSize(new Dimension(550, 450));
         setModal(true);
         setUndecorated(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+        systemIcon.setForeground(Color.green);
 
         enterButton.addActionListener(new ActionListener() {
             @Override
