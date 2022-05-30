@@ -1,36 +1,20 @@
 package DatabaseRelated;
 
-import DatabaseRelated.PDFCreation.PDFTableClass;
-import DatabaseRelated.PDFCreation.PDFTextClass;
 import Exceptions.FieldCompletionException;
 import Exceptions.RowNotSelectedException;
-import PersonRelated.Customer;
 import PersonRelated.MyBusiness;
-import PersonRelated.Supplier;
 import UserRelated.Employee;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-
-import static DatabaseRelated.JsonUtiles.createJSON;
 
 
 public class MainMenu extends JDialog {
-    Sistem app = new Sistem();
+    SalesSystem app = new SalesSystem();
 
     private JPanel MainMenuPanelMenu;
     private JTabbedPane mainMenuTabPanel;
@@ -57,7 +41,7 @@ public class MainMenu extends JDialog {
     private JTable clientProductList;
     private JButton addToCartButton;
     private JTextField userAmount;
-    private JButton CONFIRMPURCHASEButton;
+    private JButton confirmPurchaseButton;
     private JScrollPane tabl;
     private JLabel ammountValueLabel;
     private JButton deleteCartElement;
@@ -66,7 +50,7 @@ public class MainMenu extends JDialog {
 
     private JTable salesTable;
     private JPanel addSales;
-    private JButton GENERARFACTURAButton;
+    private JButton generateInvoiceButton;
     private JTable supplierTable;
     private JButton addSupplierButton;
     private JTextField supplierNameField;
@@ -78,12 +62,12 @@ public class MainMenu extends JDialog {
     private JLabel nameLabel;
     private JLabel phoneLabel;
     private JLabel taxPayerLabel;
-    private JLabel WorkigAreaLabel;
+    private JLabel workingAreaLabel;
     private JTextField sellPriceField;
     private JLabel sellPriceLabel;
     private JTextField updateSupplier;
     private JTextField updateSellPrice;
-    private JButton DELETEELEMENTButton;
+    private JButton delElementButton;
     private JPanel supplierTab;
     private JLabel setAmountDay;
     private JButton deskClosing;
@@ -101,7 +85,7 @@ public class MainMenu extends JDialog {
     private JComboBox comboBoxCustomers;
     private JLabel customerNameLAbel;
     private JButton xButton;
-    private JButton DELETEButton;
+    private JButton delButton;
     private JLabel employeeName;
     private JPanel customerTab;
     private JPanel statisticsTab;
@@ -112,11 +96,11 @@ public class MainMenu extends JDialog {
     private JTextField businesstaxText;
     private JTextField businessNameText;
     private JLabel companyNameLabel;
-    private JButton ACCEPTButton;
+    private JButton acceptButton;
     private JLabel companyLabel;
     private JLabel taxpayerLabel;
     private JLabel phoneLabelBusiness;
-    private JPanel businesstab;
+    private JPanel businessTab;
     private JTextField enterProductSearch;
     private JLabel searchProduct;
     private MyBusiness company = new MyBusiness();
@@ -234,12 +218,12 @@ public class MainMenu extends JDialog {
                 app.setTotalPrice(cartTable,textFinalPrice);
             }
         });
-        CONFIRMPURCHASEButton.addActionListener(new ActionListener() {
+        confirmPurchaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 app.confirmPruchase(comboBoxCustomers,textFinalPrice);
                 app.listCart(cartTable);
-                app.listaVentas(salesTable);
+                app.salesList(salesTable);
                 app.setTotalDay(setAmountDay, salesTable);
             }
         });
@@ -257,7 +241,7 @@ public class MainMenu extends JDialog {
                 }
             }
         });
-        DELETEELEMENTButton.addActionListener(new ActionListener() {
+        delElementButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -268,7 +252,7 @@ public class MainMenu extends JDialog {
                 }
             }
         });
-        GENERARFACTURAButton.addActionListener(new ActionListener() {
+        generateInvoiceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 app.generateInvoice(salesTable);
@@ -300,7 +284,7 @@ public class MainMenu extends JDialog {
                 dispose();
             }
         });
-        DELETEButton.addActionListener(new ActionListener() {
+        delButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -311,7 +295,7 @@ public class MainMenu extends JDialog {
                 }
             }
         });
-        ACCEPTButton.addActionListener(new ActionListener() {
+        acceptButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 createMyBusiness();
@@ -341,7 +325,7 @@ public class MainMenu extends JDialog {
             mainMenuTabPanel.remove(supplierTab);
             mainMenuTabPanel.remove(customerTab);
             mainMenuTabPanel.remove(statisticsTab);
-            mainMenuTabPanel.remove(businesstab);
+            mainMenuTabPanel.remove(businessTab);
         }
     }
     private boolean checkSupplierRequirements() {
@@ -389,7 +373,7 @@ public class MainMenu extends JDialog {
         nameLabel.setForeground(Color.WHITE);
         taxPayerLabel.setForeground(Color.WHITE);
         phoneLabel.setForeground(Color.WHITE);
-        WorkigAreaLabel.setForeground(Color.WHITE);
+        workingAreaLabel.setForeground(Color.WHITE);
         sellPriceLabel.setForeground(Color.WHITE);
         CnameLabel.setForeground(Color.WHITE);
         CphoneLabel.setForeground(Color.WHITE);
@@ -439,7 +423,7 @@ public class MainMenu extends JDialog {
         app.listClientProducts(clientProductList);
         app.listCart(cartTable);
         app.listSuppliers(supplierTable);
-        app.listaVentas(salesTable);
+        app.salesList(salesTable);
         app.customerList(customerTable);
         app.createStatisticsTable(statisticsTable);
     }

@@ -23,7 +23,7 @@ import java.util.*;
 
 import static DatabaseRelated.JsonUtiles.createJSON;
 
-public class Sistem {
+public class SalesSystem {
     private double ammountAcc;
     private MyBusiness placeholderBusiness = new MyBusiness("Name", "123321", "2222222");
     private final GenericHashMap<String, Product> productList = new GenericHashMap<>();
@@ -149,22 +149,22 @@ public class Sistem {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         int invoiceAmount = 0;
         if (allInvoiced()) {
-            total = totalCaja();
+            total = totalCash();
             fecha = LocalDateTime.now();
             dateFormatted = fecha.format(formatter);
             invoiceAmount = salesList.size();
-            listStadisticTable(statisticsTable, dateFormatted, total, invoiceAmount);
+            listStatistics(statisticsTable, dateFormatted, total, invoiceAmount);
             salesList.clear();
-            listaVentas(salesTable);
+            salesList(salesTable);
             setAmountDay.setText("Total");
         } else {
             JOptionPane.showMessageDialog(null, "No invoices");
         }
     }
 
-    private void listStadisticTable(JTable statisticsTable, String fecha, double total, int cantVentas) { //Borra las estadisticas si se genera una nueva factura.
+    private void listStatistics(JTable statisticsTable, String date, double total, int salesAmmount) { //Borra las estadisticas si se genera una nueva factura.
         DefaultTableModel model = (DefaultTableModel) statisticsTable.getModel();
-        model.addRow(new Object[]{fecha, total, cantVentas});
+        model.addRow(new Object[]{date, total, salesAmmount});
         statisticsTable.setModel(model);
     }
 
@@ -185,11 +185,11 @@ public class Sistem {
 
     public void deleteProduct(String id) throws RowNotSelectedException {
         if (!productList.deleteElement(id)) {
-            throw new RowNotSelectedException("Producto no existe");
+            throw new RowNotSelectedException("The product doesn't exist");
         }
     }
 
-    private double totalCaja() {
+    private double totalCash() {
         double acum = 0;
         for (Sale sale : salesList) {
             acum += sale.getTotalAmmount();
@@ -267,7 +267,7 @@ public class Sistem {
         }
     }
 
-    public void listaVentas(JTable salesTable) {
+    public void salesList(JTable salesTable) {
         DefaultTableModel model = new DefaultTableModel(
                 new Object[]{"Operation Nº", "Client Name", "Total Ammount", "Date", "Facturado"}, 0) {
             @Override
@@ -407,7 +407,7 @@ public class Sistem {
             data.setSellingPrice(Double.parseDouble(sellPriceField.getText()));
             addElementProductList(data.getId(), data);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            java.lang.System.out.println(e.getMessage());
         }
     }
 
@@ -432,7 +432,7 @@ public class Sistem {
         }
     }
 
-    private boolean tableHaveData() {
+    private boolean tableHasData() {
         return shopList.hashmapSize() > 0;
     }
 
@@ -531,7 +531,7 @@ public class Sistem {
 
     public void setTotalDay(JLabel setAmountDay, JTable salesTable) {
         double totalprice = 0;
-        System.out.println(salesTable.getRowCount());
+        java.lang.System.out.println(salesTable.getRowCount());
         for (int i = 0; i < salesTable.getRowCount(); i++) {
             totalprice = totalprice + Double.parseDouble(String.valueOf(salesTable.getValueAt(i, 2)));
         }
@@ -543,7 +543,7 @@ public class Sistem {
     public void confirmPruchase(JComboBox comboBoxCustomers, JLabel textFinalPrice) {
         Sale newSale = new Sale();
         int dialogButton = JOptionPane.YES_NO_OPTION;
-        if (tableHaveData()) {
+        if (tableHasData()) {
             dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
             if (dialogButton == JOptionPane.YES_OPTION) {
                 double amount = ammountAcc;
@@ -651,10 +651,10 @@ public class Sistem {
             if (dialogButton == JOptionPane.YES_OPTION) {
                 createInvoice((Double) salesTable.getValueAt(rowSelection, 0), (String) salesTable.getValueAt(rowSelection, 1), (Double) salesTable.getValueAt(rowSelection, 2), (String) salesTable.getValueAt(rowSelection, 3));
                 isInvoiced((Double) salesTable.getValueAt(rowSelection, 0));
-                listaVentas(salesTable);
+                salesList(salesTable);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Venta ya facturada");
+            JOptionPane.showMessageDialog(null, "Sale already invoiced");
         }
     }
 
