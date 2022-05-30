@@ -33,7 +33,7 @@ public class MainMenu extends JDialog {
 
     private MyBusiness placeholderBusiness = new MyBusiness("Name", "123321", "2222222");
     private JPanel products1;
-    private JTabbedPane sellTable;
+    private JTabbedPane mainMenuTabPanel;
     private JButton exitButton;
     private JButton modifyButton;
     private JTable productsTable;
@@ -167,20 +167,11 @@ public class MainMenu extends JDialog {
 
             }
         });
-        sellTable.addComponentListener(new ComponentAdapter() {
+        mainMenuTabPanel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                employeeName.setForeground(Color.GREEN);
-                employeeName.setText("Logged" + "-[" + employee.getName() + "]" + " Admin Status" + "-[" + employee.isAdmin() + "]");
-                if (!employee.isAdmin()) {
-                    sellTable.remove(adminPanel);
-                    sellTable.remove(addProducts);
-                    sellTable.remove(supplierTab);
-                    sellTable.remove(customerTab);
-                    sellTable.remove(statisticsTab);
-                    sellTable.remove(businesstab);
-                }
+                adminSettings();
             }
         });
         productsTable.addComponentListener(new ComponentAdapter() {
@@ -233,7 +224,6 @@ public class MainMenu extends JDialog {
                     JOptionPane.showMessageDialog(null, "Select a row");
                     ex.printStackTrace();
                 }
-
             }
         });
         deleteCartElement.addActionListener(new ActionListener() {
@@ -334,6 +324,19 @@ public class MainMenu extends JDialog {
         businessphoneText.setText("");
     }
 
+    void adminSettings(){
+        employeeName.setForeground(Color.GREEN);
+        employeeName.setText("Logged" + "-[" + employee.getName() + "]" + " Admin Status" + "-[" + employee.isAdmin() + "]");
+        if (!employee.isAdmin()) {
+            mainMenuTabPanel.remove(adminPanel);
+            mainMenuTabPanel.remove(addProducts);
+            mainMenuTabPanel.remove(supplierTab);
+            mainMenuTabPanel.remove(customerTab);
+            mainMenuTabPanel.remove(statisticsTab);
+            mainMenuTabPanel.remove(businesstab);
+        }
+    }
+
     private void deskClosing() {
         double total = 0;
         LocalDateTime fecha;
@@ -356,7 +359,7 @@ public class MainMenu extends JDialog {
 
     private void generateInvoice() {
         int dialogButton = JOptionPane.YES_NO_OPTION;
-        rowSelection = salesTable.getSelectedRow();
+        int rowSelection = salesTable.getSelectedRow();
         Boolean aux = (Boolean) salesTable.getValueAt(rowSelection, 4);
         if (rowSelection != -1 && aux.equals(false)) {
             dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
@@ -552,7 +555,7 @@ public class MainMenu extends JDialog {
     }
 
     private void addToCart() throws RowNotSelectedException {
-        rowSelection = clientProductList.getSelectedRow();
+       int rowSelection = clientProductList.getSelectedRow();
         if (rowSelection != -1 && !ammountValueLabel.getText().equals("")) {
             cartProductsData();
             listCart();
@@ -738,7 +741,7 @@ public class MainMenu extends JDialog {
 
     private void cartProductsData() {
         int auxStock = 0;
-
+        int rowSelection = clientProductList.getSelectedRow();
         String id = String.valueOf(clientProductList.getValueAt(rowSelection, 0));
         String supplier = String.valueOf(clientProductList.getValueAt(rowSelection, 1));
         String name = String.valueOf(clientProductList.getValueAt(rowSelection, 2));
@@ -816,6 +819,7 @@ public class MainMenu extends JDialog {
         updateName.setText("");
         updateStock.setText("");
         updatePrice.setText("");
+        updateSellPrice.setText("");
     }
 
     private void addProduct() {
@@ -1081,7 +1085,7 @@ public class MainMenu extends JDialog {
         company = new MyBusiness(nameString, taxpayerID, phoneNumber);
         Border eBorder = new LineBorder(Color.BLACK, 1, true);
 
-        sellTable.setBorder(BorderFactory.createTitledBorder(eBorder, " " + company.getName() + " ", TitledBorder.CENTER, TitledBorder.CENTER, new Font("Consolas", Font.ITALIC, 12), Color.green));
+        mainMenuTabPanel.setBorder(BorderFactory.createTitledBorder(eBorder, " " + company.getName() + " ", TitledBorder.CENTER, TitledBorder.CENTER, new Font("Consolas", Font.ITALIC, 12), Color.green));
         UIManager.put("TabbedPane.contentAreaColor", Color.BLACK);
     }
 }
