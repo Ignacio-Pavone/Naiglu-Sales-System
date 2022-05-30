@@ -90,7 +90,7 @@
                 </constraints>
                 <properties>
                   <font name="Consolas" size="12" style="0"/>
-                  <icon value="Img/icons8-how-many-quest-40.png"/>
+                  <icon value="Img/icons8-estimate-40.png"/>
                   <text value="Ammount"/>
                 </properties>
               </component>
