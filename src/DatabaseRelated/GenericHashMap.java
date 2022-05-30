@@ -3,6 +3,7 @@ package DatabaseRelated;
 import javax.swing.table.DefaultTableModel;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,13 +18,16 @@ public class GenericHashMap <K,V>{
         hashMap = new HashMap<>();
     }
 
-
     public void addElement(K key, V value){
         getHashMap().put(key,value);
     }
 
     public boolean keyExists(K key){
         return getHashMap().containsKey(key);
+    }
+
+    public Iterator getIterator (){
+        return hashMap.entrySet().iterator();
     }
 
     public boolean deleteElement(K key){

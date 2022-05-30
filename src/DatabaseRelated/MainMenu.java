@@ -848,8 +848,13 @@ public class MainMenu extends JDialog {
                 return false;
             }
         };
-        for (Map.Entry<String, Product> entry : productList.getHashMap().entrySet()) {
-            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), +entry.getValue().getPrice(), entry.getValue().getSellingPrice()});
+
+        Iterator entries = productList.getIterator();
+        while (entries.hasNext()) {
+            Map.Entry entry = (Map.Entry) entries.next();
+            String key = (String) entry.getKey();
+            Product value = (Product) entry.getValue();
+            model.addRow(new Object[]{key, value.getSupplierName(), value.getName(), value.getStock(), value.getPrice(), value.getSellingPrice()});
         }
         productsTable.setModel(model);
     }
@@ -879,8 +884,13 @@ public class MainMenu extends JDialog {
                 return false;
             }
         };
-        for (Map.Entry<String, Product> entry : shopList.getHashMap().entrySet()) {
-            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getSellingPrice(), entry.getValue().getSellingPrice() * entry.getValue().getStock()});
+
+        Iterator entries = shopList.getIterator();
+        while (entries.hasNext()) {
+            Map.Entry entry = (Map.Entry) entries.next();
+            String key = (String) entry.getKey();
+            Product value = (Product) entry.getValue();
+            model.addRow(new Object[]{key, value.getSupplierName(), value.getName(), value.getStock(), value.getSellingPrice(), value.getSellingPrice() * value.getStock()});
         }
         cartTable.setModel(model);
     }
@@ -893,13 +903,13 @@ public class MainMenu extends JDialog {
                 return false;
             }
         };
-
-
-        for (Map.Entry<String, Product> entry : productList.getHashMap().entrySet()) {
-            model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getSellingPrice()});
+        Iterator entries = productList.getIterator();
+        while (entries.hasNext()) {
+            Map.Entry entry = (Map.Entry) entries.next();
+            String key = (String) entry.getKey();
+            Product value = (Product) entry.getValue();
+            model.addRow(new Object[]{key, value.getSupplierName(), value.getName(), value.getStock(), value.getPrice(), value.getSellingPrice()});
         }
-
-
         clientProductList.setModel(model);
     }
 

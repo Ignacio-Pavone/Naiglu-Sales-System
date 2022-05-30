@@ -5,6 +5,7 @@ import UserRelated.Employee;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.RoundRectangle2D;
 import java.sql.*;
 
 public class Login extends JDialog {
@@ -33,7 +34,6 @@ public class Login extends JDialog {
         setLocationRelativeTo(null);
         systemIcon.setForeground(Color.green);
 
-
         xButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -43,6 +43,7 @@ public class Login extends JDialog {
         enterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 loginUser();
             }
         });
@@ -57,7 +58,7 @@ public class Login extends JDialog {
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(final MouseEvent e) {
-                setLocation(e.getXOnScreen()-offset.x, e.getYOnScreen()-offset.y);
+                setLocation(e.getXOnScreen() - offset.x, e.getYOnScreen() - offset.y);
             }
         });
 
@@ -115,7 +116,7 @@ public class Login extends JDialog {
                 em = new Employee();
                 em.setID(rs.getInt("id"));
                 em.setName(rs.getString("nombre"));
-                em.setEmail( rs.getString("correo"));
+                em.setEmail(rs.getString("correo"));
                 em.setPassword(rs.getString("password"));
                 em.setAdmin(rs.getBoolean("esAdmin"));
             }
