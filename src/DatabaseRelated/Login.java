@@ -86,7 +86,7 @@ public class Login extends JDialog {
         employee = authenticate(email, password);
         if (employee != null) {
             dispose();
-            JOptionPane.showMessageDialog(null, "Welcome " + employee.getName());
+            JOptionPane.showMessageDialog(null, "Hello " + employee.getName());
             MainMenu nuevo = new MainMenu(null);
             nuevo.setEmployee(employee);
             nuevo.setVisible(true);
