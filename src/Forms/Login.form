@@ -58,7 +58,7 @@
             </constraints>
             <properties>
               <background color="-12609246"/>
-              <font name="Consolas" size="11" style="0"/>
+              <font name="Consolas" size="13" style="0"/>
               <foreground color="-13882315"/>
               <horizontalTextPosition value="0"/>
               <text value="EXIT"/>
@@ -121,7 +121,7 @@
             </constraints>
             <properties>
               <background color="-12609246"/>
-              <font name="Consolas" size="11" style="0"/>
+              <font name="Consolas" size="13" style="0"/>
               <foreground color="-13882315"/>
               <horizontalTextPosition value="0"/>
               <text value="LOGIN"/>
@@ -134,7 +134,7 @@
             </constraints>
             <properties>
               <background color="-12609246"/>
-              <font name="Consolas" size="11" style="0"/>
+              <font name="Consolas" size="13" style="0"/>
               <foreground color="-13882315"/>
               <horizontalTextPosition value="0"/>
               <text value="REGISTER"/>
