@@ -34,7 +34,6 @@ public class MainMenu extends JDialog {
     private MyBusiness placeholderBusiness = new MyBusiness("Name", "123321", "2222222");
     private JPanel products1;
     private JTabbedPane mainMenuTabPanel;
-    private JButton exitButton;
     private JButton modifyButton;
     private JTable productsTable;
     private JTextField codeField;
@@ -42,7 +41,6 @@ public class MainMenu extends JDialog {
     private JTextField stockField;
     private JTextField priceField;
     private JButton addButton;
-    private JButton exitingButton;
     private JTextField updateID;
     private JTextField updatePrice;
     private JTextField updateName;
@@ -55,9 +53,8 @@ public class MainMenu extends JDialog {
     private JLabel stockLabel;
     private JButton deleteButton;
     private JTable cartTable;
-    private JButton exitbutton1;
+
     private JTable clientProductList;
-    private JButton exitUserList;
     private JButton addToCartButton;
     private JTextField userAmount;
     private JButton CONFIRMPURCHASEButton;
@@ -66,11 +63,7 @@ public class MainMenu extends JDialog {
     private JButton deleteCartElement;
     private JLabel textFinalPrice;
     private JPanel adminPanel;
-    private JLabel finalPrice;
-    private JButton exitButton2;
-    private JTextField cantField;
-    private JButton refreshButton;
-    private MainMenu productData;
+
     private JTable salesTable;
     private JPanel addSales;
     private JButton GENERARFACTURAButton;
@@ -93,8 +86,6 @@ public class MainMenu extends JDialog {
     private JButton DELETEELEMENTButton;
     private JPanel supplierTab;
     private JLabel setAmountDay;
-    private JLabel lineLabel1;
-    private JLabel lineLabel2;
     private JButton deskClosing;
     private JTable statisticsTable;
     private JTable customerTable;
@@ -139,7 +130,6 @@ public class MainMenu extends JDialog {
     private final ArrayList<Customer> customerList = new ArrayList<>(); // lista clientes
     private Collection<Product> mapTolist;
     private ArrayList<Product> finalProductPDF = new ArrayList<>();
-
 
     public MainMenu(JFrame parent) {
         super(parent);
