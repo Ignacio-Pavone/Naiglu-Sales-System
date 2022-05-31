@@ -789,9 +789,10 @@ public class SalesSystem {
                 salesList.add(aux);
             }
             ois.close();
-        } catch (
-                IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (EOFException e){
+            System.out.println(e.getMessage());
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
         }
     }
 }

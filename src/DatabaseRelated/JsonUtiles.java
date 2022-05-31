@@ -39,9 +39,8 @@ public class JsonUtiles {
                 Sale aux = saleList.get(i);
                 jO.put("operationNumber", aux.getOperationNumber());
                 jO.put("customerName", aux.getCustomerName());
-                jO.put("totalAmmount", aux.getTotalAmmount());
-                jO.put("date", aux.getDate());
-                jO.put("dateFormatted", aux.getDateFormatted());
+                jO.put("ammount", aux.getTotalAmmount());
+                jO.put("date", aux.getDateFormatted());
                 jA.put(jO);
             } catch (JSONException e) {
                 e.printStackTrace();
