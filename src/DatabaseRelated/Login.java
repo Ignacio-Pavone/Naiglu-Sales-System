@@ -67,7 +67,6 @@ public class Login extends JDialog{
                 showRegister();
             }
         });
-
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

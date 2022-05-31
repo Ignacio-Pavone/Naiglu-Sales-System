@@ -42,10 +42,10 @@ public class Connect {
         Connection con;
         PreparedStatement ps;
         ResultSet rs;
-        Connect cn = new Connect();
+
         try {
             String sql = "SELECT * FROM usuarios WHERE correo=? AND password=?";
-            con = cn.getConnection();
+            con = getConnection();
             ps = con.prepareStatement(sql);
             ps.setString(1, email);
             ps.setString(2, password);

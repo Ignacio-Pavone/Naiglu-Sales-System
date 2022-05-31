@@ -30,8 +30,6 @@ public class Register extends JDialog {
         setUndecorated(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-
-
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
