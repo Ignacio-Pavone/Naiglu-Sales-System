@@ -1,9 +1,10 @@
 package DatabaseRelated;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Sale {
+public class Sale implements Serializable {
     private double operationNumber;
     private String customerName;
     private double totalAmmount;
