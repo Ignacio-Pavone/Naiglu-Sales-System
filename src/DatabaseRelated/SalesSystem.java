@@ -26,7 +26,7 @@ import static DatabaseRelated.JsonUtiles.createJSON;
 
 public class SalesSystem {
     private double ammountAcc;
-    private MyBusiness placeholderBusiness = new MyBusiness("Name", "123321", "2222222");
+    private final MyBusiness placeholderBusiness = new MyBusiness("Name", "123321", "2222222");
     private final GenericHashMap<String, Product> productList = new GenericHashMap<>();
     private final GenericHashMap<String, Product> shopList = new GenericHashMap<>();
     private final ArrayList<Sale> salesList = new ArrayList<>(); // lista ventas Concretadas
@@ -35,31 +35,31 @@ public class SalesSystem {
     private Collection<Product> mapTolist;
     private ArrayList<Product> finalProductPDF = new ArrayList<>();
 
-    public GenericHashMap<String, Product> getProductList() {
+    private GenericHashMap<String, Product> getProductList() {
         return productList;
     }
 
-    public GenericHashMap<String, Product> getShopList() {
+    private GenericHashMap<String, Product> getShopList() {
         return shopList;
     }
 
-    public ArrayList<Sale> getSalesList() {
+    private ArrayList<Sale> getSalesList() {
         return salesList;
     }
 
-    public HashSet<Supplier> getSuppliersList() {
+    private HashSet<Supplier> getSuppliersList() {
         return suppliersList;
     }
 
-    public ArrayList<Customer> getCustomerList() {
+    private ArrayList<Customer> getCustomerList() {
         return customerList;
     }
 
-    public Collection<Product> getMapTolist() {
+    private Collection<Product> getMapTolist() {
         return mapTolist;
     }
 
-    public ArrayList<Product> getFinalProductPDF() {
+    private ArrayList<Product> getFinalProductPDF() {
         return finalProductPDF;
     }
 
