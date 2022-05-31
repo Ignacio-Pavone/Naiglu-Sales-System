@@ -789,10 +789,30 @@ public class SalesSystem {
                 salesList.add(aux);
             }
             ois.close();
-        } catch (EOFException e){
-            System.out.println(e.getMessage());
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e){
             System.out.println(e.getMessage());
         }
+    }
+
+    public void delete(JTable salesTable){
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        int rowSelection = salesTable.getSelectedRow();
+        if (rowSelection != -1){
+            double operationNumber = (double) salesTable.getValueAt(rowSelection,0);
+            int pos = searchSale(operationNumber);
+            if (pos != -1)
+            salesList.remove(pos);
+            else JOptionPane.showMessageDialog(null,"Sale doesn´t exist");
+        }
+    }
+
+    public int searchSale(double operationNumber){
+        int pos = -1;
+        for (int i = 0; i<salesList.size(); i++){
+            if (salesList.get(i).getOperationNumber() == operationNumber){
+                pos = i;
+            }
+        }
+        return pos;
     }
 }

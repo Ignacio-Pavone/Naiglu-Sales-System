@@ -3,6 +3,7 @@ package DatabaseRelated;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Sale implements Serializable {
     private double operationNumber;
@@ -42,6 +43,12 @@ public class Sale implements Serializable {
         this.totalAmmount = amount;
         this.customerId = id;
 
+    }
+
+    public Sale(double operationNumber, String name, double totalAmmount) {
+        this.operationNumber = operationNumber;
+        customerName = name;
+        this.totalAmmount = totalAmmount;
     }
 
     public LocalDateTime getDate() {
@@ -88,6 +95,15 @@ public class Sale implements Serializable {
         this.totalAmmount = totalAmmount;
     }
 
+    public boolean compareTo(double d){
+        if (this.getOperationNumber() == d) return true;
+        else return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(operationNumber);
+    }
 
     @Override
     public String toString() {

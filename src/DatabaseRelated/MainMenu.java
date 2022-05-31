@@ -103,6 +103,7 @@ public class MainMenu extends JDialog {
     private JPanel businessTab;
     private JTextField enterProductSearch;
     private JLabel searchProduct;
+    private JButton delete;
     private MyBusiness company = new MyBusiness();
     private Employee employee = new Employee();
 
@@ -312,6 +313,13 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 app.searchProduct(clientProductList, enterProductSearch);
+            }
+        });
+        delete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                app.delete(salesTable);
+                app.salesList(salesTable);
             }
         });
     }
