@@ -314,7 +314,7 @@ public class SalesSystem {
                 String key = (String) entry.getKey();
                 Product value = (Product) entry.getValue();
                 if (value.getName().equalsIgnoreCase(productName)) {
-                    model.addRow(new Object[]{key, value.getSupplierName(), value.getName(), value.getStock(), value.getPrice(),value.getSellingPrice()});
+                    model.addRow(new Object[]{key, value.getSupplierName(), value.getName(), value.getStock(), value.getPrice(), value.getSellingPrice()});
                 }
             }
             clientProductList.setModel(model);
@@ -340,13 +340,11 @@ public class SalesSystem {
         stock = shopList.getElementByKey(id).getStock();
         return stock;
     }
+
     public void supplierFile() {
         try {
             File file1 = new File("Data/Supplier.bin");
-            File folder = file1.getParentFile();
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
+            createFolder(file1);
             FileOutputStream fileOutputStream = new FileOutputStream(file1);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             for (Supplier s : suppliersList) {
@@ -357,6 +355,7 @@ public class SalesSystem {
             System.out.println(e.getMessage());
         }
     }
+
     public void supplierReadFile() {
         try {
             File file1 = new File("Data/Supplier.bin");
@@ -378,10 +377,7 @@ public class SalesSystem {
     public void customerFile() {
         try {
             File file1 = new File("Data/Customer.bin");
-            File folder = file1.getParentFile();
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
+            createFolder(file1);
             FileOutputStream fileOutputStream = new FileOutputStream(file1);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             for (Customer s : customerList) {
@@ -392,6 +388,7 @@ public class SalesSystem {
             System.out.println(e.getMessage());
         }
     }
+
     public void customerReadFile() {
         try {
             File file1 = new File("Data/Customer.bin");
@@ -413,10 +410,7 @@ public class SalesSystem {
     public void productFile() {
         try {
             File file1 = new File("Data/Product.bin");
-            File folder = file1.getParentFile();
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
+            createFolder(file1);
             FileOutputStream fileOutputStream = new FileOutputStream(file1);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             Iterator entries = productList.getIterator();
@@ -424,7 +418,7 @@ public class SalesSystem {
                 Map.Entry entry = (Map.Entry) entries.next();
                 String key = (String) entry.getKey();
                 Product value = (Product) entry.getValue();
-                Product aux = new Product(key,value.getSupplierName(),value.getName(),value.getStock(),value.getPrice(), value.getSellingPrice());
+                Product aux = new Product(key, value.getSupplierName(), value.getName(), value.getStock(), value.getPrice(), value.getSellingPrice());
                 objectOutputStream.writeObject(aux);
             }
             objectOutputStream.close();
@@ -432,6 +426,7 @@ public class SalesSystem {
             System.out.println(e.getMessage());
         }
     }
+
     public void productReadFile() {
         try {
             File file1 = new File("Data/Product.bin");
@@ -440,7 +435,7 @@ public class SalesSystem {
             int lectura = 1;
             while (lectura == 1) {
                 Product aux = (Product) objectInputStream.readObject();
-                productList.addElement(aux.getId(),aux);
+                productList.addElement(aux.getId(), aux);
             }
             objectInputStream.close();
         } catch (IOException e) {
@@ -449,6 +444,7 @@ public class SalesSystem {
             throw new RuntimeException(e);
         }
     }
+
     public void setComboBoxConfig(JComboBox comboBox1) {
         comboBox1.removeAllItems();
         Object[] arr = new Object[suppliersList.size()];
@@ -480,18 +476,21 @@ public class SalesSystem {
             throw new RowNotSelectedException("Select a row");
         }
     }
-
     public void addProduct(JTextField codeField, JComboBox comboBox1, JTextField nameField, JTextField stockField, JTextField priceField, JTextField sellPriceField) {
         try {
             Product data = new Product();
-            data.setId(codeField.getText());
-            Supplier aux = (Supplier) comboBox1.getSelectedItem();
-            data.setSupplierName(aux.getName());
-            data.setName(nameField.getText());
-            data.setStock(Integer.parseInt(stockField.getText()));
-            data.setPrice(Double.parseDouble(priceField.getText()));
-            data.setSellingPrice(Double.parseDouble(sellPriceField.getText()));
-            addElementProductList(data.getId(), data);
+            if (comboBox1.getSelectedItem() != null) {
+                data.setId(codeField.getText());
+                Supplier aux = (Supplier) comboBox1.getSelectedItem();
+                data.setSupplierName(aux.getName());
+                data.setName(nameField.getText());
+                data.setStock(Integer.parseInt(stockField.getText()));
+                data.setPrice(Double.parseDouble(priceField.getText()));
+                data.setSellingPrice(Double.parseDouble(sellPriceField.getText()));
+                addElementProductList(data.getId(), data);
+            }else{
+                JOptionPane.showMessageDialog(null,"First we need a Supplier");
+            }
         } catch (Exception e) {
             java.lang.System.out.println(e.getMessage());
         }
@@ -710,12 +709,22 @@ public class SalesSystem {
             createJSON(auxSale, finalProductPDF);
             //createJSON(auxSale,finalProductPDF);
             contentStream.close();
-            String idConcat = "Operation N° " + operation + " " + customer;
+            String idConcat = "Invoices/Operation N° " + operation + " " + customer;
             String namePDF = idConcat.concat(".pdf");
+            File file1 = new File(namePDF);
+            createFolder(file1);
             doc.save(namePDF);
             doc.close();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void createFolder(File document) {
+        File folder = document.getParentFile();
+        folder = document.getParentFile();
+        if (!folder.exists()) {
+            folder.mkdir();
         }
     }
 
