@@ -308,9 +308,13 @@ public class SalesSystem {
                     return false;
                 }
             };
-            for (Map.Entry<String, Product> entry : productList.getHashMap().entrySet()) {
-                if (entry.getValue().getName().equalsIgnoreCase(productName)) {
-                    model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getSellingPrice()});
+            Iterator entries = productList.getIterator();
+            while (entries.hasNext()) {
+                Map.Entry entry = (Map.Entry) entries.next();
+                String key = (String) entry.getKey();
+                Product value = (Product) entry.getValue();
+                if (value.getName().equalsIgnoreCase(productName)) {
+                    model.addRow(new Object[]{key, value.getSupplierName(), value.getName(), value.getStock(), value.getPrice(),value.getSellingPrice()});
                 }
             }
             clientProductList.setModel(model);
@@ -618,7 +622,7 @@ public class SalesSystem {
                 if (!sellExist(newSale)) {
                     salesList.add(newSale);
                     textFinalPrice.setText("Total Price");
-                    mapTolist = shopList.getHashMap().values();
+                    mapTolist = shopList.getHashMap().values(); //TO-DO Arreglar esto
                     finalProductPDF = new ArrayList<>(mapTolist);
                     shopList.hashmapClear();
                 }
