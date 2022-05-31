@@ -338,7 +338,12 @@ public class SalesSystem {
     }
     public void supplierFile() {
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream("Supplier.bin");
+            File file1 = new File("Data/Supplier.bin");
+            File folder = file1.getParentFile();
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            FileOutputStream fileOutputStream = new FileOutputStream(file1);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             for (Supplier s : suppliersList) {
                 objectOutputStream.writeObject(s);
@@ -350,7 +355,8 @@ public class SalesSystem {
     }
     public void supplierReadFile() {
         try {
-            FileInputStream fileInputStream = new FileInputStream("Supplier.bin");
+            File file1 = new File("Data/Supplier.bin");
+            FileInputStream fileInputStream = new FileInputStream(file1);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             int lectura = 1;
             while (lectura == 1) {
@@ -367,7 +373,12 @@ public class SalesSystem {
 
     public void customerFile() {
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream("Customer.bin");
+            File file1 = new File("Data/Customer.bin");
+            File folder = file1.getParentFile();
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            FileOutputStream fileOutputStream = new FileOutputStream(file1);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             for (Customer s : customerList) {
                 objectOutputStream.writeObject(s);
@@ -379,7 +390,8 @@ public class SalesSystem {
     }
     public void customerReadFile() {
         try {
-            FileInputStream fileInputStream = new FileInputStream("Customer.bin");
+            File file1 = new File("Data/Customer.bin");
+            FileInputStream fileInputStream = new FileInputStream(file1);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             int lectura = 1;
             while (lectura == 1) {
@@ -396,7 +408,12 @@ public class SalesSystem {
 
     public void productFile() {
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream("Product.bin");
+            File file1 = new File("Data/Product.bin");
+            File folder = file1.getParentFile();
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            FileOutputStream fileOutputStream = new FileOutputStream(file1);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             Iterator entries = productList.getIterator();
             while (entries.hasNext()) {
@@ -413,7 +430,8 @@ public class SalesSystem {
     }
     public void productReadFile() {
         try {
-            FileInputStream fileInputStream = new FileInputStream("Product.bin");
+            File file1 = new File("Data/Product.bin");
+            FileInputStream fileInputStream = new FileInputStream(file1);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             int lectura = 1;
             while (lectura == 1) {

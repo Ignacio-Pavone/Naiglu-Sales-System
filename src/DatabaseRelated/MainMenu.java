@@ -121,8 +121,6 @@ public class MainMenu extends JDialog {
         setLocationRelativeTo(null);
         listingCollections();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
