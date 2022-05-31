@@ -1,7 +1,6 @@
 package DatabaseRelated;
 
 import UserRelated.Employee;
-import UserRelated.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,14 +53,14 @@ public class Register extends JDialog {
                 employee.setName(nameTextField.getText());
                 employee.setEmail(emailTextField.getText());
                 employee.setPassword(passwordTextField.getText());
-                Registrarse(employee);
+                register(employee);
             } else {
                 JOptionPane.showMessageDialog(null, "ERROR");
             }
         }
 
 
-    public boolean Registrarse(Employee employee) {
+    public boolean register(Employee employee) {
         String sql = "INSERT INTO usuarios (nombre, correo, password, esAdmin) VALUES (?,?,?,?)";
         try {
             con = connection.getConnection();
@@ -73,9 +72,6 @@ public class Register extends JDialog {
             ps.execute();
             JOptionPane.showMessageDialog(null, "SUCCESSFUL REGISTRATION");
             return true;
-        } catch (SQLIntegrityConstraintViolationException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-            return false;
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
             return false;
@@ -87,10 +83,6 @@ public class Register extends JDialog {
         Matcher mat = null;
         pat = Pattern.compile("^[\\w\\-\\_\\+]+(\\.[\\w\\-\\_]+)*@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$");
         mat = pat.matcher(correo);
-        if (mat.find()) {
-            return true;
-        } else {
-            return false;
-        }
+        return mat.find();
     }
 }

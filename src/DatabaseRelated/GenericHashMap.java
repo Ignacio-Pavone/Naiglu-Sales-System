@@ -10,8 +10,6 @@ import java.util.Set;
 public class GenericHashMap <K,V>{
     private K key;
     private V value;
-
-
     private final HashMap<K,V> hashMap;
 
     public GenericHashMap() {
