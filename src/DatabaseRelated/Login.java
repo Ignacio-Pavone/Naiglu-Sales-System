@@ -6,9 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
+import java.io.Serializable;
 import java.sql.*;
 
-public class Login extends JDialog {
+public class Login extends JDialog{
     private JPasswordField passwordField2;
     private JButton enterButton;
     private JButton cancelButton;

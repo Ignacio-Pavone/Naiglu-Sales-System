@@ -17,6 +17,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -25,7 +26,7 @@ import static DatabaseRelated.JsonUtiles.createJSON;
 
 public class SalesSystem {
     private double ammountAcc;
-    private MyBusiness placeholderBusiness = new MyBusiness("Name", "123321", "2222222");
+    private final MyBusiness placeholderBusiness = new MyBusiness("Name", "123321", "2222222");
     private final GenericHashMap<String, Product> productList = new GenericHashMap<>();
     private final GenericHashMap<String, Product> shopList = new GenericHashMap<>();
     private final ArrayList<Sale> salesList = new ArrayList<>(); // lista ventas Concretadas
@@ -34,31 +35,31 @@ public class SalesSystem {
     private Collection<Product> mapTolist;
     private ArrayList<Product> finalProductPDF = new ArrayList<>();
 
-    public GenericHashMap<String, Product> getProductList() {
+    private GenericHashMap<String, Product> getProductList() {
         return productList;
     }
 
-    public GenericHashMap<String, Product> getShopList() {
+    private GenericHashMap<String, Product> getShopList() {
         return shopList;
     }
 
-    public ArrayList<Sale> getSalesList() {
+    private ArrayList<Sale> getSalesList() {
         return salesList;
     }
 
-    public HashSet<Supplier> getSuppliersList() {
+    private HashSet<Supplier> getSuppliersList() {
         return suppliersList;
     }
 
-    public ArrayList<Customer> getCustomerList() {
+    private ArrayList<Customer> getCustomerList() {
         return customerList;
     }
 
-    public Collection<Product> getMapTolist() {
+    private Collection<Product> getMapTolist() {
         return mapTolist;
     }
 
-    public ArrayList<Product> getFinalProductPDF() {
+    private ArrayList<Product> getFinalProductPDF() {
         return finalProductPDF;
     }
 
@@ -307,9 +308,13 @@ public class SalesSystem {
                     return false;
                 }
             };
-            for (Map.Entry<String, Product> entry : productList.getHashMap().entrySet()) {
-                if (entry.getValue().getName().equalsIgnoreCase(productName)) {
-                    model.addRow(new Object[]{entry.getKey(), entry.getValue().getSupplierName(), entry.getValue().getName(), entry.getValue().getStock(), entry.getValue().getPrice(), entry.getValue().getSellingPrice()});
+            Iterator entries = productList.getIterator();
+            while (entries.hasNext()) {
+                Map.Entry entry = (Map.Entry) entries.next();
+                String key = (String) entry.getKey();
+                Product value = (Product) entry.getValue();
+                if (value.getName().equalsIgnoreCase(productName)) {
+                    model.addRow(new Object[]{key, value.getSupplierName(), value.getName(), value.getStock(), value.getPrice(), value.getSellingPrice()});
                 }
             }
             clientProductList.setModel(model);
@@ -336,31 +341,108 @@ public class SalesSystem {
         return stock;
     }
 
-    public void hardCode(JComboBox comboBox1, JComboBox comboBoxCustomers) {
-        Supplier aux = new Supplier("Fravega", "3333333", "155757575", "IT");
-        Supplier aux1 = new Supplier("Compumundo", "6555555", "22333333", "IT");
-        Supplier aux2 = new Supplier("Ribeiro", "11111111", "44444444", "IT");
-        Supplier aux3 = new Supplier("Delta", "22222222", "2222222", "IT");
-        suppliersList.add(aux);
-        suppliersList.add(aux1);
-        suppliersList.add(aux2);
-        suppliersList.add(aux3);
-        Product new1 = new Product("1", aux.getName(), "PC", 200, 70000.00, 100000.00);
-        Product new2 = new Product("2", aux1.getName(), "KEYBOARD", 150, 5000.00, 5000.00);
-        Product new3 = new Product("3", aux2.getName(), "MOUSE", 500, 3000.00, 4000.00);
-        Product new4 = new Product("4", aux3.getName(), "HEADPHONES", 100, 6000.00, 8000.00);
-        productList.addElement(new1.getId(), new1);
-        productList.addElement(new2.getId(), new2);
-        productList.addElement(new3.getId(), new3);
-        productList.addElement(new4.getId(), new4);
-        Customer auxC1 = new Customer("Juan", "22233333", "15550000", "A");
-        Customer auxC2 = new Customer("Pedro", "111111111", "222222222", "B");
-        Customer auxC3 = new Customer("Ignacio", "555555555", "3333333", "B");
-        Customer auxC4 = new Customer("Naza", "66666666", "99999999", "C");
-        customerList.add(auxC1);
-        customerList.add(auxC2);
-        customerList.add(auxC3);
-        customerList.add(auxC4);
+    public void supplierFile() {
+        try {
+            File file1 = new File("Data/Supplier.bin");
+            createFolder(file1);
+            FileOutputStream fileOutputStream = new FileOutputStream(file1);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            for (Supplier s : suppliersList) {
+                objectOutputStream.writeObject(s);
+            }
+            objectOutputStream.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void supplierReadFile() {
+        try {
+            File file1 = new File("Data/Supplier.bin");
+            FileInputStream fileInputStream = new FileInputStream(file1);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            int lectura = 1;
+            while (lectura == 1) {
+                Supplier aux = (Supplier) objectInputStream.readObject();
+                suppliersList.add(aux);
+            }
+            objectInputStream.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void customerFile() {
+        try {
+            File file1 = new File("Data/Customer.bin");
+            createFolder(file1);
+            FileOutputStream fileOutputStream = new FileOutputStream(file1);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            for (Customer s : customerList) {
+                objectOutputStream.writeObject(s);
+            }
+            objectOutputStream.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void customerReadFile() {
+        try {
+            File file1 = new File("Data/Customer.bin");
+            FileInputStream fileInputStream = new FileInputStream(file1);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            int lectura = 1;
+            while (lectura == 1) {
+                Customer aux = (Customer) objectInputStream.readObject();
+                customerList.add(aux);
+            }
+            objectInputStream.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void productFile() {
+        try {
+            File file1 = new File("Data/Product.bin");
+            createFolder(file1);
+            FileOutputStream fileOutputStream = new FileOutputStream(file1);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            Iterator entries = productList.getIterator();
+            while (entries.hasNext()) {
+                Map.Entry entry = (Map.Entry) entries.next();
+                String key = (String) entry.getKey();
+                Product value = (Product) entry.getValue();
+                Product aux = new Product(key, value.getSupplierName(), value.getName(), value.getStock(), value.getPrice(), value.getSellingPrice());
+                objectOutputStream.writeObject(aux);
+            }
+            objectOutputStream.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void productReadFile() {
+        try {
+            File file1 = new File("Data/Product.bin");
+            FileInputStream fileInputStream = new FileInputStream(file1);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            int lectura = 1;
+            while (lectura == 1) {
+                Product aux = (Product) objectInputStream.readObject();
+                productList.addElement(aux.getId(), aux);
+            }
+            objectInputStream.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void setComboBoxConfig(JComboBox comboBox1) {
@@ -394,18 +476,21 @@ public class SalesSystem {
             throw new RowNotSelectedException("Select a row");
         }
     }
-
     public void addProduct(JTextField codeField, JComboBox comboBox1, JTextField nameField, JTextField stockField, JTextField priceField, JTextField sellPriceField) {
         try {
             Product data = new Product();
-            data.setId(codeField.getText());
-            Supplier aux = (Supplier) comboBox1.getSelectedItem();
-            data.setSupplierName(aux.getName());
-            data.setName(nameField.getText());
-            data.setStock(Integer.parseInt(stockField.getText()));
-            data.setPrice(Double.parseDouble(priceField.getText()));
-            data.setSellingPrice(Double.parseDouble(sellPriceField.getText()));
-            addElementProductList(data.getId(), data);
+            if (comboBox1.getSelectedItem() != null) {
+                data.setId(codeField.getText());
+                Supplier aux = (Supplier) comboBox1.getSelectedItem();
+                data.setSupplierName(aux.getName());
+                data.setName(nameField.getText());
+                data.setStock(Integer.parseInt(stockField.getText()));
+                data.setPrice(Double.parseDouble(priceField.getText()));
+                data.setSellingPrice(Double.parseDouble(sellPriceField.getText()));
+                addElementProductList(data.getId(), data);
+            }else{
+                JOptionPane.showMessageDialog(null,"First we need a Supplier");
+            }
         } catch (Exception e) {
             java.lang.System.out.println(e.getMessage());
         }
@@ -554,7 +639,7 @@ public class SalesSystem {
                 if (!sellExist(newSale)) {
                     salesList.add(newSale);
                     textFinalPrice.setText("Total Price");
-                    mapTolist = shopList.getHashMap().values();
+                    mapTolist = shopList.getHashMap().values(); //TO-DO Arreglar esto
                     finalProductPDF = new ArrayList<>(mapTolist);
                     shopList.hashmapClear();
                 }
@@ -624,12 +709,22 @@ public class SalesSystem {
             createJSON(auxSale, finalProductPDF);
             //createJSON(auxSale,finalProductPDF);
             contentStream.close();
-            String idConcat = "Operation N° " + operation + " " + customer;
+            String idConcat = "Invoices/Operation N° " + operation + " " + customer;
             String namePDF = idConcat.concat(".pdf");
+            File file1 = new File(namePDF);
+            createFolder(file1);
             doc.save(namePDF);
             doc.close();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void createFolder(File document) {
+        File folder = document.getParentFile();
+        folder = document.getParentFile();
+        if (!folder.exists()) {
+            folder.mkdir();
         }
     }
 

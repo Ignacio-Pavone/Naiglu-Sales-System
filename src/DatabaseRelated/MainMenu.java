@@ -109,7 +109,9 @@ public class MainMenu extends JDialog {
 
     public MainMenu(JFrame parent) {
         super(parent);
-        app.hardCode(comboBox1, comboBoxCustomers);
+        app.supplierReadFile();
+        app.customerReadFile();
+        app.productReadFile();
         app.setComboBoxConfig(comboBox1);
         app.loadCustomerCombobox(comboBoxCustomers);
         tableStyle();
@@ -119,8 +121,6 @@ public class MainMenu extends JDialog {
         setLocationRelativeTo(null);
         listingCollections();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -282,6 +282,9 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
+                app.supplierFile();
+                app.customerFile();
+                app.productFile();
             }
         });
         delButton.addActionListener(new ActionListener() {
