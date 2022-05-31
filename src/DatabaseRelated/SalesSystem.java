@@ -793,6 +793,5 @@ public class SalesSystem {
                 IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 }
