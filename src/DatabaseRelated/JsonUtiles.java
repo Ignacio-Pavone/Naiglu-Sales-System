@@ -29,56 +29,35 @@ public class JsonUtiles {
         return file.length() == 0;
     }
 
-    public static void createJSON(Sale sale, ArrayList<Product> products) {
+    public static void createJSON(ArrayList<Sale> saleList) {
         JSONObject json = new JSONObject();
-        JSONArray jsonArray = new JSONArray();
-        JSONArray arraySales = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
-        Product[] productsArray = products.toArray(new Product[0]);
-        if (isEmptyFile(new File("JSONSales/sales.json"))) {
-            File file1 = new File("JSONSales/sales.json");
-            File folder = file1.getParentFile();
-            if (!folder.exists()) {
-                folder.mkdirs();
-            } else {
-                try {
-                    jsonObject.put("operationNumber", sale.getOperationNumber());
-                    jsonObject.put("customerName", sale.getCustomerName());
-                    jsonObject.put("totalAmmount", sale.getTotalAmmount());
-                    jsonObject.put("date", sale.getDate());
-                    arraySales.put(productsArray);
-                    jsonObject.put("Products", arraySales);
-                    jsonArray.put(jsonObject);
-                    json.put("sales", jsonArray);
-                    FileWriter file = new FileWriter(file1);
-                    file.write(json.toString());
-                    file.flush();
-                    file.close();
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            String filePath = "C:\\Users\\Luis Taliercio\\Proyecto-Final-Java\\JSONSales\\sales.json"; //TO-DO change this path
+        JSONArray jA = new JSONArray();
+        JSONArray jProducts;
+        for (int i = 0; i < saleList.size(); i++) {
+            JSONObject jO = new JSONObject();
             try {
-                jsonObject.put("operationNumber", sale.getOperationNumber());
-                jsonObject.put("customerName", sale.getCustomerName());
-                jsonObject.put("totalAmmount", sale.getTotalAmmount());
-                jsonObject.put("date", sale.getDate());
-                arraySales.put(productsArray);
-                jsonObject.put("Products", arraySales);
-                jsonArray.put(jsonObject);
-                json.put("sales", jsonArray);
-                FileWriter fw = new FileWriter(filePath,true);
+                Sale aux = saleList.get(i);
+                jO.put("operationNumber", aux.getOperationNumber());
+                jO.put("customerName", aux.getCustomerName());
+                jO.put("totalAmmount", aux.getTotalAmmount());
+                jO.put("date", aux.getDate());
+                jO.put("dateFormatted", aux.getDateFormatted());
+                jA.put(jO);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+            try {
+                json.put("sales",jA);
+                FileWriter fw = new FileWriter("JsonSales/sales.json");
                 fw.write(json.toString());
                 fw.flush();
                 fw.close();
-            } catch (JSONException | IOException e) {
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
-        }
-
     }
 }
+

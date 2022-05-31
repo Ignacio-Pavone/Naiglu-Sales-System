@@ -109,6 +109,7 @@ public class MainMenu extends JDialog {
 
     public MainMenu(JFrame parent) {
         super(parent);
+        app.salesReadFile();
         app.supplierReadFile();
         app.customerReadFile();
         app.productReadFile();
@@ -261,6 +262,7 @@ public class MainMenu extends JDialog {
         deskClosing.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                app.salesFile();
                 app.deskClosing(salesTable,statisticsTable,setAmountDay);
             }
         });

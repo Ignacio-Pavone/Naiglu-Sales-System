@@ -155,6 +155,7 @@ public class SalesSystem {
             dateFormatted = fecha.format(formatter);
             invoiceAmount = salesList.size();
             listStatistics(statisticsTable, dateFormatted, total, invoiceAmount);
+            JsonUtiles.createJSON(salesList);
             salesList.clear();
             salesList(salesTable);
             setAmountDay.setText("Total");
@@ -476,6 +477,7 @@ public class SalesSystem {
             throw new RowNotSelectedException("Select a row");
         }
     }
+
     public void addProduct(JTextField codeField, JComboBox comboBox1, JTextField nameField, JTextField stockField, JTextField priceField, JTextField sellPriceField) {
         try {
             Product data = new Product();
@@ -488,8 +490,8 @@ public class SalesSystem {
                 data.setPrice(Double.parseDouble(priceField.getText()));
                 data.setSellingPrice(Double.parseDouble(sellPriceField.getText()));
                 addElementProductList(data.getId(), data);
-            }else{
-                JOptionPane.showMessageDialog(null,"First we need a Supplier");
+            } else {
+                JOptionPane.showMessageDialog(null, "First we need a Supplier");
             }
         } catch (Exception e) {
             java.lang.System.out.println(e.getMessage());
@@ -616,7 +618,6 @@ public class SalesSystem {
 
     public void setTotalDay(JLabel setAmountDay, JTable salesTable) {
         double totalprice = 0;
-        java.lang.System.out.println(salesTable.getRowCount());
         for (int i = 0; i < salesTable.getRowCount(); i++) {
             totalprice = totalprice + Double.parseDouble(String.valueOf(salesTable.getValueAt(i, 2)));
         }
@@ -706,8 +707,6 @@ public class SalesSystem {
             Double doubleAux = operation;
             String operationAux = doubleAux.toString();
             Sale auxSale = new Sale(aux.getName(), price, operationAux);
-            createJSON(auxSale, finalProductPDF);
-            //createJSON(auxSale,finalProductPDF);
             contentStream.close();
             String idConcat = "Invoices/Operation N° " + operation + " " + customer;
             String namePDF = idConcat.concat(".pdf");
@@ -762,5 +761,38 @@ public class SalesSystem {
             }
         }
         customerList.remove(pos);
+    }
+
+    public void salesFile() {
+        try {
+            File file1 = new File("Data/Sales.bin");
+            createFolder(file1);
+            FileOutputStream fileOutputStream = new FileOutputStream(file1);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            for (Sale s : salesList) {
+                objectOutputStream.writeObject(s);
+            }
+            objectOutputStream.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void salesReadFile() {
+        try {
+            File file1 = new File("Data/Sales.bin");
+            FileInputStream fileInputStream = new FileInputStream(file1);
+            ObjectInputStream ois = new ObjectInputStream(fileInputStream);
+            int lectura = 1;
+            while (lectura == 1) {
+                Sale aux = (Sale) ois.readObject();
+                salesList.add(aux);
+            }
+            ois.close();
+        } catch (
+                IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 }
