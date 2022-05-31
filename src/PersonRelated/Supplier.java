@@ -1,8 +1,9 @@
 package PersonRelated;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Supplier extends Entity {
+public class Supplier extends Entity implements Serializable {
     private String workingArea;
 
     public Supplier() {
