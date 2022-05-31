@@ -107,6 +107,7 @@ public class MainMenu extends JDialog {
     private Employee employee = new Employee();
 
 
+
     public MainMenu(JFrame parent) {
         super(parent);
         app.salesReadFile();

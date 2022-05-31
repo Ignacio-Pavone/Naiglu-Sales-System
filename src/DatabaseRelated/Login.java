@@ -20,10 +20,8 @@ public class Login extends JDialog{
     private JButton xButton;
     public static Employee employee;
     final Point offset = new Point();
-    Connection con;
-    PreparedStatement ps;
-    ResultSet rs;
-    Connect cn = new Connect();
+
+    Connect connect = new Connect();
 
     public Login(JFrame parent) {
         super(parent);
@@ -44,8 +42,8 @@ public class Login extends JDialog{
         enterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                loginUser();
+                connect.loginUser(passwordField2,email);
+                dispose();
             }
         });
 
@@ -70,7 +68,6 @@ public class Login extends JDialog{
             }
         });
 
-
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -81,51 +78,9 @@ public class Login extends JDialog{
 
 
     }
-
-    private void loginUser() {
-        String email = Login.this.email.getText();
-        String password = String.valueOf(passwordField2.getPassword());
-        employee = authenticate(email, password);
-        if (employee != null) {
-            dispose();
-            JOptionPane.showMessageDialog(null, "Hello " + employee.getName());
-            MainMenu nuevo = new MainMenu(null);
-            nuevo.setEmployee(employee);
-            nuevo.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(Login.this, "Incorrect email or password.", "Try again",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
     private void showRegister() {
         Register nuevo = new Register(null);
         nuevo.setVisible(true);
     }
 
-    private Employee authenticate(String email, String password) {
-        Employee em = null;
-        try {
-            String sql = "SELECT * FROM usuarios WHERE correo=? AND password=?";
-            con = cn.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setString(1, email);
-            ps.setString(2, password);
-            rs = ps.executeQuery();
-
-            if (rs.next()) {
-                em = new Employee();
-                em.setID(rs.getInt("id"));
-                em.setName(rs.getString("nombre"));
-                em.setEmail(rs.getString("correo"));
-                em.setPassword(rs.getString("password"));
-                em.setAdmin(rs.getBoolean("esAdmin"));
-            }
-            rs.close();
-            con.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return em;
-    }
 }
