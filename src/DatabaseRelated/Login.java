@@ -53,7 +53,6 @@ public class Login extends JDialog {
                     menu.setVisible(true);
                     menu.setEmployee(aux);
                 }
-
             }
         });
 

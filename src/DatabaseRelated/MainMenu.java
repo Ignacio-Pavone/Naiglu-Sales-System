@@ -241,14 +241,14 @@ public class MainMenu extends JDialog {
                 app.confirmPruchase(comboBoxCustomers, textFinalPrice);
                 listCart();
                 salesList();
-                app.setTotalDay(setAmountDay, salesTable);
+                setTotalDay();
             }
         });
         addSupplierButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    app.addSupplier(supplierNameField, supplierIDField, supplierPhoneField, supplierWorkingArea);
+                    app.addSupplier(supplierNameField.getText(), supplierIDField.getText(), supplierPhoneField.getText(), supplierWorkingArea.getText());
                     setComboBoxConfig();
                     clearSupplierFields();
                     app.listSuppliers(supplierTable);
@@ -335,6 +335,16 @@ public class MainMenu extends JDialog {
         });
     }
 
+    public void setTotalDay() {
+        double totalprice = 0;
+        for (int i = 0; i < salesTable.getRowCount(); i++) {
+            totalprice = totalprice + Double.parseDouble(String.valueOf(salesTable.getValueAt(i, 2)));
+        }
+        setAmountDay.setVisible(true);
+        setAmountDay.setText("" + totalprice);
+        setAmountDay.setForeground(Color.GREEN);
+    }
+
 
     public void deleteCustomerFromList() throws RowNotSelectedException {
         int row = 0;
@@ -356,7 +366,6 @@ public class MainMenu extends JDialog {
             throw new RowNotSelectedException("Select a row");
         }
     }
-
     public void generateInvoice() {
         int dialogButton = JOptionPane.YES_NO_OPTION;
         int rowSelection = salesTable.getSelectedRow();
@@ -372,7 +381,6 @@ public class MainMenu extends JDialog {
             JOptionPane.showMessageDialog(null, "Sale already invoiced");
         }
     }
-
     public void deleteSupplierFromList() throws RowNotSelectedException {
         int row = 0;
         row = supplierTable.getSelectedRow();
@@ -393,8 +401,6 @@ public class MainMenu extends JDialog {
             throw new RowNotSelectedException("Select a row");
         }
     }
-
-
     public void updateProduct() throws RowNotSelectedException {
         String id = updateID.getText();
         if (!id.equals("")) {

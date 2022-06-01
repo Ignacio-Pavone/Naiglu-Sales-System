@@ -435,12 +435,12 @@ public class SalesSystem {
             }
         }
     }
-    public void addSupplier(JTextField supplierNameField, JTextField supplierIDField, JTextField supplierPhoneField, JTextField supplierWorkingArea) throws FieldCompletionException {
+    public void addSupplier(String supplierNameField, String supplierIDField, String supplierPhoneField, String supplierWorkingArea) throws FieldCompletionException {
         Supplier aux = new Supplier();
-        aux.setName(supplierNameField.getText());
-        aux.setTaxpayerID(supplierIDField.getText());
-        aux.setPhoneNumber(supplierPhoneField.getText());
-        aux.setWorkingArea(supplierWorkingArea.getText());
+        aux.setName(supplierNameField);
+        aux.setTaxpayerID(supplierIDField);
+        aux.setPhoneNumber(supplierPhoneField);
+        aux.setWorkingArea(supplierWorkingArea);
         suppliersList.add(aux);
     }
 
@@ -462,18 +462,6 @@ public class SalesSystem {
         int stock = 0;
         stock = productList.getElementByKey(id).getStock();
         return stock;
-    }
-
-
-
-    public void setTotalDay(JLabel setAmountDay, JTable salesTable) {
-        double totalprice = 0;
-        for (int i = 0; i < salesTable.getRowCount(); i++) {
-            totalprice = totalprice + Double.parseDouble(String.valueOf(salesTable.getValueAt(i, 2)));
-        }
-        setAmountDay.setVisible(true);
-        setAmountDay.setText("" + totalprice);
-        setAmountDay.setForeground(Color.GREEN);
     }
 
     public void confirmPruchase(JComboBox comboBoxCustomers, JLabel textFinalPrice) {
@@ -507,9 +495,6 @@ public class SalesSystem {
         }
         return flag;
     }
-
-
-
     public void createFolder(File document) {
         File folder = document.getParentFile();
         folder = document.getParentFile();
