@@ -95,14 +95,18 @@ public class Sale implements Serializable {
         this.totalAmmount = totalAmmount;
     }
 
-    public boolean compareTo(double d){
-        if (this.getOperationNumber() == d) return true;
-        else return false;
+    public boolean equals (Object o){
+        boolean flag = false;
+        if (o instanceof Sale){
+            Sale aux = (Sale) o;
+            if (aux.getOperationNumber() == this.getOperationNumber()) flag=true;
+        }
+        return flag;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(operationNumber);
+        return 1;
     }
 
     @Override

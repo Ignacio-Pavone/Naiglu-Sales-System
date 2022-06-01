@@ -1,6 +1,7 @@
 package DatabaseRelated;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Product implements Serializable {
     private String id;
@@ -78,6 +79,20 @@ public class Product implements Serializable {
 
     public void setSellingPrice(Double sellingPrice) {
         this.sellingPrice = sellingPrice;
+    }
+
+    public boolean equals (Object o){
+        boolean flag = false;
+        if (o instanceof Product){
+            Product aux = (Product) o;
+            if (aux.id.equals(this.getId())) flag=true;
+        }
+        return flag;
+    }
+
+    @Override
+    public int hashCode() {
+        return 1;
     }
 
     @Override
