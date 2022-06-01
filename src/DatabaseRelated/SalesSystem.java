@@ -22,8 +22,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static DatabaseRelated.JsonUtiles.createJSON;
-
 public class SalesSystem {
     private double ammountAcc;
     private final MyBusiness placeholderBusiness = new MyBusiness("Name", "123321", "2222222");
@@ -78,26 +76,17 @@ public class SalesSystem {
         return salesList.iterator();
     }
 
-
-
-    public void listProducts(JTable productsTable) {
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Code", "Supplier", "Name", "Stock", "Price", "Sell Price"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        Iterator entries = productList.getIterator();
-        while (entries.hasNext()) {
-            Map.Entry entry = (Map.Entry) entries.next();
-            String key = (String) entry.getKey();
-            Product value = (Product) entry.getValue();
-            model.addRow(new Object[]{key, value.getSupplierName(), value.getName(), value.getStock(), value.getPrice(), value.getSellingPrice()});
-        }
-        productsTable.setModel(model);
+    public Iterator returnSuppliersHashSet(){
+        return suppliersList.iterator();
     }
+
+    public Iterator returnIteratorCustomerList(){
+        return customerList.iterator();
+    }
+
+
+
+
 
     public void deleteSupplierFromList(JTable supplierTable, JComboBox comboBox1) throws RowNotSelectedException {
         int row = 0;
@@ -131,7 +120,7 @@ public class SalesSystem {
             fecha = LocalDateTime.now();
             dateFormatted = fecha.format(formatter);
             invoiceAmount = salesList.size();
-            listStatistics(statisticsTable, dateFormatted, total, invoiceAmount);
+            listStatistics(dateFormatted, total, invoiceAmount);
             JsonUtiles.createJSON(salesList);
             salesList.clear();
             salesList(salesTable);
@@ -141,22 +130,9 @@ public class SalesSystem {
         }
     }
 
-    private void listStatistics(JTable statisticsTable, String date, double total, int salesAmmount) { //Borra las estadisticas si se genera una nueva factura.
-        DefaultTableModel model = (DefaultTableModel) statisticsTable.getModel();
-        model.addRow(new Object[]{date, total, salesAmmount});
-        statisticsTable.setModel(model);
-    }
 
-    public void createStatisticsTable(JTable statisticsTable) { //Borra las estadisticas si se genera una nueva factura.
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Date", "Total/Day", "N° Sales"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        statisticsTable.setModel(model);
-    }
+
+
 
     public void deleteProductShop(String id) {
         shopList.deleteElement(id);
@@ -246,19 +222,7 @@ public class SalesSystem {
         }
     }
 
-    public void salesList(JTable salesTable) {
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Operation Nº", "Client Name", "Total Ammount", "Date", "Facturado"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        for (Sale sale : salesList) {
-            model.addRow(new Object[]{sale.getOperationNumber(), sale.getCustomerName(), sale.getTotalAmmount(), sale.getDateFormatted(), sale.isInvoiced()});
-        }
-        salesTable.setModel(model);
-    }
+
 
     public void listSuppliers(JTable supplierTable) {
         DefaultTableModel model = new DefaultTableModel(

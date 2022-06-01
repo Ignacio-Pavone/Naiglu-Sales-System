@@ -2,7 +2,9 @@ package DatabaseRelated;
 
 import Exceptions.FieldCompletionException;
 import Exceptions.RowNotSelectedException;
+import PersonRelated.Customer;
 import PersonRelated.MyBusiness;
+import PersonRelated.Supplier;
 import UserRelated.Employee;
 
 import javax.swing.*;
@@ -130,7 +132,7 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 app.addProduct(codeField, comboBox1, nameField, stockField, priceField, sellPriceField);
-                app.listProducts(productsTable);
+                listProducts();
                 listClientProducts();
                 clearTextFields();
                 productsTable.setRowSelectionAllowed(true);
@@ -170,7 +172,7 @@ public class MainMenu extends JDialog {
                     app.updateProduct(updateID, updateName, updateSupplier, updateStock, updatePrice, updateSellPrice);
                     cleanLabels();
                     listClientProducts();
-                    app.listProducts(productsTable);
+                    listProducts();
                 } catch (RowNotSelectedException ex) {
                     JOptionPane.showMessageDialog(null, "Select a row");
                     ex.printStackTrace();
@@ -188,7 +190,7 @@ public class MainMenu extends JDialog {
                         if (dialogButton == JOptionPane.YES_OPTION) {
                             app.deleteProduct(id);
                             cleanLabels();
-                            app.listProducts(productsTable);
+                            listProducts();
                             listClientProducts();
 
                         }
@@ -217,7 +219,7 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 app.deleteProductFromCart(cartTable);
-                app.listProducts(productsTable);
+                listProducts();
                 listClientProducts();
                 listCart();
                 app.setTotalPrice(cartTable, textFinalPrice);
@@ -228,7 +230,7 @@ public class MainMenu extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 app.confirmPruchase(comboBoxCustomers, textFinalPrice);
                 listCart();
-                app.salesList(salesTable);
+                salesList();
                 app.setTotalDay(setAmountDay, salesTable);
             }
         });
@@ -446,6 +448,38 @@ public class MainMenu extends JDialog {
         cartTable.setModel(model);
     }
 
+    public void listSuppliers() {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"Name", "Taxpayer ID", "Phone", "Area"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        Iterator entries = app.returnSuppliersHashSet();
+        while (entries.hasNext()) {
+            Supplier s = (Supplier) entries.next();
+            model.addRow(new Object[]{s.getName(), s.getTaxpayerID(), s.getPhoneNumber(), s.getWorkingArea()});
+        }
+        supplierTable.setModel(model);
+    }
+
+    public void salesList() {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"Operation Nº", "Client Name", "Total Ammount", "Date", "Facturado"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        Iterator aux = app.returnIteratorSaleList();
+        while (aux.hasNext()){
+            Sale sale = (Sale) aux.next();
+            model.addRow(new Object[]{sale.getOperationNumber(), sale.getCustomerName(), sale.getTotalAmmount(), sale.getDateFormatted(), sale.isInvoiced()});
+        }
+        salesTable.setModel(model);
+    }
+
     public void listClientProducts() {
         DefaultTableModel model = new DefaultTableModel(
                 new Object[]{"Code", "Supplier", "Name", "Stock", "Price", "Sell Price"}, 0) {
@@ -464,17 +498,68 @@ public class MainMenu extends JDialog {
         clientProductList.setModel(model);
     }
 
+    public void listProducts() {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"Code", "Supplier", "Name", "Stock", "Price", "Sell Price"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        Iterator entries = app.returnIteratorProductList();
+        while (entries.hasNext()) {
+            Map.Entry entry = (Map.Entry) entries.next();
+            String key = (String) entry.getKey();
+            Product value = (Product) entry.getValue();
+            model.addRow(new Object[]{key, value.getSupplierName(), value.getName(), value.getStock(), value.getPrice(), value.getSellingPrice()});
+        }
+        productsTable.setModel(model);
+    }
+
+    public void customerList() {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"Name", "ID", "Phone Number", "Category"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        Iterator entries = app.returnIteratorCustomerList();
+        while (entries.hasNext()) {
+            Customer customer = (Customer) entries.next();
+            model.addRow(new Object[]{customer.getName(), customer.getTaxpayerID(), customer.getPhoneNumber(), customer.getCategory()});
+        }
+        customerTable.setModel(model);
+    }
+
+    private void listStatistics(String date, double total, int salesAmmount) { //Borra las estadisticas si se genera una nueva factura.
+        DefaultTableModel model = (DefaultTableModel) statisticsTable.getModel();
+        model.addRow(new Object[]{date, total, salesAmmount});
+        statisticsTable.setModel(model);
+    }
+
+    public void createStatisticsTable() { //Borra las estadisticas si se genera una nueva factura.
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"Date", "Total/Day", "N° Sales"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        statisticsTable.setModel(model);
+    }
+
     private void listingCollections() {
         labelStyle();
         tableStyle();
         setLocationRelativeTo(null);
-        app.listProducts(productsTable);
+        listProducts();
         listClientProducts();
         listCart();
-        app.listSuppliers(supplierTable);
-        app.salesList(salesTable);
-        app.customerList(customerTable);
-        app.createStatisticsTable(statisticsTable);
+        listSuppliers();
+        salesList();
+        customerList();
+        createStatisticsTable();
     }
 
     private void createMyBusiness() {
