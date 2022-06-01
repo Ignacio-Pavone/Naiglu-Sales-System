@@ -315,13 +315,6 @@ public class MainMenu extends JDialog {
                 app.searchProduct(clientProductList, enterProductSearch);
             }
         });
-        delete.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                app.delete(salesTable);
-                app.salesList(salesTable);
-            }
-        });
     }
     private void companyLabelsStyle() {
         companyNameLabel.setForeground(Color.GREEN);

@@ -777,7 +777,6 @@ public class SalesSystem {
             System.out.println(e.getMessage());
         }
     }
-
     public void salesReadFile() {
         try {
             File file1 = new File("Data/Sales.bin");
@@ -793,19 +792,6 @@ public class SalesSystem {
             System.out.println(e.getMessage());
         }
     }
-
-    public void delete(JTable salesTable){
-        int dialogButton = JOptionPane.YES_NO_OPTION;
-        int rowSelection = salesTable.getSelectedRow();
-        if (rowSelection != -1){
-            double operationNumber = (double) salesTable.getValueAt(rowSelection,0);
-            int pos = searchSale(operationNumber);
-            if (pos != -1)
-            salesList.remove(pos);
-            else JOptionPane.showMessageDialog(null,"Sale doesn´t exist");
-        }
-    }
-
     public int searchSale(double operationNumber){
         int pos = -1;
         for (int i = 0; i<salesList.size(); i++){
