@@ -81,6 +81,9 @@ public class SalesSystem {
     public Iterator returnIteratorCustomerList(){
         return customerList.iterator();
     }
+    public Iterator returnIteratorSupplierList(){
+        return suppliersList.iterator();
+    }
 
 
     public void setAmmountAcc(double ammountAcc) {
@@ -230,19 +233,7 @@ public class SalesSystem {
 
 
 
-    public void listSuppliers(JTable supplierTable) {
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Name", "Taxpayer ID", "Phone", "Area"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        for (Supplier s : suppliersList) {
-            model.addRow(new Object[]{s.getName(), s.getTaxpayerID(), s.getPhoneNumber(), s.getWorkingArea()});
-        }
-        supplierTable.setModel(model);
-    }
+
 
 
 

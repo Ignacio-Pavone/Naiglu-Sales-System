@@ -251,7 +251,7 @@ public class MainMenu extends JDialog {
                     app.addSupplier(supplierNameField.getText(), supplierIDField.getText(), supplierPhoneField.getText(), supplierWorkingArea.getText());
                     setComboBoxConfig();
                     clearSupplierFields();
-                    app.listSuppliers(supplierTable);
+                    listSuppliers();
                 } catch (FieldCompletionException ex) {
                     JOptionPane.showMessageDialog(null, "Please fill all the required fields");
                     ex.printStackTrace();
@@ -293,7 +293,7 @@ public class MainMenu extends JDialog {
                     customerList();
                     clearCustomerFields();
                     loadCustomerCombobox();
-                    app.listSuppliers(supplierTable);
+                    listSuppliers();
                 } catch (FieldCompletionException ex) {
                     JOptionPane.showMessageDialog(null, "Please fill all the required fields");
                     ex.printStackTrace();
@@ -344,7 +344,6 @@ public class MainMenu extends JDialog {
         setAmountDay.setText("" + totalprice);
         setAmountDay.setForeground(Color.GREEN);
     }
-
 
     public void deleteCustomerFromList() throws RowNotSelectedException {
         int row = 0;
@@ -516,7 +515,6 @@ public class MainMenu extends JDialog {
             clientProductList.setModel(model);
         }
     }
-
     public void setTotalPrice() {
         double totalprice = 0;
         for (int i = 0; i < cartTable.getRowCount(); i++) {
