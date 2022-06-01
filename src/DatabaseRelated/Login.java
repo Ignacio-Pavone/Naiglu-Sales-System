@@ -42,8 +42,11 @@ public class Login extends JDialog{
         enterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                connect.loginUser(passwordField2,email);
+                Employee aux = connect.loginUser(passwordField2.getPassword(),email.getText());
+                MainMenu menu = new MainMenu(null);
                 dispose();
+                menu.setVisible(true);
+                menu.setEmployee(aux);
             }
         });
 

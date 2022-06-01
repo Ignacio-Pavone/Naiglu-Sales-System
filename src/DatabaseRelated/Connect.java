@@ -21,36 +21,25 @@ public class Connect {
         return null;
     }
 
-    public void loginUser(JPasswordField passwordField2, JTextField emailField) {
-        String email = emailField.getText();
-        String password = String.valueOf(passwordField2.getPassword());
-        employee = authenticate(email, password);
-        if (employee != null) {
-
-            JOptionPane.showMessageDialog(null, "Hello " + employee.getName());
-            MainMenu nuevo = new MainMenu(null);
-            nuevo.setEmployee(employee);
-            nuevo.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Incorrect email or password.", "Try again",
-                    JOptionPane.ERROR_MESSAGE);
-        }
+    public Employee loginUser(char[] passwordField2, String emailField) {
+        String email = emailField;
+        char [] password = passwordField2;
+        Employee aux= authenticate(email, password);
+        return aux;
     }
 
-    private Employee authenticate(String email, String password) {
-        Employee em = null;
+    private Employee authenticate(String email, char[] password) {
         Connection con;
         PreparedStatement ps;
         ResultSet rs;
-
+        Employee em = null;
         try {
             String sql = "SELECT * FROM usuarios WHERE correo=? AND password=?";
             con = getConnection();
             ps = con.prepareStatement(sql);
             ps.setString(1, email);
-            ps.setString(2, password);
+            ps.setString(2, String.valueOf(password));
             rs = ps.executeQuery();
-
             if (rs.next()) {
                 em = new Employee();
                 em.setID(rs.getInt("id"));
@@ -64,6 +53,7 @@ public class Connect {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return em;
     }
 

@@ -63,45 +63,22 @@ public class SalesSystem {
         return finalProductPDF;
     }
 
-    public void listCart(JTable cartTable) {
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Code", "Customer", "Name", "Ammount", "Unity price", "Total price"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        Iterator entries = shopList.getIterator();
-        while (entries.hasNext()) {
-            Map.Entry entry = (Map.Entry) entries.next();
-            String key = (String) entry.getKey();
-            Product value = (Product) entry.getValue();
-            model.addRow(new Object[]{key, value.getSupplierName(), value.getName(), value.getStock(), value.getSellingPrice(), value.getSellingPrice() * value.getStock()});
-        }
-        cartTable.setModel(model);
-    }
-
     public void addElementProductList(String id, Product producto) {
         productList.addElement(id, producto);
     }
 
-    public void listClientProducts(JTable clientProductList) {
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Code", "Supplier", "Name", "Stock", "Price", "Sell Price"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        Iterator entries = productList.getIterator();
-        while (entries.hasNext()) {
-            Map.Entry entry = (Map.Entry) entries.next();
-            String key = (String) entry.getKey();
-            Product value = (Product) entry.getValue();
-            model.addRow(new Object[]{key, value.getSupplierName(), value.getName(), value.getStock(), value.getPrice(), value.getSellingPrice()});
-        }
-        clientProductList.setModel(model);
+    public Iterator returnIteratorShopList (){
+        return shopList.getIterator();
     }
+    public Iterator returnIteratorProductList (){
+        return productList.getIterator();
+    }
+
+    public Iterator returnIteratorSaleList(){
+        return salesList.iterator();
+    }
+
+
 
     public void listProducts(JTable productsTable) {
         DefaultTableModel model = new DefaultTableModel(
@@ -241,7 +218,7 @@ public class SalesSystem {
         String id = String.valueOf(clientProductList.getValueAt(rowSelection, 0));
         String supplier = String.valueOf(clientProductList.getValueAt(rowSelection, 1));
         String name = String.valueOf(clientProductList.getValueAt(rowSelection, 2));
-        int stock = Integer.parseInt(String.valueOf(clientProductList.getValueAt(rowSelection, 3))); // 7
+        int stock = Integer.parseInt(String.valueOf(clientProductList.getValueAt(rowSelection, 3)));
         double price = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 4)));
         double sellingPrice = Double.parseDouble(String.valueOf(clientProductList.getValueAt(rowSelection, 5)));
         int newStock = 0;

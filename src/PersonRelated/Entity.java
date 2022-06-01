@@ -16,7 +16,6 @@ public abstract class Entity implements Serializable {
         this.taxpayerID = taxpayerID;
         this.phoneNumber = phoneNumber;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -24,7 +23,6 @@ public abstract class Entity implements Serializable {
         Entity entity = (Entity) o;
         return Objects.equals(name, entity.name);
     }
-
     @Override
     public int hashCode() {
         return 1;

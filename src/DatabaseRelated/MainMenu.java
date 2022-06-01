@@ -9,8 +9,11 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Iterator;
+import java.util.Map;
 
 
 public class MainMenu extends JDialog {
@@ -108,7 +111,6 @@ public class MainMenu extends JDialog {
     private Employee employee = new Employee();
 
 
-
     public MainMenu(JFrame parent) {
         super(parent);
         app.salesReadFile();
@@ -127,9 +129,9 @@ public class MainMenu extends JDialog {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                app.addProduct(codeField,comboBox1,nameField,stockField,priceField,sellPriceField);
+                app.addProduct(codeField, comboBox1, nameField, stockField, priceField, sellPriceField);
                 app.listProducts(productsTable);
-                app.listClientProducts(clientProductList);
+                listClientProducts();
                 clearTextFields();
                 productsTable.setRowSelectionAllowed(true);
                 productsTable.setColumnSelectionAllowed(false);
@@ -154,7 +156,7 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    app.modifyProduct(productsTable,updateID,updateSupplier,updateName,updateStock,updatePrice,updateSellPrice);
+                    app.modifyProduct(productsTable, updateID, updateSupplier, updateName, updateStock, updatePrice, updateSellPrice);
                 } catch (RowNotSelectedException ex) {
                     JOptionPane.showMessageDialog(null, "Select a row");
                     ex.printStackTrace();
@@ -165,9 +167,9 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    app.updateProduct(updateID,updateName,updateSupplier,updateStock,updatePrice,updateSellPrice);
+                    app.updateProduct(updateID, updateName, updateSupplier, updateStock, updatePrice, updateSellPrice);
                     cleanLabels();
-                    app.listClientProducts(clientProductList);
+                    listClientProducts();
                     app.listProducts(productsTable);
                 } catch (RowNotSelectedException ex) {
                     JOptionPane.showMessageDialog(null, "Select a row");
@@ -182,15 +184,15 @@ public class MainMenu extends JDialog {
                     int dialogButton = JOptionPane.YES_NO_OPTION;
                     String id = updateID.getText();
                     if (!id.equals("")) {
-                    dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
+                        dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
                         if (dialogButton == JOptionPane.YES_OPTION) {
                             app.deleteProduct(id);
                             cleanLabels();
                             app.listProducts(productsTable);
-                            app.listClientProducts(clientProductList);
+                            listClientProducts();
 
                         }
-                    }else{
+                    } else {
                         JOptionPane.showMessageDialog(null, "First Press Modify Button");
                     }
                 } catch (RowNotSelectedException ex) {
@@ -204,7 +206,7 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    app.addToCart(clientProductList,cartTable,productsTable,userAmount,ammountValueLabel,textFinalPrice);
+                    app.addToCart(clientProductList, cartTable, productsTable, userAmount, ammountValueLabel, textFinalPrice);
                 } catch (RowNotSelectedException ex) {
                     JOptionPane.showMessageDialog(null, "Select a row");
                     ex.printStackTrace();
@@ -216,16 +218,16 @@ public class MainMenu extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 app.deleteProductFromCart(cartTable);
                 app.listProducts(productsTable);
-                app.listClientProducts(clientProductList);
-                app.listCart(cartTable);
-                app.setTotalPrice(cartTable,textFinalPrice);
+                listClientProducts();
+                listCart();
+                app.setTotalPrice(cartTable, textFinalPrice);
             }
         });
         confirmPurchaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                app.confirmPruchase(comboBoxCustomers,textFinalPrice);
-                app.listCart(cartTable);
+                app.confirmPruchase(comboBoxCustomers, textFinalPrice);
+                listCart();
                 app.salesList(salesTable);
                 app.setTotalDay(setAmountDay, salesTable);
             }
@@ -234,7 +236,7 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    app.addSupplier(supplierNameField,supplierIDField,supplierPhoneField,supplierWorkingArea);
+                    app.addSupplier(supplierNameField, supplierIDField, supplierPhoneField, supplierWorkingArea);
                     app.setComboBoxConfig(comboBox1);
                     clearSupplierFields();
                     app.listSuppliers(supplierTable);
@@ -265,14 +267,14 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 app.salesFile();
-                app.deskClosing(salesTable,statisticsTable,setAmountDay);
+                app.deskClosing(salesTable, statisticsTable, setAmountDay);
             }
         });
         ADDButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    app.addCustomer(customerTable,CnameCustomer,CtaxPayerIDCustomer,CphoeNumberCustomer,CcategoryCustomer);
+                    app.addCustomer(customerTable, CnameCustomer, CtaxPayerIDCustomer, CphoeNumberCustomer, CcategoryCustomer);
                     clearCustomerFields();
                     app.loadCustomerCombobox(comboBoxCustomers);
                     app.listSuppliers(supplierTable);
@@ -295,7 +297,7 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    app.deleteCustomerFromList(customerTable,comboBoxCustomers);
+                    app.deleteCustomerFromList(customerTable, comboBoxCustomers);
                 } catch (RowNotSelectedException ex) {
                     JOptionPane.showMessageDialog(null, "Select a row");
                     ex.printStackTrace();
@@ -316,6 +318,7 @@ public class MainMenu extends JDialog {
             }
         });
     }
+
     private void companyLabelsStyle() {
         companyNameLabel.setForeground(Color.GREEN);
         companyNameLabel.setText("" + company.getName());
@@ -323,6 +326,7 @@ public class MainMenu extends JDialog {
         businesstaxText.setText("");
         businessphoneText.setText("");
     }
+
     void adminSettings() {
         employeeName.setForeground(Color.GREEN);
         employeeName.setText("Logged" + "-[" + employee.getName() + "]" + " Admin Status" + "-[" + employee.isAdmin() + "]");
@@ -335,6 +339,7 @@ public class MainMenu extends JDialog {
             mainMenuTabPanel.remove(businessTab);
         }
     }
+
     private boolean checkSupplierRequirements() {
         return !supplierIDField.getText().equals("") && !supplierNameField.getText().equals("") && !supplierPhoneField.getText().equals("") && !supplierWorkingArea.getText().equals("");
     }
@@ -350,7 +355,7 @@ public class MainMenu extends JDialog {
         CcategoryCustomer.setText("");
     }
 
-    protected void setEmployee(Employee employee) {
+    public void setEmployee(Employee employee) {
         this.employee = employee;
     }
 
@@ -422,13 +427,50 @@ public class MainMenu extends JDialog {
         updateSellPrice.setText("");
     }
 
+
+    public void listCart() {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"Code", "Customer", "Name", "Ammount", "Unity price", "Total price"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        Iterator entries = app.returnIteratorShopList();
+        while (entries.hasNext()) {
+            Map.Entry entry = (Map.Entry) entries.next();
+            String key = (String) entry.getKey();
+            Product value = (Product) entry.getValue();
+            model.addRow(new Object[]{key, value.getSupplierName(), value.getName(), value.getStock(), value.getSellingPrice(), value.getSellingPrice() * value.getStock()});
+        }
+        cartTable.setModel(model);
+    }
+
+    public void listClientProducts() {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[]{"Code", "Supplier", "Name", "Stock", "Price", "Sell Price"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        Iterator entries = app.returnIteratorProductList();
+        while (entries.hasNext()) {
+            Map.Entry entry = (Map.Entry) entries.next();
+            String key = (String) entry.getKey();
+            Product value = (Product) entry.getValue();
+            model.addRow(new Object[]{key, value.getSupplierName(), value.getName(), value.getStock(), value.getPrice(), value.getSellingPrice()});
+        }
+        clientProductList.setModel(model);
+    }
+
     private void listingCollections() {
         labelStyle();
         tableStyle();
         setLocationRelativeTo(null);
         app.listProducts(productsTable);
-        app.listClientProducts(clientProductList);
-        app.listCart(cartTable);
+        listClientProducts();
+        listCart();
         app.listSuppliers(supplierTable);
         app.salesList(salesTable);
         app.customerList(customerTable);

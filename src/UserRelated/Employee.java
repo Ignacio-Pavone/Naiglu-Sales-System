@@ -7,6 +7,9 @@ public class Employee extends User{
     public Employee() {
     }
 
+    public Employee(String email, String password) {
+        super(email, password);
+    }
 
     public boolean isAdmin() {
         return admin;
@@ -16,5 +19,10 @@ public class Employee extends User{
         this.admin = admin;
     }
 
-
+    @Override
+    public String toString() {
+        return super.toString() + "Employee{" +
+                "admin=" + admin +
+                '}';
+    }
 }
