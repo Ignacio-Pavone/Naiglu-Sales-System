@@ -9,7 +9,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.io.Serializable;
 import java.sql.*;
 
-public class Login extends JDialog{
+public class Login extends JDialog {
     private JPasswordField passwordField2;
     private JButton enterButton;
     private JButton cancelButton;
@@ -42,11 +42,18 @@ public class Login extends JDialog{
         enterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Employee aux = connect.loginUser(passwordField2.getPassword(),email.getText());
                 MainMenu menu = new MainMenu(null);
-                dispose();
-                menu.setVisible(true);
-                menu.setEmployee(aux);
+
+                Employee aux = connect.loginUser(passwordField2.getPassword(), email.getText());
+                if (aux == null){
+                    JOptionPane.showMessageDialog(null,"Login Incorrecto");
+                }else{
+                    JOptionPane.showMessageDialog(null,"Welcome Again " + aux.getName());
+                    dispose();
+                    menu.setVisible(true);
+                    menu.setEmployee(aux);
+                }
+
             }
         });
 
@@ -80,6 +87,7 @@ public class Login extends JDialog{
 
 
     }
+
     private void showRegister() {
         Register nuevo = new Register(null);
         nuevo.setVisible(true);
