@@ -85,6 +85,7 @@ public class SalesSystem {
     public Iterator returnIteratorCustomerList() {
         return customerList.iterator();
     }
+
     public Iterator returnIteratorSupplierList() {
         return suppliersList.iterator();
     }
@@ -129,6 +130,7 @@ public class SalesSystem {
             throw new RowNotSelectedException("The product doesn't exist");
         }
     }
+
     public void deleteSupplier(String name) throws RowNotSelectedException {
         Supplier aux = searchSupplier(name);
         if (suppliersList.contains(aux)) {
@@ -188,6 +190,7 @@ public class SalesSystem {
         stock = shopList.getElementByKey(id).getStock();
         return stock;
     }
+
     public void addSupplier(String supplierNameField, String supplierIDField, String supplierPhoneField, String supplierWorkingArea) throws FieldCompletionException {
         Supplier aux = new Supplier();
         aux.setName(supplierNameField);
@@ -196,6 +199,7 @@ public class SalesSystem {
         aux.setWorkingArea(supplierWorkingArea);
         suppliersList.add(aux);
     }
+
     public void addCustomer(String CnameCustomer, String CtaxPayerIDCustomer, String CphoeNumberCustomer, String CcategoryCustomer) throws FieldCompletionException {
         Customer aux = new Customer();
         aux.setName(CnameCustomer);
@@ -214,6 +218,7 @@ public class SalesSystem {
         stock = productList.getElementByKey(id).getStock();
         return stock;
     }
+
     public boolean saletoMap(Sale newSale) {
         boolean flag = false;
         if (!sellExist(newSale)) {
@@ -225,6 +230,7 @@ public class SalesSystem {
         }
         return flag;
     }
+
     private boolean sellExist(Sale aux) {
         boolean flag = false;
         for (Sale sale : salesList) {
@@ -234,10 +240,12 @@ public class SalesSystem {
         }
         return flag;
     }
+
     public MyBusiness createCompany(String nameString, String taxpayerID, String phoneNumber) {
         MyBusiness company = new MyBusiness(nameString, taxpayerID, phoneNumber);
         return company;
     }
+
     public Customer lookForCustomer(String name) {
         for (Customer c : customerList) {
             if (c.getName().equals(name)) {
@@ -246,6 +254,7 @@ public class SalesSystem {
         }
         return null;
     }
+
     public void deleteCustomer(Customer aux) {
         int pos = 0;
         boolean flag = false;
@@ -256,6 +265,7 @@ public class SalesSystem {
         }
         customerList.remove(pos);
     }
+
     public int searchSale(double operationNumber) {
         int pos = -1;
         for (int i = 0; i < salesList.size(); i++) {
@@ -265,6 +275,23 @@ public class SalesSystem {
         }
         return pos;
     }
+    public void openPDF() {
+        File workingDirectory = new File(System.getProperty("user.dir"));
+        JFileChooser selectorArchivos = new JFileChooser();
+        selectorArchivos.setCurrentDirectory(workingDirectory);
+        int resultado = selectorArchivos.showOpenDialog(null);
+
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File archivo = selectorArchivos.getSelectedFile();
+            File file = new File(archivo.toString());
+            try {
+                Desktop.getDesktop().open(file);
+            } catch (IOException es) {
+                throw new RuntimeException(es);
+            }
+        }
+    }
+
 
     // Files Creation -------------------------------------------------------------------------------------------------
     public void createFolder(File document) {
@@ -274,6 +301,7 @@ public class SalesSystem {
             folder.mkdir();
         }
     }
+
     public void supplierFile() {
         try {
             File file1 = new File("Data/Supplier.bin");
@@ -288,6 +316,7 @@ public class SalesSystem {
             System.out.println(e.getMessage());
         }
     }
+
     public void supplierReadFile() {
         try {
             File file1 = new File("Data/Supplier.bin");
@@ -305,6 +334,7 @@ public class SalesSystem {
             throw new RuntimeException(e);
         }
     }
+
     public void customerFile() {
         try {
             File file1 = new File("Data/Customer.bin");
@@ -319,6 +349,7 @@ public class SalesSystem {
             System.out.println(e.getMessage());
         }
     }
+
     public void customerReadFile() {
         try {
             File file1 = new File("Data/Customer.bin");
@@ -336,6 +367,7 @@ public class SalesSystem {
             throw new RuntimeException(e);
         }
     }
+
     public void productFile() {
         try {
             File file1 = new File("Data/Product.bin");
@@ -355,6 +387,7 @@ public class SalesSystem {
             System.out.println(e.getMessage());
         }
     }
+
     public void productReadFile() {
         try {
             File file1 = new File("Data/Product.bin");
@@ -372,6 +405,7 @@ public class SalesSystem {
             throw new RuntimeException(e);
         }
     }
+
     public void salesFile() {
         try {
             File file1 = new File("Data/Sales.bin");
@@ -386,6 +420,7 @@ public class SalesSystem {
             System.out.println(e.getMessage());
         }
     }
+
     public void salesReadFile() {
         try {
             File file1 = new File("Data/Sales.bin");
@@ -420,6 +455,7 @@ public class SalesSystem {
             }
         }
     }
+
     public void createInvoice(double operation, String customer, double price, String formattedDate) {
         PDDocument doc = new PDDocument();
         PDPage firstPage = new PDPage(PDRectangle.A4);
@@ -481,13 +517,13 @@ public class SalesSystem {
         }
     }
 
-    public double increaseBalance(double ammountSale){
+    public double increaseBalance(double ammountSale) {
         double ammountBusiness = placeholderBusiness.getBalance();
         placeholderBusiness.setBalance(ammountBusiness + ammountSale);
         return placeholderBusiness.getBalance();
     }
 
-    public double decreaseBalance(double ammountPurchase){
+    public double decreaseBalance(double ammountPurchase) {
         double ammountBusiness = placeholderBusiness.getBalance();
         placeholderBusiness.setBalance(ammountBusiness - ammountPurchase);
         return placeholderBusiness.getBalance();

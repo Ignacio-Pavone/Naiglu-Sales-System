@@ -11,11 +11,16 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
+
+import static javax.swing.plaf.ComponentUI.createUI;
 
 
 public class MainMenu extends JDialog {
@@ -109,7 +114,6 @@ public class MainMenu extends JDialog {
     private JTextField enterProductSearch;
     private JLabel searchProduct;
     private JLabel amountBusiness;
-
 
     private Employee employee = new Employee();
 
@@ -337,8 +341,21 @@ public class MainMenu extends JDialog {
 
             }
         });
+        salesTable.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+              app.openPDF();
+            }
+        });
     }
 
+    private static void createWindow() {
+        JFrame frame = new JFrame("Swing Tester");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(560, 200);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
 
 
     // Admin Validate -------------------------------------------------------------------------------------------------
