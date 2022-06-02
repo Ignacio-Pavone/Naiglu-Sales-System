@@ -388,44 +388,6 @@ public class SalesSystem {
 
 
 
-    public void modifyProduct(JTable productsTable, JTextField updateID, JTextField updateSupplier, JTextField updateName, JTextField updateStock, JTextField updatePrice, JTextField updateSellPrice) throws RowNotSelectedException {
-        int rowSelection = productsTable.getSelectedRow();
-        if (rowSelection != -1) {
-            String id = String.valueOf(productsTable.getValueAt(rowSelection, 0));
-            String supplier = String.valueOf(productsTable.getValueAt(rowSelection, 1));
-            String name = String.valueOf(productsTable.getValueAt(rowSelection, 2));
-            int stock = Integer.parseInt(String.valueOf(productsTable.getValueAt(rowSelection, 3)));
-            double price = Double.parseDouble(String.valueOf(productsTable.getValueAt(rowSelection, 4)));
-            double sellingPrice = Double.parseDouble(String.valueOf(productsTable.getValueAt(rowSelection, 5)));
-            updateID.setText(id);
-            updateSupplier.setText(supplier);
-            updateName.setText(name);
-            updateStock.setText(String.valueOf(stock));
-            updatePrice.setText(String.valueOf(price));
-            updateSellPrice.setText(String.valueOf(sellingPrice));
-        } else {
-            throw new RowNotSelectedException("Select a row");
-        }
-    }
-
-    public void deleteProductFromCart(JTable cartTable) {
-        int row = 0;
-        row = cartTable.getSelectedRow();
-        int dialogButton = JOptionPane.YES_NO_OPTION;
-        int newStock = 0;
-        if (row != -1) {
-            dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
-            if (dialogButton == JOptionPane.YES_OPTION) {
-                String id = String.valueOf(cartTable.getValueAt(row, 0));
-                int stock = Integer.parseInt(String.valueOf(cartTable.getValueAt(row, 3)));
-                newStock = productStock(id) + stock;
-                Product exist = searchProduct(id);
-                Product aux = new Product(exist.getId(), exist.getSupplierName(), exist.getName(), newStock, exist.getPrice(), exist.getSellingPrice());
-                deleteProductShop(id);
-                getProductList().addElement(aux.getId(), aux);
-            }
-        }
-    }
     public void addSupplier(String supplierNameField, String supplierIDField, String supplierPhoneField, String supplierWorkingArea) throws FieldCompletionException {
         Supplier aux = new Supplier();
         aux.setName(supplierNameField);
@@ -442,7 +404,6 @@ public class SalesSystem {
         aux.setPhoneNumber(CphoeNumberCustomer);
         aux.setCategory(CcategoryCustomer);
         getCustomerList().add(aux);
-
     }
 
     public Product searchProduct(String id) {
@@ -477,6 +438,8 @@ public class SalesSystem {
         }
     }
 
+
+
     private boolean sellExist(Sale aux) {
         boolean flag = false;
         for (Sale sale : salesList) {
@@ -493,7 +456,6 @@ public class SalesSystem {
             folder.mkdir();
         }
     }
-
     public Customer lookForCustomer(String name) {
         for (Customer c : customerList) {
             if (c.getName().equals(name)) {
@@ -502,9 +464,6 @@ public class SalesSystem {
         }
         return null;
     }
-
-
-
     public void deleteCustomer(Customer aux) {
         int pos = 0;
         boolean flag = false;

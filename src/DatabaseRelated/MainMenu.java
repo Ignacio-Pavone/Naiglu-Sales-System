@@ -168,7 +168,7 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    app.modifyProduct(productsTable, updateID, updateSupplier, updateName, updateStock, updatePrice, updateSellPrice);
+                    modifyProduct();
                 } catch (RowNotSelectedException ex) {
                     JOptionPane.showMessageDialog(null, "Select a row");
                     ex.printStackTrace();
@@ -228,7 +228,7 @@ public class MainMenu extends JDialog {
         deleteCartElement.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                app.deleteProductFromCart(cartTable);
+                deleteProductFromCart();
                 listProducts();
                 listClientProducts();
                 listCart();
@@ -263,6 +263,8 @@ public class MainMenu extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 try {
                     deleteSupplierFromList();
+                    listSuppliers();
+                    setComboBoxConfig();
                 } catch (RowNotSelectedException ex) {
                     JOptionPane.showMessageDialog(null, "Select a row");
                     ex.printStackTrace();
@@ -273,6 +275,7 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 generateInvoice();
+                salesList();
             }
         });
         deskClosing.addActionListener(new ActionListener() {
@@ -289,7 +292,7 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    app.addCustomer (CnameCustomer.getText(), CtaxPayerIDCustomer.getText(), CphoeNumberCustomer.getText(), CcategoryCustomer.getText());
+                    app.addCustomer(CnameCustomer.getText(), CtaxPayerIDCustomer.getText(), CphoeNumberCustomer.getText(), CcategoryCustomer.getText());
                     customerList();
                     clearCustomerFields();
                     loadCustomerCombobox();
@@ -314,6 +317,8 @@ public class MainMenu extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 try {
                     deleteCustomerFromList();
+                    loadCustomerCombobox();
+                    customerList();
                 } catch (RowNotSelectedException ex) {
                     JOptionPane.showMessageDialog(null, "Select a row");
                     ex.printStackTrace();
@@ -330,9 +335,29 @@ public class MainMenu extends JDialog {
         enterProductSearch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                app.searchProduct(enterProductSearch.getText());
+                searchProduct();
             }
         });
+    }
+
+    public void modifyProduct() throws RowNotSelectedException {
+        int rowSelection = productsTable.getSelectedRow();
+        if (rowSelection != -1) {
+            String id = String.valueOf(productsTable.getValueAt(rowSelection, 0));
+            String supplier = String.valueOf(productsTable.getValueAt(rowSelection, 1));
+            String name = String.valueOf(productsTable.getValueAt(rowSelection, 2));
+            int stock = Integer.parseInt(String.valueOf(productsTable.getValueAt(rowSelection, 3)));
+            double price = Double.parseDouble(String.valueOf(productsTable.getValueAt(rowSelection, 4)));
+            double sellingPrice = Double.parseDouble(String.valueOf(productsTable.getValueAt(rowSelection, 5)));
+            updateID.setText(id);
+            updateSupplier.setText(supplier);
+            updateName.setText(name);
+            updateStock.setText(String.valueOf(stock));
+            updatePrice.setText(String.valueOf(price));
+            updateSellPrice.setText(String.valueOf(sellingPrice));
+        } else {
+            throw new RowNotSelectedException("Select a row");
+        }
     }
 
     public void setTotalDay() {
@@ -358,13 +383,13 @@ public class MainMenu extends JDialog {
                 String category = String.valueOf(customerTable.getValueAt(row, 3));
                 Customer aux = new Customer(name, taxpayerID, phoneNumber, category);
                 app.deleteCustomer(aux);
-                loadCustomerCombobox();
-                customerList();
+
             }
         } else {
             throw new RowNotSelectedException("Select a row");
         }
     }
+
     public void generateInvoice() {
         int dialogButton = JOptionPane.YES_NO_OPTION;
         int rowSelection = salesTable.getSelectedRow();
@@ -374,12 +399,13 @@ public class MainMenu extends JDialog {
             if (dialogButton == JOptionPane.YES_OPTION) {
                 app.createInvoice((Double) salesTable.getValueAt(rowSelection, 0), (String) salesTable.getValueAt(rowSelection, 1), (Double) salesTable.getValueAt(rowSelection, 2), (String) salesTable.getValueAt(rowSelection, 3));
                 app.isInvoiced((Double) salesTable.getValueAt(rowSelection, 0));
-                salesList();
+
             }
         } else {
             JOptionPane.showMessageDialog(null, "Sale already invoiced");
         }
     }
+
     public void deleteSupplierFromList() throws RowNotSelectedException {
         int row = 0;
         row = supplierTable.getSelectedRow();
@@ -393,13 +419,13 @@ public class MainMenu extends JDialog {
                 String workingArea = String.valueOf(supplierTable.getValueAt(row, 3));
                 Supplier aux = new Supplier(name, taxpayerID, phoneNumber, workingArea);
                 app.deleteSupplier(aux.getName());
-                listSuppliers();
-                setComboBoxConfig();
+
             }
         } else {
             throw new RowNotSelectedException("Select a row");
         }
     }
+
     public void updateProduct() throws RowNotSelectedException {
         String id = updateID.getText();
         if (!id.equals("")) {
@@ -515,6 +541,7 @@ public class MainMenu extends JDialog {
             clientProductList.setModel(model);
         }
     }
+
     public void setTotalPrice() {
         double totalprice = 0;
         for (int i = 0; i < cartTable.getRowCount(); i++) {
@@ -670,7 +697,7 @@ public class MainMenu extends JDialog {
             }
         };
         Iterator aux = app.returnIteratorSaleList();
-        while (aux.hasNext()){
+        while (aux.hasNext()) {
             Sale sale = (Sale) aux.next();
             model.addRow(new Object[]{sale.getOperationNumber(), sale.getCustomerName(), sale.getTotalAmmount(), sale.getDateFormatted(), sale.isInvoiced()});
         }
@@ -773,6 +800,25 @@ public class MainMenu extends JDialog {
         Object[] arr = app.customerlistArray();
         for (Object o : arr) {
             comboBoxCustomers.addItem(o);
+        }
+    }
+
+    public void deleteProductFromCart() {
+        int row = 0;
+        row = cartTable.getSelectedRow();
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        int newStock = 0;
+        if (row != -1) {
+            dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
+            if (dialogButton == JOptionPane.YES_OPTION) {
+                String id = String.valueOf(cartTable.getValueAt(row, 0));
+                int stock = Integer.parseInt(String.valueOf(cartTable.getValueAt(row, 3)));
+                newStock = app.productStock(id) + stock;
+                Product exist = app.searchProduct(id);
+                Product aux = new Product(exist.getId(), exist.getSupplierName(), exist.getName(), newStock, exist.getPrice(), exist.getSellingPrice());
+                app.deleteProductShop(id);
+                app.addElementProductList(aux.getId(), aux);
+            }
         }
     }
 
