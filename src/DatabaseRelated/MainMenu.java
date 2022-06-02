@@ -120,7 +120,6 @@ public class MainMenu extends JDialog {
     private JLabel searchProduct;
 
 
-
     private Employee employee = new Employee();
 
 
@@ -344,6 +343,21 @@ public class MainMenu extends JDialog {
         });
     }
 
+    // Admin Validate -------------------------------------------------------------------------------------------------
+    void adminSettings() {
+        employeeName.setForeground(Color.GREEN);
+        employeeName.setText("Logged" + "-[" + employee.getName() + "]" + " Admin Status" + "-[" + employee.isAdmin() + "]");
+        if (!employee.isAdmin()) {
+            mainMenuTabPanel.remove(adminPanel);
+            mainMenuTabPanel.remove(addProducts);
+            mainMenuTabPanel.remove(supplierTab);
+            mainMenuTabPanel.remove(customerTab);
+            mainMenuTabPanel.remove(statisticsTab);
+            mainMenuTabPanel.remove(businessTab);
+        }
+    }
+
+    // Products, Customers and Suppliers Logic
     public Sale confirmPruchase() {
         Sale newSale = new Sale();
         int dialogButton = JOptionPane.YES_NO_OPTION;
@@ -390,6 +404,17 @@ public class MainMenu extends JDialog {
         setAmountDay.setForeground(Color.GREEN);
     }
 
+    public void setTotalPrice() {
+        double totalprice = 0;
+        for (int i = 0; i < cartTable.getRowCount(); i++) {
+            totalprice = totalprice + Double.parseDouble(String.valueOf(cartTable.getValueAt(i, 5)));
+        }
+        textFinalPrice.setVisible(true);
+        textFinalPrice.setText("" + totalprice);
+        textFinalPrice.setForeground(Color.GREEN);
+        app.setAmmountAcc(totalprice);
+    }
+
     public void deleteCustomerFromList() throws RowNotSelectedException {
         int row = 0;
         row = customerTable.getSelectedRow();
@@ -409,23 +434,6 @@ public class MainMenu extends JDialog {
             throw new RowNotSelectedException("Select a row");
         }
     }
-
-    public void generateInvoice() {
-        int dialogButton = JOptionPane.YES_NO_OPTION;
-        int rowSelection = salesTable.getSelectedRow();
-        Boolean aux = (Boolean) salesTable.getValueAt(rowSelection, 4);
-        if (rowSelection != -1 && aux.equals(false)) {
-            dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
-            if (dialogButton == JOptionPane.YES_OPTION) {
-                app.createInvoice((Double) salesTable.getValueAt(rowSelection, 0), (String) salesTable.getValueAt(rowSelection, 1), (Double) salesTable.getValueAt(rowSelection, 2), (String) salesTable.getValueAt(rowSelection, 3));
-                app.isInvoiced((Double) salesTable.getValueAt(rowSelection, 0));
-
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Sale already invoiced");
-        }
-    }
-
     public void deleteSupplierFromList() throws RowNotSelectedException {
         int row = 0;
         row = supplierTable.getSelectedRow();
@@ -528,14 +536,6 @@ public class MainMenu extends JDialog {
             throw new RowNotSelectedException("Select a row");
         }
     }
-
-    private void companyLabelsStyle() {
-        companyNameLabel.setForeground(Color.GREEN);
-        businessNameText.setText("");
-        businesstaxText.setText("");
-        businessphoneText.setText("");
-    }
-
     public void searchProduct() {
         String productName = enterProductSearch.getText();
         if (productName.isEmpty()) {
@@ -561,29 +561,8 @@ public class MainMenu extends JDialog {
         }
     }
 
-    public void setTotalPrice() {
-        double totalprice = 0;
-        for (int i = 0; i < cartTable.getRowCount(); i++) {
-            totalprice = totalprice + Double.parseDouble(String.valueOf(cartTable.getValueAt(i, 5)));
-        }
-        textFinalPrice.setVisible(true);
-        textFinalPrice.setText("" + totalprice);
-        textFinalPrice.setForeground(Color.GREEN);
-        app.setAmmountAcc(totalprice);
-    }
 
-    void adminSettings() {
-        employeeName.setForeground(Color.GREEN);
-        employeeName.setText("Logged" + "-[" + employee.getName() + "]" + " Admin Status" + "-[" + employee.isAdmin() + "]");
-        if (!employee.isAdmin()) {
-            mainMenuTabPanel.remove(adminPanel);
-            mainMenuTabPanel.remove(addProducts);
-            mainMenuTabPanel.remove(supplierTab);
-            mainMenuTabPanel.remove(customerTab);
-            mainMenuTabPanel.remove(statisticsTab);
-            mainMenuTabPanel.remove(businessTab);
-        }
-    }
+    // Validate Requeriments -------------------------------------------------------------------------------------------------
 
     private boolean checkSupplierRequirements() {
         return !supplierIDField.getText().equals("") && !supplierNameField.getText().equals("") && !supplierPhoneField.getText().equals("") && !supplierWorkingArea.getText().equals("");
@@ -593,15 +572,65 @@ public class MainMenu extends JDialog {
         return !CnameCustomer.getText().equals("") && !CtaxPayerIDCustomer.getText().equals("") && !CphoeNumberCustomer.getText().equals("") && !CcategoryCustomer.getText().equals("");
     }
 
+    public void setComboBoxConfig() {
+        comboBox1.removeAllItems();
+        Object[] arr = new Object[app.supplierListSize()];
+        arr = app.supplierlistArray();
+        for (Object o : arr) {
+            comboBox1.addItem(o);
+        }
+    }
+
+    public void loadCustomerCombobox() {
+        comboBoxCustomers.removeAllItems();
+        Object[] arr = app.customerlistArray();
+        for (Object o : arr) {
+            comboBoxCustomers.addItem(o);
+        }
+    }
+
+    public void deleteProductFromCart() {
+        int row = 0;
+        row = cartTable.getSelectedRow();
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        int newStock = 0;
+        if (row != -1) {
+            dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
+            if (dialogButton == JOptionPane.YES_OPTION) {
+                String id = String.valueOf(cartTable.getValueAt(row, 0));
+                int stock = Integer.parseInt(String.valueOf(cartTable.getValueAt(row, 3)));
+                newStock = app.productStock(id) + stock;
+                Product exist = app.searchProduct(id);
+                Product aux = new Product(exist.getId(), exist.getSupplierName(), exist.getName(), newStock, exist.getPrice(), exist.getSellingPrice());
+                app.deleteProductShop(id);
+                app.addElementProductList(aux.getId(), aux);
+            }
+        }
+    }
+
+    private void createMyBusiness() {
+        String nameString = businessNameText.getText();
+        String taxpayerID = businesstaxText.getText();
+        String phoneNumber = businessphoneText.getText();
+        MyBusiness company = app.createCompany(nameString, taxpayerID, phoneNumber);
+        Border eBorder = new LineBorder(Color.BLACK, 1, true);
+        mainMenuTabPanel.setBorder(BorderFactory.createTitledBorder(eBorder, " " + company.getName() + " ", TitledBorder.CENTER, TitledBorder.CENTER, new Font("Consolas", Font.ITALIC, 12), Color.green));
+        UIManager.put("TabbedPane.contentAreaColor", Color.BLACK);
+        companyNameLabel.setText("" + company.getName());
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+
+    // Swing Style and Visual -------------------------------------------------------------------------------------------------
+
     private void clearCustomerFields() {
         CnameCustomer.setText("");
         CtaxPayerIDCustomer.setText("");
         CphoeNumberCustomer.setText("");
         CcategoryCustomer.setText("");
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
     }
 
     private void clearTextFields() {
@@ -647,6 +676,13 @@ public class MainMenu extends JDialog {
         searchProduct.setForeground(Color.WHITE);
     }
 
+    private void companyLabelsStyle() {
+        companyNameLabel.setForeground(Color.GREEN);
+        businessNameText.setText("");
+        businesstaxText.setText("");
+        businessphoneText.setText("");
+    }
+
     private void tableStyle() {
         clientProductList.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
         cartTable.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 12));
@@ -671,6 +707,22 @@ public class MainMenu extends JDialog {
         updatePrice.setText("");
         updateSellPrice.setText("");
     }
+
+    //Populate Tables -------------------------------------------------------------------------------------------------
+
+    private void listingCollections() {
+        labelStyle();
+        tableStyle();
+        setLocationRelativeTo(null);
+        listProducts();
+        listClientProducts();
+        listCart();
+        listSuppliers();
+        salesList();
+        customerList();
+        createStatisticsTable();
+    }
+
 
     public void listCart() {
         DefaultTableModel model = new DefaultTableModel(
@@ -791,63 +843,21 @@ public class MainMenu extends JDialog {
         statisticsTable.setModel(model);
     }
 
-    private void listingCollections() {
-        labelStyle();
-        tableStyle();
-        setLocationRelativeTo(null);
-        listProducts();
-        listClientProducts();
-        listCart();
-        listSuppliers();
-        salesList();
-        customerList();
-        createStatisticsTable();
-    }
-
-    public void setComboBoxConfig() {
-        comboBox1.removeAllItems();
-        Object[] arr = new Object[app.supplierListSize()];
-        arr = app.supplierlistArray();
-        for (Object o : arr) {
-            comboBox1.addItem(o);
-        }
-    }
-
-    public void loadCustomerCombobox() {
-        comboBoxCustomers.removeAllItems();
-        Object[] arr = app.customerlistArray();
-        for (Object o : arr) {
-            comboBoxCustomers.addItem(o);
-        }
-    }
-
-    public void deleteProductFromCart() {
-        int row = 0;
-        row = cartTable.getSelectedRow();
+    // Generete PDF invoice --------------------------------------------------------------------------------------------
+    public void generateInvoice() {
         int dialogButton = JOptionPane.YES_NO_OPTION;
-        int newStock = 0;
-        if (row != -1) {
+        int rowSelection = salesTable.getSelectedRow();
+        Boolean aux = (Boolean) salesTable.getValueAt(rowSelection, 4);
+        if (rowSelection != -1 && aux.equals(false)) {
             dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
             if (dialogButton == JOptionPane.YES_OPTION) {
-                String id = String.valueOf(cartTable.getValueAt(row, 0));
-                int stock = Integer.parseInt(String.valueOf(cartTable.getValueAt(row, 3)));
-                newStock = app.productStock(id) + stock;
-                Product exist = app.searchProduct(id);
-                Product aux = new Product(exist.getId(), exist.getSupplierName(), exist.getName(), newStock, exist.getPrice(), exist.getSellingPrice());
-                app.deleteProductShop(id);
-                app.addElementProductList(aux.getId(), aux);
+                app.createInvoice((Double) salesTable.getValueAt(rowSelection, 0), (String) salesTable.getValueAt(rowSelection, 1), (Double) salesTable.getValueAt(rowSelection, 2), (String) salesTable.getValueAt(rowSelection, 3));
+                app.isInvoiced((Double) salesTable.getValueAt(rowSelection, 0));
+
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "Sale already invoiced");
         }
-    }
-    private void createMyBusiness() {
-        String nameString = businessNameText.getText();
-        String taxpayerID = businesstaxText.getText();
-        String phoneNumber = businessphoneText.getText();
-        MyBusiness company = app.createCompany(nameString,taxpayerID,phoneNumber);
-        Border eBorder = new LineBorder(Color.BLACK, 1, true);
-        mainMenuTabPanel.setBorder(BorderFactory.createTitledBorder(eBorder, " " + company.getName() + " ", TitledBorder.CENTER, TitledBorder.CENTER, new Font("Consolas", Font.ITALIC, 12), Color.green));
-        UIManager.put("TabbedPane.contentAreaColor", Color.BLACK);
-        companyNameLabel.setText("" + company.getName());
     }
 }
 
