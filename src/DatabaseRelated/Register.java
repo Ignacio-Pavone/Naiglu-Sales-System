@@ -16,9 +16,6 @@ public class Register extends JDialog {
     private JPanel register;
     private JTextField emailTextField;
     private JButton registerButton;
-    Connection con;
-    PreparedStatement ps;
-    ResultSet rs;
     Connect connection = new Connect();
 
     public Register(JFrame parent) {
@@ -33,10 +30,18 @@ public class Register extends JDialog {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                registerButtonLogic();
+                Employee newEmployee = registerButtonLogic();
+                if (newEmployee != null){
+                    if (connection.register(newEmployee)){
+                        JOptionPane.showMessageDialog(null, "Registration Successful");
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Error");
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Error");
+                }
             }
-            });
+        });
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -44,43 +49,16 @@ public class Register extends JDialog {
             }
         });
     }
-
-        public void registerButtonLogic () {
-            Employee employee = new Employee();
-            if (!nameTextField.getText().isEmpty() && isEmail(emailTextField.getText()) && passwordTextField.getPassword().length > 0) {
-                employee.setName(nameTextField.getText());
-                employee.setEmail(emailTextField.getText());
-                employee.setPassword(passwordTextField.getText());
-                register(employee);
-            } else {
-                JOptionPane.showMessageDialog(null, "ERROR");
-            }
+    public Employee registerButtonLogic() {
+        Employee employee = new Employee();
+        if (!nameTextField.getText().isEmpty() && connection.isEmail(emailTextField.getText()) && passwordTextField.getPassword().length > 0) {
+            String name = nameTextField.getText();
+            String email = emailTextField.getText();
+            String password = passwordTextField.getText();
+            employee = connection.addEmployee(name,email,password);
+        } else {
+            JOptionPane.showMessageDialog(null, "ERROR");
         }
-
-
-    public boolean register(Employee employee) {
-        String sql = "INSERT INTO usuarios (nombre, correo, password, esAdmin) VALUES (?,?,?,?)";
-        try {
-            con = connection.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setString(1, employee.getName());
-            ps.setString(2, employee.getEmail());
-            ps.setString(3, employee.getPassword());
-            ps.setBoolean(4,employee.isAdmin());
-            ps.execute();
-            JOptionPane.showMessageDialog(null, "SUCCESSFUL REGISTRATION");
-            return true;
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-            return false;
-        }
-    }
-
-    public boolean isEmail(String correo) {
-        Pattern pat = null;
-        Matcher mat = null;
-        pat = Pattern.compile("^[\\w\\-\\_\\+]+(\\.[\\w\\-\\_]+)*@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$");
-        mat = pat.matcher(correo);
-        return mat.find();
+        return employee;
     }
 }

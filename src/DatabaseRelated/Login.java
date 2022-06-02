@@ -43,7 +43,6 @@ public class Login extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainMenu menu = new MainMenu(null);
-
                 Employee aux = connect.loginUser(passwordField2.getPassword(), email.getText());
                 if (aux == null){
                     JOptionPane.showMessageDialog(null,"Login Incorrecto");
@@ -86,7 +85,6 @@ public class Login extends JDialog {
 
 
     }
-
     private void showRegister() {
         Register nuevo = new Register(null);
         nuevo.setVisible(true);

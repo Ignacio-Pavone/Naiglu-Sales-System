@@ -11,6 +11,10 @@ public class Employee extends User{
         super(email, password);
     }
 
+    public Employee(String name, String email, String password) {
+        super(name, email, password);
+    }
+
     public boolean isAdmin() {
         return admin;
     }
