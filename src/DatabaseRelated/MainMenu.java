@@ -291,6 +291,7 @@ public class MainMenu extends JDialog {
                 app.supplierFile();
                 app.customerFile();
                 app.productFile();
+                Login again = new Login(null);
             }
         });
         delButton.addActionListener(new ActionListener() {
@@ -321,7 +322,24 @@ public class MainMenu extends JDialog {
         });
         amountBusiness.addComponentListener(new ComponentAdapter() {
         });
+
+        mainMenuTabPanel.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                adminSettings();
+            }
+        });
+        productsTable.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+
+            }
+        });
     }
+
+
 
     // Admin Validate -------------------------------------------------------------------------------------------------
     void adminSettings() {

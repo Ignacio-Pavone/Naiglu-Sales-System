@@ -21,7 +21,7 @@ public class Register extends JDialog {
     public Register(JFrame parent) {
         super(parent);
         setContentPane(register);
-        setMinimumSize(new Dimension(600, 550));
+        setMinimumSize(new Dimension(550, 450));
         setModal(true);
         setLocationRelativeTo(null);
         setUndecorated(false);

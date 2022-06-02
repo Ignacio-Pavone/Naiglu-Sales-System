@@ -1120,9 +1120,11 @@
                   </vspacer>
                   <component id="c6892" class="javax.swing.JLabel" binding="amountBusiness">
                     <constraints>
-                      <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
+                      <font name="Consolas" size="12" style="0"/>
+                      <horizontalAlignment value="2"/>
                       <icon value="Img/money.png"/>
                       <text value=""/>
                     </properties>
@@ -1142,16 +1144,18 @@
         <properties>
           <background color="-13882315"/>
           <borderPainted value="false"/>
-          <contentAreaFilled value="false"/>
+          <contentAreaFilled value="true"/>
           <focusPainted value="false"/>
-          <font name="Consolas" size="16" style="0"/>
-          <foreground color="-14192098"/>
+          <font name="Consolas" size="13" style="0"/>
+          <foreground color="-12609246"/>
           <hideActionText value="false"/>
-          <opaque value="false"/>
-          <requestFocusEnabled value="false"/>
+          <horizontalAlignment value="4"/>
+          <horizontalTextPosition value="4"/>
+          <opaque value="true"/>
+          <requestFocusEnabled value="true"/>
           <rolloverEnabled value="true"/>
-          <selected value="false"/>
-          <text value="X"/>
+          <selected value="true"/>
+          <text value="Log Out"/>
           <toolTipText value="Exit"/>
         </properties>
       </component>
