@@ -239,7 +239,10 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Sale newSale = confirmPruchase();
-                app.saletoMap(newSale);
+                if (app.saletoMap(newSale))
+                {
+                    textFinalPrice.setText("Total Price");
+                }
                 listCart();
                 salesList();
                 setTotalDay();

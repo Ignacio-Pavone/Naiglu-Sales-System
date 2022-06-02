@@ -390,13 +390,16 @@ public class SalesSystem {
         stock = productList.getElementByKey(id).getStock();
         return stock;
     }
-    public void saletoMap (Sale newSale){
+    public boolean saletoMap (Sale newSale){
+        boolean flag = false;
         if (!sellExist(newSale)) {
             salesList.add(newSale);
             mapTolist = shopList.getHashMap().values(); //TO-DO Arreglar esto
             finalProductPDF = new ArrayList<>(mapTolist);
             shopList.hashmapClear();
+            flag = true;
         }
+        return flag;
     }
     public Collection<Product> maptoList (){
         return mapTolist = shopList.getHashMap().values();
