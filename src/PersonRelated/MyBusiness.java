@@ -23,8 +23,7 @@ public class MyBusiness extends Entity implements I_SaleAndPurchase{
     public String generateDataForBills() {
         return "+ Business name: "+ this.getName() + "," +
                 "+ Taxpayer ID:" + this.getTaxpayerID() + "," +
-                "+ Phone number: "+this.getPhoneNumber() + "," +
-                "+ Balance: "+this.getBalance();
+                "+ Phone number: "+this.getPhoneNumber() + ",";
     }
 
 }
