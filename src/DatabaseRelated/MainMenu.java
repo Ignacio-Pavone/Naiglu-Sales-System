@@ -1,19 +1,11 @@
 package DatabaseRelated;
 
-import DatabaseRelated.PDFCreation.PDFTableClass;
-import DatabaseRelated.PDFCreation.PDFTextClass;
 import Exceptions.FieldCompletionException;
 import Exceptions.RowNotSelectedException;
 import PersonRelated.Customer;
 import PersonRelated.MyBusiness;
 import PersonRelated.Supplier;
 import UserRelated.Employee;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -22,8 +14,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -118,6 +108,7 @@ public class MainMenu extends JDialog {
     private JPanel businessTab;
     private JTextField enterProductSearch;
     private JLabel searchProduct;
+    private JLabel amountBusiness;
 
 
     private Employee employee = new Employee();
@@ -141,26 +132,13 @@ public class MainMenu extends JDialog {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addProduct();
+                double ammountAux = addProduct();
+                decreaseBalance(ammountAux);
                 listProducts();
                 listClientProducts();
                 clearTextFields();
                 productsTable.setRowSelectionAllowed(true);
                 productsTable.setColumnSelectionAllowed(false);
-
-            }
-        });
-        mainMenuTabPanel.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                super.componentResized(e);
-                adminSettings();
-            }
-        });
-        productsTable.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                super.componentResized(e);
 
             }
         });
@@ -277,7 +255,7 @@ public class MainMenu extends JDialog {
         generateInvoiceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                generateInvoice();
+                if (generateInvoice()) increaseBalance();
                 salesList();
             }
         });
@@ -340,6 +318,8 @@ public class MainMenu extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 searchProduct();
             }
+        });
+        amountBusiness.addComponentListener(new ComponentAdapter() {
         });
     }
 
@@ -469,7 +449,9 @@ public class MainMenu extends JDialog {
         }
     }
 
-    public void addProduct() {
+    public double addProduct() {
+        double ammountAux=0;
+        int stockAux=0;
         try {
             Product data = new Product();
             if (comboBox1.getSelectedItem() != null) {
@@ -477,8 +459,11 @@ public class MainMenu extends JDialog {
                 Supplier aux = (Supplier) comboBox1.getSelectedItem();
                 data.setSupplierName(aux.getName());
                 data.setName(nameField.getText());
-                data.setStock(Integer.parseInt(stockField.getText()));
-                data.setPrice(Double.parseDouble(priceField.getText()));
+                stockAux =Integer.parseInt(stockField.getText()); //Added
+                data.setStock(stockAux);
+                ammountAux = Double.parseDouble(priceField.getText()); //Added
+                data.setPrice(ammountAux);
+                ammountAux = ammountAux * stockAux; //Added
                 data.setSellingPrice(Double.parseDouble(sellPriceField.getText()));
                 app.addElementProductList(data.getId(), data);
             } else {
@@ -487,6 +472,7 @@ public class MainMenu extends JDialog {
         } catch (Exception e) {
             java.lang.System.out.println(e.getMessage());
         }
+        return ammountAux;
     }
 
     public void cartProductsData() {
@@ -639,6 +625,7 @@ public class MainMenu extends JDialog {
         stockField.setText("");
         priceField.setText("");
         sellPriceField.setText("");
+        //balanceBusiness.setText(""); //Added
     }
 
     private void clearSupplierFields() {
@@ -844,7 +831,8 @@ public class MainMenu extends JDialog {
     }
 
     // Generete PDF invoice --------------------------------------------------------------------------------------------
-    public void generateInvoice() {
+    public boolean generateInvoice() {
+        boolean flag = false;
         int dialogButton = JOptionPane.YES_NO_OPTION;
         int rowSelection = salesTable.getSelectedRow();
         Boolean aux = (Boolean) salesTable.getValueAt(rowSelection, 4);
@@ -853,11 +841,32 @@ public class MainMenu extends JDialog {
             if (dialogButton == JOptionPane.YES_OPTION) {
                 app.createInvoice((Double) salesTable.getValueAt(rowSelection, 0), (String) salesTable.getValueAt(rowSelection, 1), (Double) salesTable.getValueAt(rowSelection, 2), (String) salesTable.getValueAt(rowSelection, 3));
                 app.isInvoiced((Double) salesTable.getValueAt(rowSelection, 0));
-
+                flag = true;
             }
         } else {
             JOptionPane.showMessageDialog(null, "Sale already invoiced");
         }
+        return flag;
+    }
+
+    public void increaseBalance(){
+        int rowSelection = salesTable.getSelectedRow();
+        double ammount = (double)salesTable.getValueAt(rowSelection,2);
+        double aux = app.increaseBalance(ammount);
+        changeColorBalance(aux);
+        amountBusiness.setText(String.valueOf(aux));
+    }
+
+    public void decreaseBalance(double ammountAux){
+        double aux = app.decreaseBalance(ammountAux);
+        changeColorBalance(aux);
+        amountBusiness.setText(String.valueOf(aux));
+    }
+
+    public void changeColorBalance(double amountAux){
+        if (amountAux < 0) {
+            amountBusiness.setForeground(Color.RED);
+        }else amountBusiness.setForeground(Color.GREEN);
     }
 }
 

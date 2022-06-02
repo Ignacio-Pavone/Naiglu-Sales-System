@@ -480,4 +480,16 @@ public class SalesSystem {
             e.printStackTrace();
         }
     }
+
+    public double increaseBalance(double ammountSale){
+        double ammountBusiness = placeholderBusiness.getBalance();
+        placeholderBusiness.setBalance(ammountBusiness + ammountSale);
+        return placeholderBusiness.getBalance();
+    }
+
+    public double decreaseBalance(double ammountPurchase){
+        double ammountBusiness = placeholderBusiness.getBalance();
+        placeholderBusiness.setBalance(ammountBusiness - ammountPurchase);
+        return placeholderBusiness.getBalance();
+    }
 }
