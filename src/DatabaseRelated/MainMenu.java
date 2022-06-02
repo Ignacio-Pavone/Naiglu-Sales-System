@@ -238,7 +238,8 @@ public class MainMenu extends JDialog {
         confirmPurchaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                app.confirmPruchase(comboBoxCustomers, textFinalPrice);
+                Sale newSale = confirmPruchase();
+                app.saletoMap(newSale);
                 listCart();
                 salesList();
                 setTotalDay();
@@ -338,6 +339,22 @@ public class MainMenu extends JDialog {
                 searchProduct();
             }
         });
+    }
+
+    public Sale confirmPruchase() {
+        Sale newSale = new Sale();
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        if (app.tableHasData()) {
+            dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
+            if (dialogButton == JOptionPane.YES_OPTION) {
+                double amount = app.getAmmountAcc();
+                Customer aux = (Customer) comboBoxCustomers.getSelectedItem();
+                String id = aux.getTaxpayerID();
+                String nameAux = aux.getName();
+                newSale = new Sale(nameAux, amount, id);
+            }
+        }
+        return newSale;
     }
 
     public void modifyProduct() throws RowNotSelectedException {
@@ -652,7 +669,6 @@ public class MainMenu extends JDialog {
         updatePrice.setText("");
         updateSellPrice.setText("");
     }
-
 
     public void listCart() {
         DefaultTableModel model = new DefaultTableModel(

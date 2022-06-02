@@ -90,8 +90,6 @@ public class SalesSystem {
         this.ammountAcc = ammountAcc;
     }
 
-
-
     public StatisticSale deskClosing() {
         double total = 0;
         LocalDateTime fecha;
@@ -146,7 +144,6 @@ public class SalesSystem {
             }
         }
     }
-
     public void createInvoice(double operation, String customer, double price, String formattedDate) {
         PDDocument doc = new PDDocument();
         PDPage firstPage = new PDPage(PDRectangle.A4);
@@ -216,7 +213,6 @@ public class SalesSystem {
             throw new RowNotSelectedException("Select a row");
         }
     }
-
     public Supplier searchSupplier(String name) {
         for (Supplier s : suppliersList) {
             if (s.getName().equals(name)) {
@@ -225,30 +221,8 @@ public class SalesSystem {
         }
         return null;
     }
-
-
     public boolean shopkeyExist (String key){
         return shopList.keyExists(key);
-    }
-
-
-
-
-
-
-
-    public void customerList(JTable customerTable) {
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Name", "ID", "Phone Number", "Category"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        for (Customer customer : customerList) {
-            model.addRow(new Object[]{customer.getName(), customer.getTaxpayerID(), customer.getPhoneNumber(), customer.getCategory()});
-        }
-        customerTable.setModel(model);
     }
 
     public void addElementShopList (String key, Product value){
@@ -382,11 +356,12 @@ public class SalesSystem {
         return customerList.toArray();
     }
 
-    private boolean tableHasData() {
+    public boolean tableHasData() {
         return shopList.hashmapSize() > 0;
     }
-
-
+    public double getAmmountAcc() {
+        return ammountAcc;
+    }
 
     public void addSupplier(String supplierNameField, String supplierIDField, String supplierPhoneField, String supplierWorkingArea) throws FieldCompletionException {
         Supplier aux = new Supplier();
@@ -415,31 +390,17 @@ public class SalesSystem {
         stock = productList.getElementByKey(id).getStock();
         return stock;
     }
-
-    public void confirmPruchase(JComboBox comboBoxCustomers, JLabel textFinalPrice) {
-        Sale newSale = new Sale();
-        int dialogButton = JOptionPane.YES_NO_OPTION;
-        if (tableHasData()) {
-            dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
-            if (dialogButton == JOptionPane.YES_OPTION) {
-                double amount = ammountAcc;
-                Customer aux = (Customer) comboBoxCustomers.getSelectedItem();
-                String id = aux.getTaxpayerID();
-                String nameAux = aux.getName();
-                newSale = new Sale(nameAux, amount, id);
-                if (!sellExist(newSale)) {
-                    salesList.add(newSale);
-                    textFinalPrice.setText("Total Price");
-                    mapTolist = shopList.getHashMap().values(); //TO-DO Arreglar esto
-                    finalProductPDF = new ArrayList<>(mapTolist);
-                    shopList.hashmapClear();
-                }
-            }
+    public void saletoMap (Sale newSale){
+        if (!sellExist(newSale)) {
+            salesList.add(newSale);
+            mapTolist = shopList.getHashMap().values(); //TO-DO Arreglar esto
+            finalProductPDF = new ArrayList<>(mapTolist);
+            shopList.hashmapClear();
         }
     }
-
-
-
+    public Collection<Product> maptoList (){
+        return mapTolist = shopList.getHashMap().values();
+    }
     private boolean sellExist(Sale aux) {
         boolean flag = false;
         for (Sale sale : salesList) {
