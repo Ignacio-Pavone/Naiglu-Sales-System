@@ -1,5 +1,7 @@
 package DatabaseRelated;
 
+//Wrapper Class -------------------------------------------------------------------------------------------------------
+
 import DatabaseRelated.PDFCreation.PDFTableClass;
 import DatabaseRelated.PDFCreation.PDFTextClass;
 import Exceptions.FieldCompletionException;
@@ -63,28 +65,29 @@ public class SalesSystem {
     }
 
 
-    public Iterator returnIteratorShopList (){
+    // Iterators Collections ------------------------------------------------------------------------------------------
+    public Iterator returnIteratorShopList() {
         return shopList.getIterator();
     }
-    public Iterator returnIteratorProductList (){
+
+    public Iterator returnIteratorProductList() {
         return productList.getIterator();
     }
 
-    public Iterator returnIteratorSaleList(){
+    public Iterator returnIteratorSaleList() {
         return salesList.iterator();
     }
 
-    public Iterator returnSuppliersHashSet(){
+    public Iterator returnSuppliersHashSet() {
         return suppliersList.iterator();
     }
 
-    public Iterator returnIteratorCustomerList(){
+    public Iterator returnIteratorCustomerList() {
         return customerList.iterator();
     }
-    public Iterator returnIteratorSupplierList(){
+    public Iterator returnIteratorSupplierList() {
         return suppliersList.iterator();
     }
-
 
     public void setAmmountAcc(double ammountAcc) {
         this.ammountAcc = ammountAcc;
@@ -104,9 +107,17 @@ public class SalesSystem {
             invoiceAmount = salesList.size();
             JsonUtiles.createJSON(salesList);
             salesList.clear();
-            sale = new StatisticSale(dateFormatted,total,invoiceAmount);
+            sale = new StatisticSale(dateFormatted, total, invoiceAmount);
         }
         return sale;
+    }
+
+    private double totalCash() {
+        double acum = 0;
+        for (Sale sale : salesList) {
+            acum += sale.getTotalAmmount();
+        }
+        return acum;
     }
 
     public void deleteProductShop(String id) {
@@ -118,15 +129,280 @@ public class SalesSystem {
             throw new RowNotSelectedException("The product doesn't exist");
         }
     }
-
-    private double totalCash() {
-        double acum = 0;
-        for (Sale sale : salesList) {
-            acum += sale.getTotalAmmount();
+    public void deleteSupplier(String name) throws RowNotSelectedException {
+        Supplier aux = searchSupplier(name);
+        if (suppliersList.contains(aux)) {
+            suppliersList.remove(aux);
+        } else {
+            throw new RowNotSelectedException("Select a row");
         }
-        return acum;
     }
 
+    public Supplier searchSupplier(String name) {
+        for (Supplier s : suppliersList) {
+            if (s.getName().equals(name)) {
+                return s;
+            }
+        }
+        return null;
+    }
+
+    public boolean shopkeyExist(String key) {
+        return shopList.keyExists(key);
+    }
+
+    public void addElementShopList(String key, Product value) {
+        shopList.addElement(key, value);
+    }
+
+    public void addElementProductList(String key, Product value) {
+        productList.addElement(key, value);
+    }
+
+    public Object[] supplierlistArray() {
+        return suppliersList.toArray();
+    }
+
+    public int supplierListSize() {
+        return suppliersList.size();
+    }
+
+    public Object[] customerlistArray() {
+        return customerList.toArray();
+    }
+
+    public boolean tableHasData() {
+        return shopList.hashmapSize() > 0;
+    }
+
+    public double getAmmountAcc() {
+        return ammountAcc;
+    }
+
+    public Collection<Product> maptoList() {
+        return mapTolist = shopList.getHashMap().values();
+    }
+
+    public int productStockShopList(String id) {
+        int stock = 0;
+        stock = shopList.getElementByKey(id).getStock();
+        return stock;
+    }
+    public void addSupplier(String supplierNameField, String supplierIDField, String supplierPhoneField, String supplierWorkingArea) throws FieldCompletionException {
+        Supplier aux = new Supplier();
+        aux.setName(supplierNameField);
+        aux.setTaxpayerID(supplierIDField);
+        aux.setPhoneNumber(supplierPhoneField);
+        aux.setWorkingArea(supplierWorkingArea);
+        suppliersList.add(aux);
+    }
+    public void addCustomer(String CnameCustomer, String CtaxPayerIDCustomer, String CphoeNumberCustomer, String CcategoryCustomer) throws FieldCompletionException {
+        Customer aux = new Customer();
+        aux.setName(CnameCustomer);
+        aux.setTaxpayerID(CtaxPayerIDCustomer);
+        aux.setPhoneNumber(CphoeNumberCustomer);
+        aux.setCategory(CcategoryCustomer);
+        getCustomerList().add(aux);
+    }
+
+    public Product searchProduct(String id) {
+        return productList.getElementByKey(id);
+    }
+
+    public int productStock(String id) {
+        int stock = 0;
+        stock = productList.getElementByKey(id).getStock();
+        return stock;
+    }
+    public boolean saletoMap(Sale newSale) {
+        boolean flag = false;
+        if (!sellExist(newSale)) {
+            salesList.add(newSale);
+            mapTolist = shopList.getHashMap().values(); //TO-DO Arreglar esto
+            finalProductPDF = new ArrayList<>(mapTolist);
+            shopList.hashmapClear();
+            flag = true;
+        }
+        return flag;
+    }
+    private boolean sellExist(Sale aux) {
+        boolean flag = false;
+        for (Sale sale : salesList) {
+            if (sale.getOperationNumber().equals(aux.getOperationNumber()) && !flag) {
+                flag = true;
+            }
+        }
+        return flag;
+    }
+    public MyBusiness createCompany(String nameString, String taxpayerID, String phoneNumber) {
+        MyBusiness company = new MyBusiness(nameString, taxpayerID, phoneNumber);
+        return company;
+    }
+    public Customer lookForCustomer(String name) {
+        for (Customer c : customerList) {
+            if (c.getName().equals(name)) {
+                return c;
+            }
+        }
+        return null;
+    }
+    public void deleteCustomer(Customer aux) {
+        int pos = 0;
+        boolean flag = false;
+        for (int i = 0; i < customerList.size(); i++) {
+            if (aux.getTaxpayerID().equals(customerList.get(i).getTaxpayerID()) && !flag) {
+                pos = i;
+            }
+        }
+        customerList.remove(pos);
+    }
+    public int searchSale(double operationNumber) {
+        int pos = -1;
+        for (int i = 0; i < salesList.size(); i++) {
+            if (salesList.get(i).getOperationNumber() == operationNumber) {
+                pos = i;
+            }
+        }
+        return pos;
+    }
+
+    // Files Creation -------------------------------------------------------------------------------------------------
+    public void createFolder(File document) {
+        File folder = document.getParentFile();
+        folder = document.getParentFile();
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+    }
+    public void supplierFile() {
+        try {
+            File file1 = new File("Data/Supplier.bin");
+            createFolder(file1);
+            FileOutputStream fileOutputStream = new FileOutputStream(file1);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            for (Supplier s : suppliersList) {
+                objectOutputStream.writeObject(s);
+            }
+            objectOutputStream.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void supplierReadFile() {
+        try {
+            File file1 = new File("Data/Supplier.bin");
+            FileInputStream fileInputStream = new FileInputStream(file1);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            int lectura = 1;
+            while (lectura == 1) {
+                Supplier aux = (Supplier) objectInputStream.readObject();
+                suppliersList.add(aux);
+            }
+            objectInputStream.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void customerFile() {
+        try {
+            File file1 = new File("Data/Customer.bin");
+            createFolder(file1);
+            FileOutputStream fileOutputStream = new FileOutputStream(file1);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            for (Customer s : customerList) {
+                objectOutputStream.writeObject(s);
+            }
+            objectOutputStream.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void customerReadFile() {
+        try {
+            File file1 = new File("Data/Customer.bin");
+            FileInputStream fileInputStream = new FileInputStream(file1);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            int lectura = 1;
+            while (lectura == 1) {
+                Customer aux = (Customer) objectInputStream.readObject();
+                customerList.add(aux);
+            }
+            objectInputStream.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void productFile() {
+        try {
+            File file1 = new File("Data/Product.bin");
+            createFolder(file1);
+            FileOutputStream fileOutputStream = new FileOutputStream(file1);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            Iterator entries = productList.getIterator();
+            while (entries.hasNext()) {
+                Map.Entry entry = (Map.Entry) entries.next();
+                String key = (String) entry.getKey();
+                Product value = (Product) entry.getValue();
+                Product aux = new Product(key, value.getSupplierName(), value.getName(), value.getStock(), value.getPrice(), value.getSellingPrice());
+                objectOutputStream.writeObject(aux);
+            }
+            objectOutputStream.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void productReadFile() {
+        try {
+            File file1 = new File("Data/Product.bin");
+            FileInputStream fileInputStream = new FileInputStream(file1);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            int lectura = 1;
+            while (lectura == 1) {
+                Product aux = (Product) objectInputStream.readObject();
+                productList.addElement(aux.getId(), aux);
+            }
+            objectInputStream.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void salesFile() {
+        try {
+            File file1 = new File("Data/Sales.bin");
+            createFolder(file1);
+            FileOutputStream fileOutputStream = new FileOutputStream(file1);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            for (Sale s : salesList) {
+                objectOutputStream.writeObject(s);
+            }
+            objectOutputStream.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void salesReadFile() {
+        try {
+            File file1 = new File("Data/Sales.bin");
+            FileInputStream fileInputStream = new FileInputStream(file1);
+            ObjectInputStream ois = new ObjectInputStream(fileInputStream);
+            int lectura = 1;
+            while (lectura == 1) {
+                Sale aux = (Sale) ois.readObject();
+                salesList.add(aux);
+            }
+            ois.close();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    //Invoice PDF creation --------------------------------------------------------------------------------------------
     private boolean allInvoiced() {
         boolean flag = true;
         for (Sale sale : salesList) {
@@ -203,282 +479,5 @@ public class SalesSystem {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void deleteSupplier(String name) throws RowNotSelectedException {
-        Supplier aux = searchSupplier(name);
-        if (suppliersList.contains(aux)) {
-            suppliersList.remove(aux);
-        } else {
-            throw new RowNotSelectedException("Select a row");
-        }
-    }
-    public Supplier searchSupplier(String name) {
-        for (Supplier s : suppliersList) {
-            if (s.getName().equals(name)) {
-                return s;
-            }
-        }
-        return null;
-    }
-    public boolean shopkeyExist (String key){
-        return shopList.keyExists(key);
-    }
-
-    public void addElementShopList (String key, Product value){
-        shopList.addElement(key,value);
-    }
-
-    public void addElementProductList(String key, Product value){
-        productList.addElement(key,value);
-    }
-
-
-    public int productStockShopList(String id) {
-        int stock = 0;
-        stock = shopList.getElementByKey(id).getStock();
-        return stock;
-    }
-
-    public void supplierFile() {
-        try {
-            File file1 = new File("Data/Supplier.bin");
-            createFolder(file1);
-            FileOutputStream fileOutputStream = new FileOutputStream(file1);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            for (Supplier s : suppliersList) {
-                objectOutputStream.writeObject(s);
-            }
-            objectOutputStream.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void supplierReadFile() {
-        try {
-            File file1 = new File("Data/Supplier.bin");
-            FileInputStream fileInputStream = new FileInputStream(file1);
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            int lectura = 1;
-            while (lectura == 1) {
-                Supplier aux = (Supplier) objectInputStream.readObject();
-                suppliersList.add(aux);
-            }
-            objectInputStream.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void customerFile() {
-        try {
-            File file1 = new File("Data/Customer.bin");
-            createFolder(file1);
-            FileOutputStream fileOutputStream = new FileOutputStream(file1);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            for (Customer s : customerList) {
-                objectOutputStream.writeObject(s);
-            }
-            objectOutputStream.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void customerReadFile() {
-        try {
-            File file1 = new File("Data/Customer.bin");
-            FileInputStream fileInputStream = new FileInputStream(file1);
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            int lectura = 1;
-            while (lectura == 1) {
-                Customer aux = (Customer) objectInputStream.readObject();
-                customerList.add(aux);
-            }
-            objectInputStream.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void productFile() {
-        try {
-            File file1 = new File("Data/Product.bin");
-            createFolder(file1);
-            FileOutputStream fileOutputStream = new FileOutputStream(file1);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            Iterator entries = productList.getIterator();
-            while (entries.hasNext()) {
-                Map.Entry entry = (Map.Entry) entries.next();
-                String key = (String) entry.getKey();
-                Product value = (Product) entry.getValue();
-                Product aux = new Product(key, value.getSupplierName(), value.getName(), value.getStock(), value.getPrice(), value.getSellingPrice());
-                objectOutputStream.writeObject(aux);
-            }
-            objectOutputStream.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void productReadFile() {
-        try {
-            File file1 = new File("Data/Product.bin");
-            FileInputStream fileInputStream = new FileInputStream(file1);
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            int lectura = 1;
-            while (lectura == 1) {
-                Product aux = (Product) objectInputStream.readObject();
-                productList.addElement(aux.getId(), aux);
-            }
-            objectInputStream.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Object[] supplierlistArray () {
-         return suppliersList.toArray();
-    }
-
-    public int supplierListSize (){
-        return suppliersList.size();
-    }
-
-    public Object[] customerlistArray () {
-        return customerList.toArray();
-    }
-
-    public boolean tableHasData() {
-        return shopList.hashmapSize() > 0;
-    }
-    public double getAmmountAcc() {
-        return ammountAcc;
-    }
-
-    public void addSupplier(String supplierNameField, String supplierIDField, String supplierPhoneField, String supplierWorkingArea) throws FieldCompletionException {
-        Supplier aux = new Supplier();
-        aux.setName(supplierNameField);
-        aux.setTaxpayerID(supplierIDField);
-        aux.setPhoneNumber(supplierPhoneField);
-        aux.setWorkingArea(supplierWorkingArea);
-        suppliersList.add(aux);
-    }
-
-    public void addCustomer(String CnameCustomer, String CtaxPayerIDCustomer, String CphoeNumberCustomer, String CcategoryCustomer) throws FieldCompletionException {
-        Customer aux = new Customer();
-        aux.setName(CnameCustomer);
-        aux.setTaxpayerID(CtaxPayerIDCustomer);
-        aux.setPhoneNumber(CphoeNumberCustomer);
-        aux.setCategory(CcategoryCustomer);
-        getCustomerList().add(aux);
-    }
-
-    public Product searchProduct(String id) {
-        return productList.getElementByKey(id);
-    }
-
-    public int productStock(String id) {
-        int stock = 0;
-        stock = productList.getElementByKey(id).getStock();
-        return stock;
-    }
-    public boolean saletoMap (Sale newSale){
-        boolean flag = false;
-        if (!sellExist(newSale)) {
-            salesList.add(newSale);
-            mapTolist = shopList.getHashMap().values(); //TO-DO Arreglar esto
-            finalProductPDF = new ArrayList<>(mapTolist);
-            shopList.hashmapClear();
-            flag = true;
-        }
-        return flag;
-    }
-    public Collection<Product> maptoList (){
-        return mapTolist = shopList.getHashMap().values();
-    }
-    private boolean sellExist(Sale aux) {
-        boolean flag = false;
-        for (Sale sale : salesList) {
-            if (sale.getOperationNumber().equals(aux.getOperationNumber()) && !flag) {
-                flag = true;
-            }
-        }
-        return flag;
-    }
-    public MyBusiness createCompany (String nameString,String taxpayerID,String phoneNumber){
-        MyBusiness company = new MyBusiness(nameString, taxpayerID, phoneNumber);
-        return company;
-    }
-    public void createFolder(File document) {
-        File folder = document.getParentFile();
-        folder = document.getParentFile();
-        if (!folder.exists()) {
-            folder.mkdir();
-        }
-    }
-    public Customer lookForCustomer(String name) {
-        for (Customer c : customerList) {
-            if (c.getName().equals(name)) {
-                return c;
-            }
-        }
-        return null;
-    }
-    public void deleteCustomer(Customer aux) {
-        int pos = 0;
-        boolean flag = false;
-        for (int i = 0; i < customerList.size(); i++) {
-            if (aux.getTaxpayerID().equals(customerList.get(i).getTaxpayerID()) && !flag) {
-                pos = i;
-            }
-        }
-        customerList.remove(pos);
-    }
-
-    public void salesFile() {
-        try {
-            File file1 = new File("Data/Sales.bin");
-            createFolder(file1);
-            FileOutputStream fileOutputStream = new FileOutputStream(file1);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            for (Sale s : salesList) {
-                objectOutputStream.writeObject(s);
-            }
-            objectOutputStream.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-    public void salesReadFile() {
-        try {
-            File file1 = new File("Data/Sales.bin");
-            FileInputStream fileInputStream = new FileInputStream(file1);
-            ObjectInputStream ois = new ObjectInputStream(fileInputStream);
-            int lectura = 1;
-            while (lectura == 1) {
-                Sale aux = (Sale) ois.readObject();
-                salesList.add(aux);
-            }
-            ois.close();
-        } catch (IOException | ClassNotFoundException e){
-            System.out.println(e.getMessage());
-        }
-    }
-    public int searchSale(double operationNumber){
-        int pos = -1;
-        for (int i = 0; i<salesList.size(); i++){
-            if (salesList.get(i).getOperationNumber() == operationNumber){
-                pos = i;
-            }
-        }
-        return pos;
     }
 }

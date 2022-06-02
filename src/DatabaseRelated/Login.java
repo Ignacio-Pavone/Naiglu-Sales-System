@@ -82,8 +82,6 @@ public class Login extends JDialog {
             }
         });
         setVisible(true);
-
-
     }
     private void showRegister() {
         Register nuevo = new Register(null);
