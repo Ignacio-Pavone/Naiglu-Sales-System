@@ -17,17 +17,15 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.*;
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class SalesSystem {
     private double ammountAcc;
-    private final MyBusiness placeholderBusiness = new MyBusiness("Name", "123321", "2222222");
+    private final MyBusiness myBusiness = new MyBusiness("Name", "123321", "2222222");
     private final GenericHashMap<String, Product> productList = new GenericHashMap<>();
     private final GenericHashMap<String, Product> shopList = new GenericHashMap<>();
     private final ArrayList<Sale> salesList = new ArrayList<>(); // lista ventas Concretadas
@@ -473,7 +471,7 @@ public class SalesSystem {
             PDFTextClass pdfTextClass = new PDFTextClass(doc, contentStream);
             PDFont font = PDType1Font.COURIER;
             String[] businessData = new String[finalProductPDF.size()];
-            businessData = placeholderBusiness.generateDataForBills().split(",");
+            businessData = myBusiness.generateDataForBills().split(",");
 
             Customer aux = lookForCustomer(customer);
             String buyerDataString = aux.generateDataForBills();
@@ -513,21 +511,33 @@ public class SalesSystem {
             File file1 = new File(namePDF);
             createFolder(file1);
             doc.save(namePDF);
+            openInvoice(operation,customer);
             doc.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public void openInvoice(double operation, String customer) {
+        String idConcat = "Invoices/Operation N° " + operation + " " + customer;
+        String namePDF = idConcat.concat(".pdf");
+        File file1 = new File(namePDF);
+        try {
+            Desktop.getDesktop().open(file1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public double increaseBalance(double ammountSale) {
-        double ammountBusiness = placeholderBusiness.getBalance();
-        placeholderBusiness.setBalance(ammountBusiness + ammountSale);
-        return placeholderBusiness.getBalance();
+        double ammountBusiness = myBusiness.getBalance();
+        myBusiness.setBalance(ammountBusiness + ammountSale);
+        return myBusiness.getBalance();
     }
 
     public double decreaseBalance(double ammountPurchase) {
-        double ammountBusiness = placeholderBusiness.getBalance();
-        placeholderBusiness.setBalance(ammountBusiness - ammountPurchase);
-        return placeholderBusiness.getBalance();
+        double ammountBusiness = myBusiness.getBalance();
+        myBusiness.setBalance(ammountBusiness - ammountPurchase);
+        return myBusiness.getBalance();
     }
 }
