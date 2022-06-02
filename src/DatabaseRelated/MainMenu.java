@@ -118,8 +118,9 @@ public class MainMenu extends JDialog {
     private JPanel businessTab;
     private JTextField enterProductSearch;
     private JLabel searchProduct;
-    private JButton delete;
-    private MyBusiness company = new MyBusiness();
+
+
+
     private Employee employee = new Employee();
 
 
@@ -239,8 +240,7 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Sale newSale = confirmPruchase();
-                if (app.saletoMap(newSale))
-                {
+                if (app.saletoMap(newSale)) {
                     textFinalPrice.setText("Total Price");
                 }
                 listCart();
@@ -531,7 +531,6 @@ public class MainMenu extends JDialog {
 
     private void companyLabelsStyle() {
         companyNameLabel.setForeground(Color.GREEN);
-        companyNameLabel.setText("" + company.getName());
         businessNameText.setText("");
         businesstaxText.setText("");
         businessphoneText.setText("");
@@ -840,16 +839,15 @@ public class MainMenu extends JDialog {
             }
         }
     }
-
     private void createMyBusiness() {
         String nameString = businessNameText.getText();
         String taxpayerID = businesstaxText.getText();
         String phoneNumber = businessphoneText.getText();
-        company = new MyBusiness(nameString, taxpayerID, phoneNumber);
+        MyBusiness company = app.createCompany(nameString,taxpayerID,phoneNumber);
         Border eBorder = new LineBorder(Color.BLACK, 1, true);
-
         mainMenuTabPanel.setBorder(BorderFactory.createTitledBorder(eBorder, " " + company.getName() + " ", TitledBorder.CENTER, TitledBorder.CENTER, new Font("Consolas", Font.ITALIC, 12), Color.green));
         UIManager.put("TabbedPane.contentAreaColor", Color.BLACK);
+        companyNameLabel.setText("" + company.getName());
     }
 }
 

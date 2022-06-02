@@ -413,6 +413,10 @@ public class SalesSystem {
         }
         return flag;
     }
+    public MyBusiness createCompany (String nameString,String taxpayerID,String phoneNumber){
+        MyBusiness company = new MyBusiness(nameString, taxpayerID, phoneNumber);
+        return company;
+    }
     public void createFolder(File document) {
         File folder = document.getParentFile();
         folder = document.getParentFile();
