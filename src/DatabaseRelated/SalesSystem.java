@@ -275,22 +275,7 @@ public class SalesSystem {
         }
         return pos;
     }
-    public void openPDF() {
-        File workingDirectory = new File(System.getProperty("user.dir"));
-        JFileChooser selectorArchivos = new JFileChooser();
-        selectorArchivos.setCurrentDirectory(workingDirectory);
-        int resultado = selectorArchivos.showOpenDialog(null);
 
-        if (resultado == JFileChooser.APPROVE_OPTION) {
-            File archivo = selectorArchivos.getSelectedFile();
-            File file = new File(archivo.toString());
-            try {
-                Desktop.getDesktop().open(file);
-            } catch (IOException es) {
-                throw new RuntimeException(es);
-            }
-        }
-    }
 
 
     // Files Creation -------------------------------------------------------------------------------------------------
@@ -456,6 +441,23 @@ public class SalesSystem {
         }
     }
 
+    public void openPDF() {
+        File workingDirectory = new File(System.getProperty("user.dir"));
+        JFileChooser selectorArchivos = new JFileChooser();
+        selectorArchivos.setCurrentDirectory(workingDirectory);
+        int resultado = selectorArchivos.showOpenDialog(null);
+
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File archivo = selectorArchivos.getSelectedFile();
+            File file = new File(archivo.toString());
+            try {
+                Desktop.getDesktop().open(file);
+            } catch (IOException es) {
+                throw new RuntimeException(es);
+            }
+        }
+    }
+
     public void createInvoice(double operation, String customer, double price, String formattedDate) {
         PDDocument doc = new PDDocument();
         PDPage firstPage = new PDPage(PDRectangle.A4);
@@ -479,8 +481,8 @@ public class SalesSystem {
 
             pdfTextClass.addLineOfText("BUSINESS INFORMATION: ", 25, pageHeight - 25, font, 14, Color.BLACK);
             pdfTextClass.addMultiLineText(businessData, 14.50f, 25, pageHeight - 50, font, 14, Color.BLACK);
-            pdfTextClass.addLineOfText("BUYER INFORMATION: ", 25, pageHeight - 100, font, 14, Color.BLACK);
-            pdfTextClass.addMultiLineText(buyerDataStringArray, 14.50f, 25, pageHeight - 125, font, 14, Color.BLACK);
+            pdfTextClass.addLineOfText("BUYER INFORMATION: ", 25, pageHeight - 125, font, 14, Color.BLACK);
+            pdfTextClass.addMultiLineText(buyerDataStringArray, 14.50f, 25, pageHeight - 150, font, 14, Color.BLACK);
             pdfTextClass.addLineOfText("DATE: " + formattedDate, 25, pageHeight - 220, font, 14, Color.BLACK);
             pdfTextClass.addLineOfText("FINAL PRICE: $" + price, 25, pageHeight - 245, font, 14, Color.BLACK);
             PDFTableClass table = new PDFTableClass(doc, contentStream);
