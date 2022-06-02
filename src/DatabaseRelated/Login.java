@@ -31,7 +31,7 @@ public class Login extends JDialog {
         setUndecorated(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        systemIcon.setForeground(Color.green);
+        systemIcon.setForeground(Color.GRAY);
 
         xButton.addActionListener(new ActionListener() {
             @Override

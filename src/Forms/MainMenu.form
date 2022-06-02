@@ -1073,7 +1073,7 @@
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <icon value="Img/icons8-crunchyroll-50.png"/>
+                      <icon value="Img/icons8-redux-70.png"/>
                       <text value=""/>
                     </properties>
                   </component>
