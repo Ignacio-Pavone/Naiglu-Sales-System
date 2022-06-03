@@ -1,1 +1,16 @@
-{"sales":[{"date":"02-06-2022 22:39","operationNumber":36,"ammount":100,"customerName":"Ignacio Pavone"}]}
+{
+  "sales": [
+    {
+      "date": "03-06-2022 10:33",
+      "operationNumber": 120,
+      "ammount": 100,
+      "customerName": "Ignacio Pavone"
+    },
+    {
+      "date": "03-06-2022 10:33",
+      "operationNumber": 381,
+      "ammount": 100,
+      "customerName": "Ignacio Pavone"
+    }
+  ]
+}

@@ -31,33 +31,30 @@ public class SalesSystem {
     private final ArrayList<Sale> salesList = new ArrayList<>(); // lista ventas Concretadas
     private final HashSet<Supplier> suppliersList = new HashSet<>(); // lista proveedores
     private final ArrayList<Customer> customerList = new ArrayList<>(); // lista clientes
+    private ArrayList<Sale> saleListJson = new ArrayList<>(); // historial real de ventas
+
     private Collection<Product> mapTolist;
     private ArrayList<Product> finalProductPDF = new ArrayList<>();
-
     private GenericHashMap<String, Product> getProductList() {
         return productList;
     }
-
     private GenericHashMap<String, Product> getShopList() {
         return shopList;
     }
-
     private ArrayList<Sale> getSalesList() {
         return salesList;
     }
+    public ArrayList<Sale> getSaleListJson() {return saleListJson;}
 
     private HashSet<Supplier> getSuppliersList() {
         return suppliersList;
     }
-
     private ArrayList<Customer> getCustomerList() {
         return customerList;
     }
-
     private Collection<Product> getMapTolist() {
         return mapTolist;
     }
-
     private ArrayList<Product> getFinalProductPDF() {
         return finalProductPDF;
     }
@@ -104,7 +101,7 @@ public class SalesSystem {
             fecha = LocalDateTime.now();
             dateFormatted = fecha.format(formatter);
             invoiceAmount = salesList.size();
-            JsonUtiles.createJSON(salesList);
+            JsonUtiles.createJSON(saleListJson);
             salesList.clear();
             sale = new StatisticSale(dateFormatted, total, invoiceAmount);
         }
@@ -221,6 +218,7 @@ public class SalesSystem {
         boolean flag = false;
         if (!sellExist(newSale)) {
             salesList.add(newSale);
+            saleListJson.add(newSale);
             mapTolist = shopList.getHashMap().values(); //TO-DO Arreglar esto
             finalProductPDF = new ArrayList<>(mapTolist);
             shopList.hashmapClear();
@@ -281,12 +279,15 @@ public class SalesSystem {
         supplierReadFile();
         customerReadFile();
         productReadFile();
+        saleJsonReadFile();
+
     }
     public void writeFiles() {
         supplierFile();
         customerFile();
         productFile();
         salesFile();
+        saleJsonFile();
     }
 
     public void createFolder(File document) {
@@ -308,7 +309,7 @@ public class SalesSystem {
             }
             objectOutputStream.close();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.getMessage();
         }
     }
 
@@ -324,7 +325,40 @@ public class SalesSystem {
             }
             objectInputStream.close();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.getMessage();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void saleJsonFile() {
+        try {
+            File file1 = new File("Data/SaleJson.bin");
+            createFolder(file1);
+            FileOutputStream fileOutputStream = new FileOutputStream(file1);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            for (Sale s : saleListJson) {
+                objectOutputStream.writeObject(s);
+            }
+            objectOutputStream.close();
+        } catch (IOException e) {
+            e.getMessage();
+        }
+    }
+
+    public void saleJsonReadFile() {
+        try {
+            File file1 = new File("Data/SaleJson.bin");
+            FileInputStream fileInputStream = new FileInputStream(file1);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            int lectura = 1;
+            while (lectura == 1) {
+                Sale aux = (Sale) objectInputStream.readObject();
+                saleListJson.add(aux);
+            }
+            objectInputStream.close();
+        } catch (IOException e) {
+            e.getMessage();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -341,7 +375,7 @@ public class SalesSystem {
             }
             objectOutputStream.close();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+           e.getMessage();
         }
     }
 
@@ -357,7 +391,7 @@ public class SalesSystem {
             }
             objectInputStream.close();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.getMessage();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -379,7 +413,7 @@ public class SalesSystem {
             }
             objectOutputStream.close();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.getMessage();
         }
     }
 
@@ -395,7 +429,7 @@ public class SalesSystem {
             }
             objectInputStream.close();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.getMessage();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -412,7 +446,7 @@ public class SalesSystem {
             }
             objectOutputStream.close();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.getMessage();
         }
     }
 
@@ -428,7 +462,7 @@ public class SalesSystem {
             }
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println(e.getMessage());
+            e.getMessage();
         }
     }
 

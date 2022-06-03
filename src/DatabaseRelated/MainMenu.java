@@ -43,7 +43,6 @@ public class MainMenu extends JDialog {
     private JLabel stockLabel;
     private JButton deleteButton;
     private JTable cartTable;
-
     private JTable clientProductList;
     private JButton addToCartButton;
     private JTextField userAmount;
@@ -53,7 +52,6 @@ public class MainMenu extends JDialog {
     private JButton deleteCartElement;
     private JLabel textFinalPrice;
     private JPanel adminPanel;
-
     private JTable salesTable;
     private JPanel addSales;
     private JButton generateInvoiceButton;
@@ -111,10 +109,7 @@ public class MainMenu extends JDialog {
     private JLabel searchProduct;
     private JLabel amountBusiness;
     private JButton SEARCHINVOICEButton;
-
     private Employee employee = new Employee();
-
-
     public MainMenu(JFrame parent) {
         super(parent);
         app.readFiles(); // Populate collections with files.bin
