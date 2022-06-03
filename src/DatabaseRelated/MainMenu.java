@@ -11,16 +11,11 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
-
-import static javax.swing.plaf.ComponentUI.createUI;
 
 
 public class MainMenu extends JDialog {
@@ -114,6 +109,7 @@ public class MainMenu extends JDialog {
     private JTextField enterProductSearch;
     private JLabel searchProduct;
     private JLabel amountBusiness;
+    private JButton SEARCHINVOICEButton;
 
     private Employee employee = new Employee();
 
@@ -127,7 +123,7 @@ public class MainMenu extends JDialog {
         setComboBoxConfig();
         loadCustomerCombobox();
         tableStyle();
-        setMinimumSize(new Dimension(900, 700));
+        setMinimumSize(new Dimension(875, 550));
         setContentPane(MainMenuPanelMenu);
         setUndecorated(true);
         setLocationRelativeTo(null);
@@ -295,6 +291,7 @@ public class MainMenu extends JDialog {
                 app.supplierFile();
                 app.customerFile();
                 app.productFile();
+                app.salesFile();
                 Login again = new Login(null);
             }
         });
@@ -341,22 +338,20 @@ public class MainMenu extends JDialog {
 
             }
         });
-        salesTable.addMouseWheelListener(new MouseWheelListener() {
+        SEARCHINVOICEButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-              app.openPDF();
+            public void actionPerformed(ActionEvent e) {
+                int rowSelected = salesTable.getSelectedRow();
+                if (rowSelected != -1) {
+                    double operation = Double.parseDouble(String.valueOf(salesTable.getValueAt(rowSelected, 0)));
+                    String customer = String.valueOf(salesTable.getValueAt(rowSelected, 1));
+                    app.openInvoice(operation, customer);
+                }else{
+                    JOptionPane.showMessageDialog(null,"Select a sale to search Invoice");
+                }
             }
         });
     }
-
-    private static void createWindow() {
-        JFrame frame = new JFrame("Swing Tester");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(560, 200);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }
-
 
     // Admin Validate -------------------------------------------------------------------------------------------------
     void adminSettings() {
@@ -449,6 +444,7 @@ public class MainMenu extends JDialog {
             throw new RowNotSelectedException("Select a row");
         }
     }
+
     public void deleteSupplierFromList() throws RowNotSelectedException {
         int row = 0;
         row = supplierTable.getSelectedRow();
@@ -485,8 +481,8 @@ public class MainMenu extends JDialog {
     }
 
     public double addProduct() {
-        double ammountAux=0;
-        int stockAux=0;
+        double ammountAux = 0;
+        int stockAux = 0;
         try {
             Product data = new Product();
             if (comboBox1.getSelectedItem() != null) {
@@ -494,7 +490,7 @@ public class MainMenu extends JDialog {
                 Supplier aux = (Supplier) comboBox1.getSelectedItem();
                 data.setSupplierName(aux.getName());
                 data.setName(nameField.getText());
-                stockAux =Integer.parseInt(stockField.getText()); //Added
+                stockAux = Integer.parseInt(stockField.getText()); //Added
                 data.setStock(stockAux);
                 ammountAux = Double.parseDouble(priceField.getText()); //Added
                 data.setPrice(ammountAux);
@@ -557,6 +553,7 @@ public class MainMenu extends JDialog {
             throw new RowNotSelectedException("Select a row");
         }
     }
+
     public void searchProduct() {
         String productName = enterProductSearch.getText();
         if (productName.isEmpty()) {
@@ -884,24 +881,24 @@ public class MainMenu extends JDialog {
         return flag;
     }
 
-    public void increaseBalance(){
+    public void increaseBalance() {
         int rowSelection = salesTable.getSelectedRow();
-        double ammount = (double)salesTable.getValueAt(rowSelection,2);
+        double ammount = (double) salesTable.getValueAt(rowSelection, 2);
         double aux = app.increaseBalance(ammount);
         changeColorBalance(aux);
         amountBusiness.setText(String.valueOf(aux));
     }
 
-    public void decreaseBalance(double ammountAux){
+    public void decreaseBalance(double ammountAux) {
         double aux = app.decreaseBalance(ammountAux);
         changeColorBalance(aux);
         amountBusiness.setText(String.valueOf(aux));
     }
 
-    public void changeColorBalance(double amountAux){
+    public void changeColorBalance(double amountAux) {
         if (amountAux < 0) {
             amountBusiness.setForeground(Color.RED);
-        }else amountBusiness.setForeground(Color.GREEN);
+        } else amountBusiness.setForeground(Color.GREEN);
     }
 }
 

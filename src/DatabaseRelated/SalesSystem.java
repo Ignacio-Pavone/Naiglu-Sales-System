@@ -511,7 +511,6 @@ public class SalesSystem {
             File file1 = new File(namePDF);
             createFolder(file1);
             doc.save(namePDF);
-            openInvoice(operation,customer);
             doc.close();
         } catch (Exception e) {
             e.printStackTrace();
