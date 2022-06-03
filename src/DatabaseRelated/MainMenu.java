@@ -110,6 +110,7 @@ public class MainMenu extends JDialog {
     private JLabel amountBusiness;
     private JButton SEARCHINVOICEButton;
     private Employee employee = new Employee();
+
     public MainMenu(JFrame parent) {
         super(parent);
         app.readFiles(); // Populate collections with files.bin
@@ -210,12 +211,14 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Sale newSale = confirmPruchase();
-                if (app.saletoMap(newSale)) {
-                    textFinalPrice.setText("Total Price");
+                if (newSale.getCustomerName() != null) {
+                    if (app.saletoMap(newSale)) {
+                        textFinalPrice.setText("Total Price");
+                        listCart();
+                        salesList();
+                        setTotalDay();
+                    }
                 }
-                listCart();
-                salesList();
-                setTotalDay();
             }
         });
         addSupplierButton.addActionListener(new ActionListener() {
@@ -336,8 +339,8 @@ public class MainMenu extends JDialog {
                     double operation = Double.parseDouble(String.valueOf(salesTable.getValueAt(rowSelected, 0)));
                     String customer = String.valueOf(salesTable.getValueAt(rowSelected, 1));
                     app.openInvoice(operation, customer);
-                }else{
-                    JOptionPane.showMessageDialog(null,"Select a sale to search Invoice");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Select a sale to search Invoice");
                 }
             }
         });
@@ -615,6 +618,7 @@ public class MainMenu extends JDialog {
             }
         }
     }
+
     private void createMyBusiness() {
         String nameString = businessNameText.getText();
         String taxpayerID = businesstaxText.getText();
@@ -873,13 +877,13 @@ public class MainMenu extends JDialog {
     public void increaseBalance() {
         int rowSelection = salesTable.getSelectedRow();
         double ammount = (double) salesTable.getValueAt(rowSelection, 2);
-        double aux = app.increaseBalance(ammount,myBusiness);
+        double aux = app.increaseBalance(ammount, myBusiness);
         changeColorBalance(aux);
         amountBusiness.setText(String.valueOf(aux));
     }
 
     public void decreaseBalance(double ammountAux) {
-        double aux = app.decreaseBalance(ammountAux,myBusiness);
+        double aux = app.decreaseBalance(ammountAux, myBusiness);
         changeColorBalance(aux);
         amountBusiness.setText(String.valueOf(aux));
     }

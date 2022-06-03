@@ -1,15 +1,19 @@
 {
   "sales": [
     {
-      "date": "03-06-2022 10:33",
-      "operationNumber": 120,
-      "ammount": 100,
+      "operationNumber": 0,
+      "ammount": 0
+    },
+    {
+      "date": "03-06-2022 11:08",
+      "operationNumber": 228,
+      "ammount": 5000,
       "customerName": "Ignacio Pavone"
     },
     {
-      "date": "03-06-2022 10:33",
-      "operationNumber": 381,
-      "ammount": 100,
+      "date": "03-06-2022 11:09",
+      "operationNumber": 57,
+      "ammount": 5000,
       "customerName": "Ignacio Pavone"
     }
   ]
