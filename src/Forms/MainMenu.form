@@ -343,6 +343,46 @@
               </hspacer>
             </children>
           </grid>
+          <grid id="c658f" binding="statisticsTab" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Statistics"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <grid id="acf36" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <scrollpane id="bab11">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="78009" class="javax.swing.JTable" binding="statisticsTable">
+                        <constraints/>
+                        <properties>
+                          <background color="-9934485"/>
+                          <fillsViewportHeight value="true"/>
+                          <focusable value="true"/>
+                          <font name="Consolas" size="14" style="0"/>
+                          <gridColor color="-15985889"/>
+                          <selectionBackground color="-1"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </scrollpane>
+                </children>
+              </grid>
+            </children>
+          </grid>
           <grid id="227d0" binding="supplierTab" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
@@ -493,247 +533,8 @@
                       <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                     </constraints>
                   </vspacer>
-                  <vspacer id="42b94">
-                    <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                  </vspacer>
                 </children>
               </grid>
-            </children>
-          </grid>
-          <grid id="c658f" binding="statisticsTab" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
-            <constraints>
-              <tabbedpane title="Statistics"/>
-            </constraints>
-            <properties/>
-            <border type="none"/>
-            <children>
-              <grid id="acf36" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties/>
-                <border type="none"/>
-                <children>
-                  <scrollpane id="bab11">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties/>
-                    <border type="none"/>
-                    <children>
-                      <component id="78009" class="javax.swing.JTable" binding="statisticsTable">
-                        <constraints/>
-                        <properties>
-                          <background color="-9934485"/>
-                          <fillsViewportHeight value="true"/>
-                          <focusable value="true"/>
-                          <font name="Consolas" size="14" style="0"/>
-                          <gridColor color="-15985889"/>
-                          <selectionBackground color="-1"/>
-                        </properties>
-                      </component>
-                    </children>
-                  </scrollpane>
-                </children>
-              </grid>
-            </children>
-          </grid>
-          <grid id="f3492" binding="adminPanel" layout-manager="GridLayoutManager" row-count="15" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
-            <constraints>
-              <tabbedpane title="Admin Panel"/>
-            </constraints>
-            <properties>
-              <background color="-13882315"/>
-              <font name="Consolas" size="12" style="0"/>
-            </properties>
-            <border type="none"/>
-            <children>
-              <grid id="55fca" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="0" column="0" row-span="15" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <background color="-8942951"/>
-                </properties>
-                <border type="none"/>
-                <children>
-                  <scrollpane id="13561">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <background color="-2300939"/>
-                      <font name="Consolas" size="12" style="0"/>
-                    </properties>
-                    <border type="none"/>
-                    <children>
-                      <component id="7805f" class="javax.swing.JTable" binding="productsTable">
-                        <constraints/>
-                        <properties>
-                          <alignmentX value="0.5"/>
-                          <alignmentY value="0.5"/>
-                          <autoCreateRowSorter value="false"/>
-                          <autoResizeMode value="4"/>
-                          <background color="-9934485"/>
-                          <enabled value="true"/>
-                          <fillsViewportHeight value="true"/>
-                          <font name="Consolas" size="14" style="0"/>
-                          <gridColor color="-15985889"/>
-                          <preferredSize width="300" height="300"/>
-                          <selectionBackground color="-459777"/>
-                          <showHorizontalLines value="true"/>
-                        </properties>
-                        <clientProperties>
-                          <Table.isFileList class="java.lang.Boolean" value="false"/>
-                        </clientProperties>
-                      </component>
-                    </children>
-                  </scrollpane>
-                </children>
-              </grid>
-              <component id="af851" class="javax.swing.JTextField" binding="updateID">
-                <constraints>
-                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="-1"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <text value=""/>
-                  <visible value="false"/>
-                </properties>
-              </component>
-              <component id="36078" class="javax.swing.JTextField" binding="updateName">
-                <constraints>
-                  <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="-1"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <font name="Consolas" size="12" style="0"/>
-                  <text value=""/>
-                </properties>
-              </component>
-              <component id="f5700" class="javax.swing.JTextField" binding="updateStock">
-                <constraints>
-                  <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="-1"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <font name="Consolas" size="12" style="0"/>
-                </properties>
-              </component>
-              <vspacer id="a39bc">
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
-              <component id="587d4" class="javax.swing.JTextField" binding="updateSupplier">
-                <constraints>
-                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="4" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="-1"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <focusable value="true"/>
-                  <visible value="false"/>
-                </properties>
-              </component>
-              <component id="87a0" class="javax.swing.JButton" binding="updateButton">
-                <constraints>
-                  <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <background color="-14192098"/>
-                  <font name="Consolas" size="12" style="0"/>
-                  <text value="UPDATE"/>
-                </properties>
-              </component>
-              <component id="1c105" class="javax.swing.JButton" binding="modifyButton">
-                <constraints>
-                  <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <background color="-14192098"/>
-                  <font name="Consolas" size="12" style="0"/>
-                  <text value="MODIFY"/>
-                </properties>
-              </component>
-              <component id="a770c" class="javax.swing.JLabel" binding="updateNameLabel">
-                <constraints>
-                  <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <font name="Consolas" size="12" style="0"/>
-                  <text value="Name"/>
-                </properties>
-              </component>
-              <component id="28b21" class="javax.swing.JLabel" binding="updateStockLabel">
-                <constraints>
-                  <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <font name="Consolas" size="12" style="0"/>
-                  <text value="Stock"/>
-                </properties>
-              </component>
-              <component id="f2cfd" class="javax.swing.JLabel" binding="updatePriceLabel">
-                <constraints>
-                  <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <font name="Consolas" size="12" style="0"/>
-                  <text value="Sell Price"/>
-                </properties>
-              </component>
-              <component id="5da2f" class="javax.swing.JTextField" binding="updateSellPrice">
-                <constraints>
-                  <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="-1"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <font name="Consolas" size="12" style="0"/>
-                  <visible value="true"/>
-                </properties>
-              </component>
-              <component id="3c4a9" class="javax.swing.JTextField" binding="updatePrice">
-                <constraints>
-                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="-1"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <font name="Consolas" size="12" style="0"/>
-                  <visible value="false"/>
-                </properties>
-              </component>
-              <vspacer id="c90cf">
-                <constraints>
-                  <grid row="14" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
-              <component id="14515" class="javax.swing.JButton" binding="deleteButton" default-binding="true">
-                <constraints>
-                  <grid row="13" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <background color="-14192098"/>
-                  <font name="Consolas" size="12" style="0"/>
-                  <text value="DELETE"/>
-                </properties>
-              </component>
-              <vspacer id="88f96">
-                <constraints>
-                  <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
             </children>
           </grid>
           <grid id="ac0c0" binding="customerTab" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -1056,6 +857,200 @@
                   <text value="ADD"/>
                 </properties>
               </component>
+            </children>
+          </grid>
+          <grid id="f3492" binding="adminPanel" layout-manager="GridLayoutManager" row-count="15" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Admin Panel"/>
+            </constraints>
+            <properties>
+              <background color="-13882315"/>
+              <font name="Consolas" size="12" style="0"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <grid id="55fca" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="0" column="0" row-span="15" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-8942951"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <scrollpane id="13561">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-2300939"/>
+                      <font name="Consolas" size="12" style="0"/>
+                    </properties>
+                    <border type="none"/>
+                    <children>
+                      <component id="7805f" class="javax.swing.JTable" binding="productsTable">
+                        <constraints/>
+                        <properties>
+                          <alignmentX value="0.5"/>
+                          <alignmentY value="0.5"/>
+                          <autoCreateRowSorter value="false"/>
+                          <autoResizeMode value="4"/>
+                          <background color="-9934485"/>
+                          <enabled value="true"/>
+                          <fillsViewportHeight value="true"/>
+                          <font name="Consolas" size="14" style="0"/>
+                          <gridColor color="-15985889"/>
+                          <preferredSize width="300" height="300"/>
+                          <selectionBackground color="-459777"/>
+                          <showHorizontalLines value="true"/>
+                        </properties>
+                        <clientProperties>
+                          <Table.isFileList class="java.lang.Boolean" value="false"/>
+                        </clientProperties>
+                      </component>
+                    </children>
+                  </scrollpane>
+                </children>
+              </grid>
+              <component id="af851" class="javax.swing.JTextField" binding="updateID">
+                <constraints>
+                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <text value=""/>
+                  <visible value="false"/>
+                </properties>
+              </component>
+              <component id="36078" class="javax.swing.JTextField" binding="updateName">
+                <constraints>
+                  <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <font name="Consolas" size="12" style="0"/>
+                  <text value=""/>
+                </properties>
+              </component>
+              <component id="f5700" class="javax.swing.JTextField" binding="updateStock">
+                <constraints>
+                  <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <font name="Consolas" size="12" style="0"/>
+                </properties>
+              </component>
+              <vspacer id="a39bc">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <component id="587d4" class="javax.swing.JTextField" binding="updateSupplier">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="4" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <focusable value="true"/>
+                  <visible value="false"/>
+                </properties>
+              </component>
+              <component id="87a0" class="javax.swing.JButton" binding="updateButton">
+                <constraints>
+                  <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-14192098"/>
+                  <font name="Consolas" size="12" style="0"/>
+                  <text value="UPDATE"/>
+                </properties>
+              </component>
+              <component id="1c105" class="javax.swing.JButton" binding="modifyButton">
+                <constraints>
+                  <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-14192098"/>
+                  <font name="Consolas" size="12" style="0"/>
+                  <text value="MODIFY"/>
+                </properties>
+              </component>
+              <component id="a770c" class="javax.swing.JLabel" binding="updateNameLabel">
+                <constraints>
+                  <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <font name="Consolas" size="12" style="0"/>
+                  <text value="Name"/>
+                </properties>
+              </component>
+              <component id="28b21" class="javax.swing.JLabel" binding="updateStockLabel">
+                <constraints>
+                  <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <font name="Consolas" size="12" style="0"/>
+                  <text value="Stock"/>
+                </properties>
+              </component>
+              <component id="f2cfd" class="javax.swing.JLabel" binding="updatePriceLabel">
+                <constraints>
+                  <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <font name="Consolas" size="12" style="0"/>
+                  <text value="Sell Price"/>
+                </properties>
+              </component>
+              <component id="5da2f" class="javax.swing.JTextField" binding="updateSellPrice">
+                <constraints>
+                  <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <font name="Consolas" size="12" style="0"/>
+                  <visible value="true"/>
+                </properties>
+              </component>
+              <component id="3c4a9" class="javax.swing.JTextField" binding="updatePrice">
+                <constraints>
+                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <font name="Consolas" size="12" style="0"/>
+                  <visible value="false"/>
+                </properties>
+              </component>
+              <vspacer id="c90cf">
+                <constraints>
+                  <grid row="14" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <component id="14515" class="javax.swing.JButton" binding="deleteButton" default-binding="true">
+                <constraints>
+                  <grid row="13" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-14192098"/>
+                  <font name="Consolas" size="12" style="0"/>
+                  <text value="DELETE"/>
+                </properties>
+              </component>
+              <vspacer id="88f96">
+                <constraints>
+                  <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
             </children>
           </grid>
           <grid id="1550a" binding="businessTab" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
