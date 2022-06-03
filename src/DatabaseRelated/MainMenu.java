@@ -116,10 +116,7 @@ public class MainMenu extends JDialog {
 
     public MainMenu(JFrame parent) {
         super(parent);
-        app.salesReadFile();
-        app.supplierReadFile();
-        app.customerReadFile();
-        app.productReadFile();
+        app.readFiles(); // Populate collections with files.bin
         setComboBoxConfig();
         loadCustomerCombobox();
         tableStyle();
@@ -288,10 +285,7 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                app.supplierFile();
-                app.customerFile();
-                app.productFile();
-                app.salesFile();
+                app.writeFiles(); // Write files with new data
                 Login again = new Login(null);
             }
         });

@@ -275,8 +275,20 @@ public class SalesSystem {
     }
 
 
-
     // Files Creation -------------------------------------------------------------------------------------------------
+    public void readFiles() {
+        salesReadFile();
+        supplierReadFile();
+        customerReadFile();
+        productReadFile();
+    }
+    public void writeFiles() {
+        supplierFile();
+        customerFile();
+        productFile();
+        salesFile();
+    }
+
     public void createFolder(File document) {
         File folder = document.getParentFile();
         folder = document.getParentFile();
