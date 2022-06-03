@@ -21,6 +21,7 @@ import java.util.Map;
 public class MainMenu extends JDialog {
     SalesSystem app = new SalesSystem();
 
+    private MyBusiness myBusiness = new MyBusiness();
     private JPanel MainMenuPanelMenu;
     private JTabbedPane mainMenuTabPanel;
     private JButton modifyButton;
@@ -619,16 +620,15 @@ public class MainMenu extends JDialog {
             }
         }
     }
-
     private void createMyBusiness() {
         String nameString = businessNameText.getText();
         String taxpayerID = businesstaxText.getText();
         String phoneNumber = businessphoneText.getText();
-        MyBusiness company = app.createCompany(nameString, taxpayerID, phoneNumber);
+        myBusiness = app.createCompany(nameString, taxpayerID, phoneNumber);
         Border eBorder = new LineBorder(Color.BLACK, 1, true);
-        mainMenuTabPanel.setBorder(BorderFactory.createTitledBorder(eBorder, " " + company.getName() + " ", TitledBorder.CENTER, TitledBorder.CENTER, new Font("Consolas", Font.ITALIC, 12), Color.green));
+        mainMenuTabPanel.setBorder(BorderFactory.createTitledBorder(eBorder, " " + myBusiness.getName() + " ", TitledBorder.CENTER, TitledBorder.CENTER, new Font("Consolas", Font.ITALIC, 12), Color.green));
         UIManager.put("TabbedPane.contentAreaColor", Color.BLACK);
-        companyNameLabel.setText("" + company.getName());
+        companyNameLabel.setText("" + myBusiness.getName());
     }
 
     public void setEmployee(Employee employee) {
@@ -865,7 +865,7 @@ public class MainMenu extends JDialog {
         if (rowSelection != -1 && aux.equals(false)) {
             dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
             if (dialogButton == JOptionPane.YES_OPTION) {
-                app.createInvoice((Double) salesTable.getValueAt(rowSelection, 0), (String) salesTable.getValueAt(rowSelection, 1), (Double) salesTable.getValueAt(rowSelection, 2), (String) salesTable.getValueAt(rowSelection, 3));
+                app.createInvoice((Double) salesTable.getValueAt(rowSelection, 0), (String) salesTable.getValueAt(rowSelection, 1), (Double) salesTable.getValueAt(rowSelection, 2), (String) salesTable.getValueAt(rowSelection, 3), myBusiness);
                 app.isInvoiced((Double) salesTable.getValueAt(rowSelection, 0));
                 flag = true;
             }
@@ -878,13 +878,13 @@ public class MainMenu extends JDialog {
     public void increaseBalance() {
         int rowSelection = salesTable.getSelectedRow();
         double ammount = (double) salesTable.getValueAt(rowSelection, 2);
-        double aux = app.increaseBalance(ammount);
+        double aux = app.increaseBalance(ammount,myBusiness);
         changeColorBalance(aux);
         amountBusiness.setText(String.valueOf(aux));
     }
 
     public void decreaseBalance(double ammountAux) {
-        double aux = app.decreaseBalance(ammountAux);
+        double aux = app.decreaseBalance(ammountAux,myBusiness);
         changeColorBalance(aux);
         amountBusiness.setText(String.valueOf(aux));
     }

@@ -25,7 +25,7 @@ import java.util.*;
 
 public class SalesSystem {
     private double ammountAcc;
-    private final MyBusiness myBusiness = new MyBusiness("Name", "123321", "2222222");
+
     private final GenericHashMap<String, Product> productList = new GenericHashMap<>();
     private final GenericHashMap<String, Product> shopList = new GenericHashMap<>();
     private final ArrayList<Sale> salesList = new ArrayList<>(); // lista ventas Concretadas
@@ -468,7 +468,7 @@ public class SalesSystem {
         }
     }
 
-    public void createInvoice(double operation, String customer, double price, String formattedDate) {
+    public void createInvoice(double operation, String customer, double price, String formattedDate, MyBusiness myBusiness) {
         PDDocument doc = new PDDocument();
         PDPage firstPage = new PDPage(PDRectangle.A4);
         doc.addPage(firstPage);
@@ -540,13 +540,13 @@ public class SalesSystem {
         }
     }
 
-    public double increaseBalance(double ammountSale) {
+    public double increaseBalance(double ammountSale, MyBusiness myBusiness) {
         double ammountBusiness = myBusiness.getBalance();
         myBusiness.setBalance(ammountBusiness + ammountSale);
         return myBusiness.getBalance();
     }
 
-    public double decreaseBalance(double ammountPurchase) {
+    public double decreaseBalance(double ammountPurchase, MyBusiness myBusiness) {
         double ammountBusiness = myBusiness.getBalance();
         myBusiness.setBalance(ammountBusiness - ammountPurchase);
         return myBusiness.getBalance();
