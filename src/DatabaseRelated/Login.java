@@ -18,6 +18,7 @@ public class Login extends JDialog {
     private JButton registerButton;
     private JLabel systemIcon;
     private JButton xButton;
+    private JLabel copyRight;
     public static Employee employee;
     final Point offset = new Point();
 
@@ -32,6 +33,7 @@ public class Login extends JDialog {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         systemIcon.setForeground(Color.GRAY);
+        copyRight.setForeground(Color.GREEN);
 
         xButton.addActionListener(new ActionListener() {
             @Override
