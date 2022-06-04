@@ -61,7 +61,7 @@
               <background color="-12609246"/>
               <font name="Consolas" size="13" style="0"/>
               <foreground color="-13882315"/>
-              <horizontalTextPosition value="0"/>
+              <horizontalTextPosition value="2"/>
               <text value="EXIT"/>
               <toolTipText value="Salir"/>
             </properties>

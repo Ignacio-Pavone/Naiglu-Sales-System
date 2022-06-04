@@ -33,6 +33,7 @@ public class SalesSystem {
     private final ArrayList<Customer> customerList = new ArrayList<>(); // lista clientes
     private ArrayList<Sale> saleListJson = new ArrayList<>(); // historial real de ventas
 
+    private ArrayList<StatisticSale> statisticSales = new ArrayList<>(); // historial de estadisticas
     private Collection<Product> mapTolist;
     private ArrayList<Product> finalProductPDF = new ArrayList<>();
     private GenericHashMap<String, Product> getProductList() {
@@ -85,11 +86,15 @@ public class SalesSystem {
         return suppliersList.iterator();
     }
 
+    public Iterator returnStatisticsIterator(){
+        return statisticSales.iterator();
+    }
+
     public void setAmmountAcc(double ammountAcc) {
         this.ammountAcc = ammountAcc;
     }
 
-    public StatisticSale deskClosing() {
+    public void deskClosing() {
         double total = 0;
         LocalDateTime fecha;
         String dateFormatted;
@@ -104,8 +109,8 @@ public class SalesSystem {
             JsonUtiles.createJSON(saleListJson);
             salesList.clear();
             sale = new StatisticSale(dateFormatted, total, invoiceAmount);
+            statisticSales.add(sale);
         }
-        return sale;
     }
 
     private double totalCash() {
@@ -144,6 +149,14 @@ public class SalesSystem {
         return null;
     }
 
+    public boolean clearStatistics(){
+        boolean flag = false;
+        if (statisticSales.size() > 0){
+            flag = true;
+            statisticSales.clear();
+        }
+        return flag;
+    }
     public boolean shopkeyExist(String key) {
         return shopList.keyExists(key);
     }
@@ -275,14 +288,15 @@ public class SalesSystem {
 
     // Files Creation -------------------------------------------------------------------------------------------------
     public void readFiles() {
+        statisticsReadFile();
         salesReadFile();
         supplierReadFile();
         customerReadFile();
         productReadFile();
         saleJsonReadFile();
-
     }
     public void writeFiles() {
+        statisticsFile();
         supplierFile();
         customerFile();
         productFile();
@@ -466,6 +480,38 @@ public class SalesSystem {
         }
     }
 
+    public void statisticsFile() {
+        try {
+            File file1 = new File("Data/Statistics.bin");
+            createFolder(file1);
+            FileOutputStream fileOutputStream = new FileOutputStream(file1);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            for (StatisticSale s : statisticSales) {
+                objectOutputStream.writeObject(s);
+            }
+            objectOutputStream.close();
+        } catch (IOException e) {
+            e.getMessage();
+        }
+    }
+
+    public void statisticsReadFile() {
+        try {
+            File file1 = new File("Data/Statistics.bin");
+            FileInputStream fileInputStream = new FileInputStream(file1);
+            ObjectInputStream ois = new ObjectInputStream(fileInputStream);
+            int lectura = 1;
+            while (lectura == 1) {
+                StatisticSale aux = (StatisticSale) ois.readObject();
+                statisticSales.add(aux);
+                System.out.println(statisticSales.get(0));
+            }
+            ois.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.getMessage();
+        }
+    }
+
     //Invoice PDF creation --------------------------------------------------------------------------------------------
     private boolean allInvoiced() {
         boolean flag = true;
@@ -484,24 +530,6 @@ public class SalesSystem {
             }
         }
     }
-
-    public void openPDF() {
-        File workingDirectory = new File(System.getProperty("user.dir"));
-        JFileChooser selectorArchivos = new JFileChooser();
-        selectorArchivos.setCurrentDirectory(workingDirectory);
-        int resultado = selectorArchivos.showOpenDialog(null);
-
-        if (resultado == JFileChooser.APPROVE_OPTION) {
-            File archivo = selectorArchivos.getSelectedFile();
-            File file = new File(archivo.toString());
-            try {
-                Desktop.getDesktop().open(file);
-            } catch (IOException es) {
-                throw new RuntimeException(es);
-            }
-        }
-    }
-
     public void createInvoice(double operation, String customer, double price, String formattedDate, MyBusiness myBusiness) {
         PDDocument doc = new PDDocument();
         PDPage firstPage = new PDPage(PDRectangle.A4);

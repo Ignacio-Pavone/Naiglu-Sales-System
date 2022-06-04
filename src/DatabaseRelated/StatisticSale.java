@@ -1,9 +1,10 @@
 package DatabaseRelated;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class StatisticSale {
+public class StatisticSale implements Serializable {
     private String date;
     private Double totalInvoices;
     private int invoiceAmount;
@@ -36,5 +37,14 @@ public class StatisticSale {
 
     public void setInvoiceAmount(int invoiceAmount) {
         this.invoiceAmount = invoiceAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "StatisticSale{" +
+                "date='" + date + '\'' +
+                ", totalInvoices=" + totalInvoices +
+                ", invoiceAmount=" + invoiceAmount +
+                '}';
     }
 }

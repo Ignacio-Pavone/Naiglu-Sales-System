@@ -110,6 +110,7 @@ public class MainMenu extends JDialog {
     private JLabel amountBusiness;
     private JButton SEARCHINVOICEButton;
     private JLabel chooseClienteLabel;
+    private JButton clearStatisticsButton;
     private Employee employee = new Employee();
 
     public MainMenu(JFrame parent) {
@@ -260,9 +261,9 @@ public class MainMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 app.salesFile();
-                StatisticSale sale = app.deskClosing();
+                app.deskClosing();
                 setAmountDay.setText("Total");
-                listStatistics(sale.getDate(), sale.getTotalInvoices(), sale.getInvoiceAmount());
+                createStatisticsTable();
                 salesList();
             }
         });
@@ -345,6 +346,22 @@ public class MainMenu extends JDialog {
                 }
             }
         });
+        clearStatisticsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (employee.isAdmin()){
+                    if (app.clearStatistics()){
+                        JOptionPane.showMessageDialog(null,"Successful ");
+                        createStatisticsTable();
+                    }else{
+                        JOptionPane.showMessageDialog(null,"Nothing to Delete! ");
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null,"You dont have the permission");
+                }
+
+            }
+        });
     }
 
     // Admin Validate -------------------------------------------------------------------------------------------------
@@ -356,7 +373,6 @@ public class MainMenu extends JDialog {
             mainMenuTabPanel.remove(addProducts);
             mainMenuTabPanel.remove(supplierTab);
             mainMenuTabPanel.remove(customerTab);
-            mainMenuTabPanel.remove(statisticsTab);
             mainMenuTabPanel.remove(businessTab);
         }
     }
@@ -840,20 +856,17 @@ public class MainMenu extends JDialog {
         customerTable.setModel(model);
     }
 
-    private void listStatistics(String date, double total, int salesAmmount) { //Borra las estadisticas si se genera una nueva factura.
-        DefaultTableModel model = (DefaultTableModel) statisticsTable.getModel();
-        model.addRow(new Object[]{date, total, salesAmmount});
-        statisticsTable.setModel(model);
-    }
-
-    public void createStatisticsTable() { //Borra las estadisticas si se genera una nueva factura.
+    public void createStatisticsTable() {
         DefaultTableModel model = new DefaultTableModel(
                 new Object[]{"Date", "Total/Day", "N° Sales"}, 0) {
             @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
+            public boolean isCellEditable(int row, int column) {return false;}
         };
+        Iterator entries = app.returnStatisticsIterator();
+        while (entries.hasNext()) {
+            StatisticSale s = (StatisticSale) entries.next();
+            model.addRow(new Object[]{s.getDate(), s.getInvoiceAmount(), s.getTotalInvoices()});
+        }
         statisticsTable.setModel(model);
     }
 
