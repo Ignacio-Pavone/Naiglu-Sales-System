@@ -165,7 +165,7 @@
               <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <icon value="Img/icons8-forgot-password-40.png"/>
+              <icon value="Img/icons8-1password-40.png"/>
               <text value=""/>
             </properties>
           </component>
