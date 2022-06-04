@@ -101,6 +101,7 @@
               <icon value="Img/icons8-login-22-normal.png"/>
               <iconTextGap value="5"/>
               <rolloverIcon value="Img/icons8-login-rounded-up-22-roll.png"/>
+              <rolloverSelectedIcon value="Img/icons8-login-rounded-up-22-roll.png"/>
               <text value="LOGIN"/>
               <toolTipText value="Ingresar"/>
             </properties>

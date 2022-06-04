@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class Connect {
 
-    Connection con;
+    private Connection con;
     public static Employee employee;
 
     public Connection getConnection() {
