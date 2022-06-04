@@ -109,6 +109,7 @@ public class MainMenu extends JDialog {
     private JLabel searchProduct;
     private JLabel amountBusiness;
     private JButton SEARCHINVOICEButton;
+    private JLabel chooseClienteLabel;
     private Employee employee = new Employee();
 
     public MainMenu(JFrame parent) {
@@ -686,6 +687,7 @@ public class MainMenu extends JDialog {
         taxpayerLabel.setForeground(Color.WHITE);
         phoneLabelBusiness.setForeground(Color.WHITE);
         searchProduct.setForeground(Color.WHITE);
+        chooseClienteLabel.setForeground(Color.WHITE);
     }
 
     private void companyLabelsStyle() {

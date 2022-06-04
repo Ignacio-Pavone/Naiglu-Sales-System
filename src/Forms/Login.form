@@ -28,6 +28,7 @@
               <horizontalAlignment value="0"/>
               <horizontalTextPosition value="0"/>
               <icon value="Img/icons8-redux-70.png"/>
+              <labelFor value=""/>
               <text value="Naiglu System"/>
               <verticalAlignment value="3"/>
               <verticalTextPosition value="3"/>
@@ -95,7 +96,11 @@
               <background color="-12609246"/>
               <font name="Consolas" size="13" style="0"/>
               <foreground color="-13882315"/>
-              <horizontalTextPosition value="0"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="2"/>
+              <icon value="Img/icons8-login-22-normal.png"/>
+              <iconTextGap value="5"/>
+              <rolloverIcon value="Img/icons8-login-rounded-up-22-roll.png"/>
               <text value="LOGIN"/>
               <toolTipText value="Ingresar"/>
             </properties>
