@@ -116,6 +116,13 @@ As you can see, the purchase was reflected on the account's balance.
 
 ![image](https://user-images.githubusercontent.com/84025828/172195701-ddc0ad79-af81-4bcf-8c27-b0229d19a468.png)
 
+Lastly, the admin panel. It is used if you want to modify the price/name of a product, or if you don't want to sell it anymore. You can also decrease the stock in case it was lost or wasn't well calculated in the first place. 
+
+![image](https://user-images.githubusercontent.com/84025828/172196086-d02a724e-f162-4602-97cb-54bbcf1ea3d9.png)
+
+
+Logging out the program and exiting will save the information loaded to the system, including sales, customers, suppliers and products. We recommend not closing the program through the Task Manager or Alt+F4 since the changes might not register. 
+
 
 
 
