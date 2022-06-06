@@ -550,6 +550,25 @@ public class MainMenu extends JDialog {
         }
     }
 
+    public void deleteProductFromCart() {
+        int row = 0;
+        row = cartTable.getSelectedRow();
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        int newStock = 0;
+        if (row != -1) {
+            dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
+            if (dialogButton == JOptionPane.YES_OPTION) {
+                String id = String.valueOf(cartTable.getValueAt(row, 0));
+                int stock = Integer.parseInt(String.valueOf(cartTable.getValueAt(row, 3)));
+                newStock = app.productStock(id) + stock;
+                Product exist = app.searchProduct(id);
+                Product aux = new Product(exist.getId(), exist.getSupplierName(), exist.getName(), newStock, exist.getPrice(), exist.getSellingPrice());
+                app.deleteProductShop(id);
+                app.addElementProductList(aux.getId(), aux);
+            }
+        }
+    }
+
     public void addToCart() throws RowNotSelectedException {
         int rowSelection = clientProductList.getSelectedRow();
         if (rowSelection != -1 && !ammountValueLabel.getText().equals("")) {
@@ -614,25 +633,6 @@ public class MainMenu extends JDialog {
         Object[] arr = app.customerlistArray();
         for (Object o : arr) {
             comboBoxCustomers.addItem(o);
-        }
-    }
-
-    public void deleteProductFromCart() {
-        int row = 0;
-        row = cartTable.getSelectedRow();
-        int dialogButton = JOptionPane.YES_NO_OPTION;
-        int newStock = 0;
-        if (row != -1) {
-            dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", dialogButton);
-            if (dialogButton == JOptionPane.YES_OPTION) {
-                String id = String.valueOf(cartTable.getValueAt(row, 0));
-                int stock = Integer.parseInt(String.valueOf(cartTable.getValueAt(row, 3)));
-                newStock = app.productStock(id) + stock;
-                Product exist = app.searchProduct(id);
-                Product aux = new Product(exist.getId(), exist.getSupplierName(), exist.getName(), newStock, exist.getPrice(), exist.getSellingPrice());
-                app.deleteProductShop(id);
-                app.addElementProductList(aux.getId(), aux);
-            }
         }
     }
 

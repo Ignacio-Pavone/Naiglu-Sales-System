@@ -94,6 +94,8 @@ public class SalesSystem {
         this.ammountAcc = ammountAcc;
     }
 
+    //Aux Functions ---------------------------------------------------------------------------------------------------
+
     public void deskClosing() {
         double total = 0;
         LocalDateTime fecha;
@@ -512,7 +514,7 @@ public class SalesSystem {
         }
     }
 
-    //Invoice PDF creation --------------------------------------------------------------------------------------------
+    //Invoice creation --------------------------------------------------------------------------------------------
     private boolean allInvoiced() {
         boolean flag = true;
         for (Sale sale : salesList) {
